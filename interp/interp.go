@@ -1,24 +1,26 @@
-package yon
+package interp
+
 import (
 	"bytes"
 	"strconv"
 	"fmt"
 	"container/list"
+	"github.com/mk2/yon/interp/word"
 )
 
 type Interpreter struct {
 	source   string
-	programs []*Word
+	programs []*word.Word
 	stack    *list.List
 	ip       int
 	np       int
 }
 
-// NewInterp is used for creating new interpreter
-func NewInterpreter() (interp *Interpreter) {
+// NewInterp returns new interpeter object
+func New() (interp *Interpreter) {
 
 	interp = new(Interpreter)
-	interp.programs = make([]*Word, 0)
+	interp.programs = make([]*word.Word, 0)
 	interp.stack = list.New()
 	interp.ip = 0
 	interp.np = 1
@@ -62,7 +64,7 @@ func (interp *Interpreter) Parse(source string) error {
 
 	var (
 		next int = -1
-		w *Word
+		w *word.Word
 		e error
 	)
 
@@ -117,10 +119,10 @@ func (interp *Interpreter) Parse(source string) error {
 	return nil
 }
 
-func (interp *Interpreter) readNum(from int) (next int, w *Word, err error) {
+func (interp *Interpreter) readNum(from int) (next int, w *word.Word, err error) {
 
-	w = &Word{
-		wordType: NotWordType,
+	w = &word.Word{
+		WordType: word.NotWordType,
 	}
 
 	buf := bytes.NewBuffer([]byte{})
@@ -146,8 +148,8 @@ func (interp *Interpreter) readNum(from int) (next int, w *Word, err error) {
 	if s := buf.String(); s != "<nil>" {
 		var f float64
 		if f, err = strconv.ParseFloat(s, 64); err == nil {
-			w.wordType = NumWordType
-			w.num = f
+			w.WordType = word.NumWordType
+			w.Num = f
 			return
 		}
 	}
@@ -155,10 +157,10 @@ func (interp *Interpreter) readNum(from int) (next int, w *Word, err error) {
 	return
 }
 
-func (interp *Interpreter) readStr(from int) (next int, w *Word, err error) {
+func (interp *Interpreter) readStr(from int) (next int, w *word.Word, err error) {
 
-	w = &Word{
-		wordType: NotWordType,
+	w = &word.Word{
+		WordType: word.NotWordType,
 	}
 
 	buf := bytes.NewBuffer([]byte{})
@@ -182,18 +184,18 @@ func (interp *Interpreter) readStr(from int) (next int, w *Word, err error) {
 
 	// convert string to float
 	if s := buf.String(); s != "<nil>" {
-		w.wordType = StrWordType
-		w.str = s
+		w.WordType = word.StrWordType
+		w.Str = s
 		return
 	}
 
 	return
 }
 
-func (interp *Interpreter) readIdent(from int) (next int, w *Word, err error) {
+func (interp *Interpreter) readIdent(from int) (next int, w *word.Word, err error) {
 
-	w = &Word{
-		wordType: NotWordType,
+	w = &word.Word{
+		WordType: word.NotWordType,
 	}
 
 	buf := bytes.NewBuffer([]byte{})
@@ -219,18 +221,18 @@ func (interp *Interpreter) readIdent(from int) (next int, w *Word, err error) {
 
 	// convert string to float
 	if s := buf.String(); s != "<nil>" {
-		w.wordType = IdentWordType
-		w.str = s
+		w.WordType = word.IdentWordType
+		w.Str = s
 		return
 	}
 
 	return
 }
 
-func (interp *Interpreter) readEmbed(from int) (next int, w *Word, err error) {
+func (interp *Interpreter) readEmbed(from int) (next int, w *word.Word, err error) {
 
-	w = &Word{
-		wordType: NotWordType,
+	w = &word.Word{
+		WordType: word.NotWordType,
 	}
 
 	buf := bytes.NewBuffer([]byte{})
@@ -256,12 +258,12 @@ func (interp *Interpreter) readEmbed(from int) (next int, w *Word, err error) {
 
 	// convert string to float
 	if s := buf.String(); s != "<nil>" {
-		w.wordType = EmbedWordType
+		w.WordType = word.EmbedWordType
 
 		switch s {
 
 		case "", "s":
-			w.embedWordType = StackOpEmbedWordKind
+			w.EmbedWordType = word.StackOpEmbedWordKind
 
 		}
 
@@ -271,10 +273,10 @@ func (interp *Interpreter) readEmbed(from int) (next int, w *Word, err error) {
 	return
 }
 
-func (interp *Interpreter) readComment(from int) (next int, w *Word, err error) {
+func (interp *Interpreter) readComment(from int) (next int, w *word.Word, err error) {
 
-	w = &Word{
-		wordType: NotWordType,
+	w = &word.Word{
+		WordType: word.NotWordType,
 	}
 
 	buf := bytes.NewBuffer([]byte{})
@@ -305,12 +307,12 @@ func (interp *Interpreter) readComment(from int) (next int, w *Word, err error) 
 
 	// convert string to float
 	if s := buf.String(); s != "<nil>" {
-		w.wordType = EmbedWordType
+		w.WordType = word.EmbedWordType
 
 		switch s {
 
 		case "", "s":
-			w.embedWordType = StackOpEmbedWordKind
+			w.EmbedWordType = word.StackOpEmbedWordKind
 
 		}
 
