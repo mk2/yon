@@ -1,16 +1,19 @@
 package word
-import "container/list"
+import (
+	"github.com/mk2/yon/interp/stack"
+)
 
-type WordCode func(*Word) error
+type Result interface{}
 
+type WordCode func(*BaseWord) error
 type WordType int
 
 const (
 	NotWordType WordType = iota
-	EmbedWordType
-	IdentWordType
-	NumWordType
-	StrWordType
+	EmbedFuncWordType
+	FuncWordType
+	NumberWordType
+	StringWordType
 )
 
 type EmbedWordKind int
@@ -20,38 +23,17 @@ const (
 	StackOpEmbedWordKind
 )
 
+type Word interface {
+	GetWordType() WordType
+	SetWordType(WordType)
+	SetStack(stack.Stack)
+	GetStack() (stack.Stack, error)
+	CanExec() (bool, error)
+	Exec() (Result, error)
+}
+
 type EmbedWord struct {
+	BaseWord
 	EmbedWordType EmbedWordKind
 }
 
-type IdentWord struct {
-	IdentName string
-}
-
-type NumWord struct {
-	Num float64
-}
-
-type StrWord struct {
-	Str string
-}
-
-type Word struct {
-	WordType WordType
-	EmbedWord
-	IdentWord
-	NumWord
-	StrWord
-}
-
-func (w *Word) Exec(stack *list.List) (err error) {
-
-	switch w.WordType {
-
-	case NumWordType:
-		stack.PushFront(w.Num)
-
-	}
-
-	return
-}

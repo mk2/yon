@@ -4,26 +4,24 @@ import (
 	"bytes"
 	"strconv"
 	"fmt"
-	"container/list"
 	"github.com/mk2/yon/interp/word"
+	"github.com/mk2/yon/interp/stack"
 )
 
 type Interpreter struct {
 	source   string
-	programs []*word.Word
-	stack    *list.List
-	ip       int
-	np       int
+	programs []word.Word
+	stack    stack.Stack
 }
 
 // NewInterp returns new interpeter object
 func New() (interp *Interpreter) {
 
 	interp = new(Interpreter)
-	interp.programs = make([]*word.Word, 0)
-	interp.stack = list.New()
-	interp.ip = 0
-	interp.np = 1
+	interp = &Interpreter{
+		programs: make([]word.Word, 0),
+		stack: stack.New(),
+	}
 
 	return
 }
@@ -45,11 +43,9 @@ func (interp *Interpreter) ParseAndExec(source string) (err error) {
 // Exec is used for yon program execution
 func (interp *Interpreter) Exec() (err error) {
 
-	stack := interp.stack
-
 	for _, w := range interp.programs {
 
-		if err = w.Exec(stack); err != nil {
+		if err = w.Exec(); err != nil {
 			return
 		}
 	}
@@ -57,14 +53,14 @@ func (interp *Interpreter) Exec() (err error) {
 	return
 }
 
-// Exec is used for execution single line program
+// Parse is used for parsing single line program
 func (interp *Interpreter) Parse(source string) error {
 
 	interp.source = source
 
 	var (
 		next int = -1
-		w *word.Word
+		w *word.BaseWord
 		e error
 	)
 
@@ -93,13 +89,13 @@ func (interp *Interpreter) Parse(source string) error {
 		case '+', '-', '/', '%':
 
 		case '"':
-			if next, w, e = interp.readStr(i + 1); e != nil {
+			if next, w, e = interp.readString(i + 1); e != nil {
 				return e
 			}
 			interp.programs = append(interp.programs, w)
 
 		case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
-			if next, w, e = interp.readNum(i); e != nil {
+			if next, w, e = interp.readNumber(i); e != nil {
 				return e
 			}
 			interp.programs = append(interp.programs, w)
@@ -119,11 +115,9 @@ func (interp *Interpreter) Parse(source string) error {
 	return nil
 }
 
-func (interp *Interpreter) readNum(from int) (next int, w *word.Word, err error) {
+func (interp *Interpreter) readNumber(from int) (next int, w *word.NumberWord, err error) {
 
-	w = &word.Word{
-		WordType: word.NotWordType,
-	}
+	w = &word.NumberWord{}
 
 	buf := bytes.NewBuffer([]byte{})
 
@@ -148,8 +142,8 @@ func (interp *Interpreter) readNum(from int) (next int, w *word.Word, err error)
 	if s := buf.String(); s != "<nil>" {
 		var f float64
 		if f, err = strconv.ParseFloat(s, 64); err == nil {
-			w.WordType = word.NumWordType
-			w.Num = f
+			w.SetWordType(word.NumberWordType)
+			w.Number = f
 			return
 		}
 	}
@@ -157,10 +151,10 @@ func (interp *Interpreter) readNum(from int) (next int, w *word.Word, err error)
 	return
 }
 
-func (interp *Interpreter) readStr(from int) (next int, w *word.Word, err error) {
+func (interp *Interpreter) readString(from int) (next int, w *word.StringWord, err error) {
 
-	w = &word.Word{
-		WordType: word.NotWordType,
+	w = &word.BaseWord{
+		wordType: word.NotWordType,
 	}
 
 	buf := bytes.NewBuffer([]byte{})
@@ -184,19 +178,17 @@ func (interp *Interpreter) readStr(from int) (next int, w *word.Word, err error)
 
 	// convert string to float
 	if s := buf.String(); s != "<nil>" {
-		w.WordType = word.StrWordType
-		w.Str = s
+		w.SetWordType(word.StringWordType)
+		w.String = s
 		return
 	}
 
 	return
 }
 
-func (interp *Interpreter) readIdent(from int) (next int, w *word.Word, err error) {
+func (interp *Interpreter) readIdent(from int) (next int, w *word.StringWord, err error) {
 
-	w = &word.Word{
-		WordType: word.NotWordType,
-	}
+	w = &word.FuncWord{}
 
 	buf := bytes.NewBuffer([]byte{})
 
@@ -221,18 +213,18 @@ func (interp *Interpreter) readIdent(from int) (next int, w *word.Word, err erro
 
 	// convert string to float
 	if s := buf.String(); s != "<nil>" {
-		w.WordType = word.IdentWordType
-		w.Str = s
+		w.SetWordType(word.FuncWordType)
+		w.String = s
 		return
 	}
 
 	return
 }
 
-func (interp *Interpreter) readEmbed(from int) (next int, w *word.Word, err error) {
+func (interp *Interpreter) readEmbed(from int) (next int, w *word.BaseWord, err error) {
 
-	w = &word.Word{
-		WordType: word.NotWordType,
+	w = &word.BaseWord{
+		wordType: word.NotWordType,
 	}
 
 	buf := bytes.NewBuffer([]byte{})
@@ -258,12 +250,11 @@ func (interp *Interpreter) readEmbed(from int) (next int, w *word.Word, err erro
 
 	// convert string to float
 	if s := buf.String(); s != "<nil>" {
-		w.WordType = word.EmbedWordType
+		w.SetWordType(word.EmbedFuncWordType)
 
 		switch s {
 
 		case "", "s":
-			w.EmbedWordType = word.StackOpEmbedWordKind
 
 		}
 
@@ -273,10 +264,10 @@ func (interp *Interpreter) readEmbed(from int) (next int, w *word.Word, err erro
 	return
 }
 
-func (interp *Interpreter) readComment(from int) (next int, w *word.Word, err error) {
+func (interp *Interpreter) readComment(from int) (next int, w *word.BaseWord, err error) {
 
-	w = &word.Word{
-		WordType: word.NotWordType,
+	w = &word.BaseWord{
+		wordType: word.NotWordType,
 	}
 
 	buf := bytes.NewBuffer([]byte{})
@@ -307,12 +298,11 @@ func (interp *Interpreter) readComment(from int) (next int, w *word.Word, err er
 
 	// convert string to float
 	if s := buf.String(); s != "<nil>" {
-		w.WordType = word.EmbedWordType
+		w.SetWordType(word.EmbedFuncWordType)
 
 		switch s {
 
 		case "", "s":
-			w.EmbedWordType = word.StackOpEmbedWordKind
 
 		}
 
