@@ -2,8 +2,6 @@ package kit
 
 import "container/list"
 
-type WordType int
-
 type Word interface {
 	GetWordType() WordType
 	SetWordType(WordType)

@@ -65,8 +65,7 @@ func (interp *Interpreter) Wait() error {
 
 func (interp *Interpreter) Eval(r io.RuneScanner) (stoppedCh, errorCh) {
 
-	l := lexer.New(r)
-	tokens := l.GetTokenCh()
+	tokens := lexer.New(r).GetTokenCh()
 
 	go interp.run()
 
@@ -81,7 +80,7 @@ func (interp *Interpreter) Eval(r io.RuneScanner) (stoppedCh, errorCh) {
 				continue
 
 			case lexer.TIdentifier:
-				w = &word.BaseWord{}
+				w = &word.Word{}
 				w.SetWordType(word.TNilWord)
 
 			case lexer.TNumber:

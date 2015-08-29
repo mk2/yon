@@ -3,7 +3,7 @@ package word
 import "github.com/mk2/yon/interp/kit"
 
 type NumberWord struct {
-	BaseWord
+	Word
 	Number float64
 }
 
@@ -11,7 +11,7 @@ func NewNumberWord(val string) *NumberWord {
 
 	return &NumberWord{
 		Number: 0,
-		BaseWord: BaseWord{
+		Word: Word{
 			wordType: TNumberWord,
 		},
 	}
@@ -23,7 +23,7 @@ func (w *NumberWord) Read(m kit.Memory) (interface{}, error) {
 }
 
 type StringWord struct {
-	BaseWord
+	Word
 	String string
 }
 
@@ -31,7 +31,7 @@ func NewStringWord(val string) *StringWord {
 
 	return &StringWord{
 		String: val,
-		BaseWord: BaseWord{
+		Word: Word{
 			wordType: TStringWord,
 		},
 	}

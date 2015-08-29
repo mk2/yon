@@ -1,6 +1,6 @@
 package word
 
 type VarWord struct {
-	BaseWord
+	Word
 	VarName string
 }

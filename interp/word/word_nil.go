@@ -1,13 +1,13 @@
 package word
 
 type NilWord struct {
-	BaseWord
+	Word
 }
 
 func NewNilWord() *NilWord {
 
 	return &NilWord{
-		BaseWord: BaseWord{
+		Word: Word{
 			wordType: TNilWord,
 		},
 	}

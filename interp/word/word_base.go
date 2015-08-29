@@ -2,17 +2,17 @@ package word
 
 import "github.com/mk2/yon/interp/kit"
 
-type BaseWord struct {
+type Word struct {
 	kit.Word
 	wordType kit.WordType
 }
 
-func (w *BaseWord) GetWordType() kit.WordType {
+func (w *Word) GetWordType() kit.WordType {
 
 	return w.wordType
 }
 
-func (w *BaseWord) SetWordType(wordType kit.WordType) {
+func (w *Word) SetWordType(wordType kit.WordType) {
 
 	w.wordType = wordType
 }

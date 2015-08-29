@@ -1,16 +1,16 @@
 package word
 
-import "github.com/mk2/yon/interp/memory"
+import "github.com/mk2/yon/interp/kit"
 
 type FuncBody func() error
 
 type FuncWord struct {
-	BaseWord
+	Word
 	Name string
 	Body FuncBody
 }
 
-func (w *FuncWord) Read(m *memory.Memory) (interface{}, error) {
+func (w *FuncWord) Read(m kit.Memory) (interface{}, error) {
 
 	return nil, w.Body()
 }
