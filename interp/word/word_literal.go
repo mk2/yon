@@ -5,16 +5,27 @@ type NumberWord struct {
 	Number float64
 }
 
-func (w *NumberWord) Exec() (result Result, err error) {
+func NewNumberWord(val string) *NumberWord {
 
-	if _, err = w.CanExec(); err != nil {
-		return
+	return &NumberWord{
+		Number: 0,
+		BaseWord: BaseWord{
+			wordType: NumberWordType,
+		},
 	}
-
-	return
 }
 
 type StringWord struct {
 	BaseWord
 	String string
+}
+
+func NewStringWord(val string) *StringWord {
+
+	return &StringWord{
+		String: val,
+		BaseWord: BaseWord{
+			wordType: StringWordType,
+		},
+	}
 }
