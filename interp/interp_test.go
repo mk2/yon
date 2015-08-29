@@ -13,4 +13,5 @@ func TestInterpEval(t *testing.T) {
 	interp := interp.New()
 	interp.Eval(bytes.NewBufferString("1 2 `test` 2"))
 	interp.Wait()
+	interp.PrintStack()
 }

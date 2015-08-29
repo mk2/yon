@@ -42,13 +42,17 @@ func (interp *Interpreter) Wait() {
 	<-interp.stoppedCh
 }
 
+func (interp *Interpreter) PrintStack() {
+
+	stack.Print(&interp.stack)
+}
+
 func (interp *Interpreter) Eval(r *bytes.Buffer) (stoppedCh, errorCh) {
 
 	l := lexer.New(r)
 	tokens := l.GetTokenCh()
 
 	go func() {
-	EVAL_LOOP:
 		for {
 
 			var w word.Word
@@ -70,7 +74,7 @@ func (interp *Interpreter) Eval(r *bytes.Buffer) (stoppedCh, errorCh) {
 
 			case lexer.TEOF:
 				interp.stoppedCh <- struct{}{}
-				break EVAL_LOOP
+				return
 
 			default:
 				w = word.NewNilWord()
@@ -92,9 +96,11 @@ func (interp *Interpreter) run() {
 
 		case word.NumberWordType:
 			log.Println("number word")
+			interp.stack.PushFront(w)
 
 		case word.StringWordType:
 			log.Println("string word")
+			interp.stack.PushFront(w)
 
 		case word.NilWordType:
 			log.Println("nil word")
