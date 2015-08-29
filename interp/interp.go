@@ -113,11 +113,17 @@ func (interp *Interpreter) run() {
 
 		case word.TNumberWord:
 			log.Println("number word")
-			interp.memo.Stack().Push(w)
+			if _, err := w.Do(interp.memo); err != nil {
+				interp.errorCh <- err
+				break
+			}
 
 		case word.TStringWord:
 			log.Println("string word")
-			interp.memo.Stack().Push(w)
+			if _, err := w.Do(interp.memo); err != nil {
+				interp.errorCh <- err
+				break
+			}
 
 		case word.TNilWord:
 			log.Println("nil word")

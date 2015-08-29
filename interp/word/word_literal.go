@@ -19,7 +19,9 @@ func NewNumberWord(val string) *NumberWord {
 
 func (w *NumberWord) Do(m kit.Memory) (interface{}, error) {
 
-	return w.Number, nil
+	m.Stack().Push(w.Number)
+
+	return nil, nil
 }
 
 type StringWord struct {
@@ -35,4 +37,11 @@ func NewStringWord(val string) *StringWord {
 			wordType: TStringWord,
 		},
 	}
+}
+
+func (w *StringWord) Do(m kit.Memory) (interface{}, error) {
+
+	m.Stack().Push(w.String)
+
+	return nil, nil
 }

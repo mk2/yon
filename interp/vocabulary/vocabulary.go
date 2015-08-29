@@ -3,6 +3,8 @@ package vocabulary
 import (
 	"sync"
 
+	"errors"
+
 	"github.com/mk2/yon/interp/kit"
 )
 
@@ -18,14 +20,20 @@ func New() (v *Vocabulary) {
 		words: make(map[string]kit.Word, 0),
 	}
 
-	v.loadPrelude()
+	v.LoadPrelude()
 
 	return
 }
 
-func (v *Vocabulary) Write(k string, w kit.Word) {
+func (v *Vocabulary) Write(k string, w kit.Word) error {
+
+	if _, ok := v.words[k]; ok {
+		return errors.New("already exists key: " + k)
+	}
 
 	v.words[k] = w
+
+	return nil
 }
 
 func (v *Vocabulary) Read(k string) kit.Word {

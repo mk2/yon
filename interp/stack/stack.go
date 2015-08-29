@@ -51,6 +51,14 @@ func (s *Stack) Print() {
 			}
 		}
 
+		if f, ok := e.Value.(float64); ok {
+			color.Magenta(fBase, depth, fmt.Sprintf(fNumberWord, f))
+		}
+
+		if str, ok := e.Value.(string); ok {
+			color.Cyan(fBase, depth, fmt.Sprintf(fStringWord, str))
+		}
+
 		depth += 1
 	}
 }
@@ -70,6 +78,13 @@ func (s *Stack) Pop() *list.Element {
 	e := s.Front()
 	s.Remove(e)
 	s.Unlock()
+
+	return e
+}
+
+func (s *Stack) Peek() *list.Element {
+
+	e := s.Front()
 
 	return e
 }
