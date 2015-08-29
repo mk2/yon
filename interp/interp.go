@@ -1,10 +1,11 @@
 package interp
 
 import (
-	"bytes"
 	"log"
 
 	"errors"
+
+	"io"
 
 	"github.com/mk2/yon/interp/lexer"
 	"github.com/mk2/yon/interp/stack"
@@ -32,14 +33,7 @@ func New() (interp *Interpreter) {
 		errorCh:   make(chan error),
 	}
 
-	go interp.run()
-
 	return
-}
-
-func (interp *Interpreter) Wait() {
-
-	<-interp.stoppedCh
 }
 
 func (interp *Interpreter) PrintStack() {
@@ -47,10 +41,31 @@ func (interp *Interpreter) PrintStack() {
 	stack.Print(&interp.stack)
 }
 
-func (interp *Interpreter) Eval(r *bytes.Buffer) (stoppedCh, errorCh) {
+func (interp *Interpreter) EvalAndWait(r io.RuneScanner) error {
+
+	interp.Eval(r)
+	return interp.Wait()
+}
+
+func (interp *Interpreter) Wait() error {
+
+	select {
+
+	case <-interp.stoppedCh:
+		return nil
+
+	case err := <-interp.errorCh:
+		return err
+
+	}
+}
+
+func (interp *Interpreter) Eval(r io.RuneScanner) (stoppedCh, errorCh) {
 
 	l := lexer.New(r)
 	tokens := l.GetTokenCh()
+
+	go interp.run()
 
 	go func() {
 		for {
