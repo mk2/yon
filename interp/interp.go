@@ -26,6 +26,12 @@ type Interpreter struct {
 	errorCh   errorCh
 }
 
+/*
+================================================================================
+Interpreter APIs
+================================================================================
+*/
+
 // New returns new interpeter object
 func New() (interp *Interpreter) {
 
@@ -39,6 +45,7 @@ func New() (interp *Interpreter) {
 	return
 }
 
+// PrintStack prints current stack contents
 func (interp *Interpreter) PrintStack() {
 
 	interp.memo.Stack().Print()
@@ -105,7 +112,15 @@ func (interp *Interpreter) Eval(r io.RuneScanner) (stoppedCh, errorCh) {
 	return interp.stoppedCh, interp.errorCh
 }
 
+/*
+================================================================================
+Interpreter private methods
+================================================================================
+*/
+
 func (interp *Interpreter) run() {
+
+	m := interp.memo
 
 	for {
 
@@ -113,14 +128,14 @@ func (interp *Interpreter) run() {
 
 		case word.TNumberWord:
 			log.Println("number word")
-			if _, err := w.Do(interp.memo); err != nil {
+			if _, err := w.Do(m); err != nil {
 				interp.errorCh <- err
 				break
 			}
 
 		case word.TStringWord:
 			log.Println("string word")
-			if _, err := w.Do(interp.memo); err != nil {
+			if _, err := w.Do(m); err != nil {
 				interp.errorCh <- err
 				break
 			}
