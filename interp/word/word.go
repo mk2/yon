@@ -1,27 +1,11 @@
 package word
 
-type Result interface{}
-
-type WordCode func(*BaseWord) error
-type WordType int
+import "github.com/mk2/yon/interp/kit"
 
 const (
-	NilWordType WordType = iota
-	FuncWordType
-	NumberWordType
-	StringWordType
-	QuoteWordType
-	ArrayWordType
+	TNilWord kit.WordType = iota
+	TFuncWord
+	TNumberWord
+	TStringWord
+	TArrayWord
 )
-
-type EmbedWordKind int
-
-const (
-	NotEmbedWordKind EmbedWordKind = iota
-	StackOpEmbedWordKind
-)
-
-type Word interface {
-	GetWordType() WordType
-	SetWordType(WordType)
-}

@@ -7,8 +7,11 @@ import (
 
 	"io"
 
+	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/lexer"
+	"github.com/mk2/yon/interp/memory"
 	"github.com/mk2/yon/interp/stack"
+	"github.com/mk2/yon/interp/vocabulary"
 	"github.com/mk2/yon/interp/word"
 )
 
@@ -17,8 +20,8 @@ type errorCh chan error
 
 type Interpreter struct {
 	source    string
-	stack     stack.Stack
-	program   chan word.Word
+	program   chan kit.Word
+	memo      kit.Memory
 	stoppedCh stoppedCh
 	errorCh   errorCh
 }
@@ -27,8 +30,8 @@ type Interpreter struct {
 func New() (interp *Interpreter) {
 
 	interp = &Interpreter{
-		program:   make(chan word.Word),
-		stack:     *stack.New(),
+		program:   make(chan kit.Word),
+		memo:      memory.New(stack.New(), vocabulary.New()),
 		stoppedCh: make(chan struct{}),
 		errorCh:   make(chan error),
 	}
@@ -38,7 +41,7 @@ func New() (interp *Interpreter) {
 
 func (interp *Interpreter) PrintStack() {
 
-	stack.Print(&interp.stack)
+	interp.memo.Stack().Print()
 }
 
 func (interp *Interpreter) EvalAndWait(r io.RuneScanner) error {
@@ -70,7 +73,7 @@ func (interp *Interpreter) Eval(r io.RuneScanner) (stoppedCh, errorCh) {
 	go func() {
 		for {
 
-			var w word.Word
+			var w kit.Word
 
 			switch t := <-tokens; t.Typ {
 
@@ -79,7 +82,7 @@ func (interp *Interpreter) Eval(r io.RuneScanner) (stoppedCh, errorCh) {
 
 			case lexer.TIdentifier:
 				w = &word.BaseWord{}
-				w.SetWordType(word.NilWordType)
+				w.SetWordType(word.TNilWord)
 
 			case lexer.TNumber:
 				w = word.NewNumberWord(t.Val)
@@ -109,15 +112,15 @@ func (interp *Interpreter) run() {
 
 		switch w := <-interp.program; w.GetWordType() {
 
-		case word.NumberWordType:
+		case word.TNumberWord:
 			log.Println("number word")
-			interp.stack.PushFront(w)
+			interp.memo.Stack().Push(w)
 
-		case word.StringWordType:
+		case word.TStringWord:
 			log.Println("string word")
-			interp.stack.PushFront(w)
+			interp.memo.Stack().Push(w)
 
-		case word.NilWordType:
+		case word.TNilWord:
 			log.Println("nil word")
 			break
 

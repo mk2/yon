@@ -8,7 +8,7 @@ func NewNilWord() *NilWord {
 
 	return &NilWord{
 		BaseWord: BaseWord{
-			wordType: NilWordType,
+			wordType: TNilWord,
 		},
 	}
 }
