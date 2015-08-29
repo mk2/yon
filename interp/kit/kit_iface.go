@@ -5,7 +5,7 @@ import "container/list"
 type Word interface {
 	GetWordType() WordType
 	SetWordType(WordType)
-	Read(m Memory) (interface{}, error)
+	Do(m Memory) (interface{}, error)
 }
 
 type Stack interface {
@@ -15,8 +15,8 @@ type Stack interface {
 }
 
 type Vocabulary interface {
-	Put(k string, w Word)
-	Get(k string) Word
+	Write(k string, w Word)
+	Read(k string) Word
 }
 
 type Memory interface {

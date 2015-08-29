@@ -23,12 +23,12 @@ func New() (v *Vocabulary) {
 	return
 }
 
-func (v *Vocabulary) Put(k string, w kit.Word) {
+func (v *Vocabulary) Write(k string, w kit.Word) {
 
 	v.words[k] = w
 }
 
-func (v *Vocabulary) Get(k string) kit.Word {
+func (v *Vocabulary) Read(k string) kit.Word {
 
 	return v.words[k]
 }

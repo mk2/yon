@@ -17,7 +17,7 @@ func NewNumberWord(val string) *NumberWord {
 	}
 }
 
-func (w *NumberWord) Read(m kit.Memory) (interface{}, error) {
+func (w *NumberWord) Do(m kit.Memory) (interface{}, error) {
 
 	return w.Number, nil
 }

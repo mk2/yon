@@ -10,7 +10,7 @@ type FuncWord struct {
 	Body FuncBody
 }
 
-func (w *FuncWord) Read(m kit.Memory) (interface{}, error) {
+func (w *FuncWord) Do(m kit.Memory) (interface{}, error) {
 
 	return nil, w.Body()
 }
