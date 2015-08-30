@@ -155,3 +155,13 @@ func (interp *Interpreter) run() {
 
 	interp.stoppedCh <- struct{}{}
 }
+
+/*
+================================================================================
+Interpreter parse methods
+================================================================================
+*/
+
+func (interp *Interpreter) parseIdentifier() {
+
+}

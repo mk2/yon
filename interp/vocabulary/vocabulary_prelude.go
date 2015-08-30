@@ -12,6 +12,8 @@ const (
 	kPopPrint   = "."
 	kDup        = "dup"
 	kDef        = "def"
+	kForceDef   = "def!"
+	kAskDef     = "def?"
 )
 
 func (v *Vocabulary) LoadPrelude() error {

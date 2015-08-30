@@ -154,8 +154,7 @@ func lex(l *lexer) stateFn {
 		l.next()
 
 	case r == '.':
-		l.emit(TDot)
-		l.next()
+		return lexDotPrefix
 
 	case r == '"' || r == '`':
 		l.leftDelim = r
@@ -231,6 +230,24 @@ func lexNumber(l *lexer) stateFn {
 	}
 
 	l.emit(TNumber)
+
+	return lex
+}
+
+func lexDotPrefix(l *lexer) stateFn {
+
+	// skip the first dot '.'
+	l.next()
+
+	switch r := l.peek(); {
+
+	case r == 's':
+		l.emit(TDotS)
+		l.next()
+
+	case r == nilRune:
+		l.emit(TDot)
+	}
 
 	return lex
 }

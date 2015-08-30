@@ -12,6 +12,7 @@ const (
 	TIdentifier
 	TNumber
 	TDot
+	TDotS
 	TString
 	TDblColon
 	TSemiColon
