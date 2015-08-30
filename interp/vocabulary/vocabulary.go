@@ -8,24 +8,23 @@ import (
 	"github.com/mk2/yon/interp/kit"
 )
 
-type Vocabulary struct {
-	kit.Vocabulary
+type vocabulary struct {
 	sync.Mutex
 	words map[string]kit.Word
 }
 
-func New() (v *Vocabulary) {
+func New() kit.Vocabulary {
 
-	v = &Vocabulary{
+	v := &vocabulary{
 		words: make(map[string]kit.Word, 0),
 	}
 
 	v.LoadPrelude()
 
-	return
+	return v
 }
 
-func (v *Vocabulary) Write(k string, w kit.Word) error {
+func (v *vocabulary) Write(k string, w kit.Word) error {
 
 	if _, ok := v.words[k]; ok {
 		return errors.New("already exists key: " + k)
@@ -36,7 +35,7 @@ func (v *Vocabulary) Write(k string, w kit.Word) error {
 	return nil
 }
 
-func (v *Vocabulary) Read(k string) kit.Word {
+func (v *vocabulary) Read(k string) kit.Word {
 
 	return v.words[k]
 }

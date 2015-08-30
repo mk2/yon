@@ -2,40 +2,42 @@ package lexer
 
 import (
 	"bytes"
-	"io"
 	"log"
+
+	"github.com/mk2/yon/interp/kit"
+	"github.com/mk2/yon/interp/token"
 )
 
 const nilRune = rune(-1)
 
 type lexer struct {
 	name       string
-	start      Position
-	pos        Position
-	input      io.RuneScanner
+	start      kit.Position
+	pos        kit.Position
+	input      kit.RuneScanner
 	state      stateFn
 	leftDelim  rune
 	rightDelim rune
-	tokens     chan token
+	tokens     chan kit.Token
 	buf        *bytes.Buffer
 }
 
 type stateFn func(*lexer) stateFn
 
 // New returns new lexer struct instance
-func New(r io.RuneScanner) (l *lexer) {
+func New(r kit.RuneScanner) kit.Lexer {
 
-	l = &lexer{
+	l := &lexer{
 		name:   "",
 		input:  r,
 		state:  nil,
-		tokens: make(chan token),
+		tokens: make(chan kit.Token),
 		buf:    new(bytes.Buffer),
 	}
 
 	go l.run()
 
-	return
+	return l
 }
 
 /*
@@ -45,8 +47,8 @@ Lexer APIs
 */
 
 // NextToken returns next obtaining token
-// This API is blocking api.
-func (l *lexer) NextToken() token {
+// This API is blocking.
+func (l *lexer) NextToken() kit.Token {
 
 	token := <-l.tokens
 
@@ -54,7 +56,7 @@ func (l *lexer) NextToken() token {
 }
 
 // GetTokenCh returns token incoming channel
-func (l *lexer) GetTokenCh() <-chan token {
+func (l *lexer) GetTokens() <-chan kit.Token {
 
 	return l.tokens
 }
@@ -72,12 +74,12 @@ func (l *lexer) run() {
 	}
 }
 
-func (l *lexer) emit(t tokenType) {
+func (l *lexer) emit(t kit.TokenType) {
 
 	val := l.buf.String()
 
 	if val != "<nil>" {
-		l.tokens <- token{
+		l.tokens <- token.Token{
 			Typ: t,
 			Pos: l.start,
 			Val: val,
@@ -130,27 +132,27 @@ func lex(l *lexer) stateFn {
 	switch r := l.peek(); {
 
 	case r == '(':
-		l.emit(TLeftParen)
+		l.emit(token.TLeftParen)
 		l.next()
 
 	case r == ')':
-		l.emit(TRightParen)
+		l.emit(token.TRightParen)
 		l.next()
 
 	case r == '{':
-		l.emit(TLeftSquareBracket)
+		l.emit(token.TLeftSquareBracket)
 		l.next()
 
 	case r == '}':
-		l.emit(TRightSquareBracket)
+		l.emit(token.TRightSquareBracket)
 		l.next()
 
 	case r == ':':
-		l.emit(TDblColon)
+		l.emit(token.TDblColon)
 		l.next()
 
 	case r == ';':
-		l.emit(TSemiColon)
+		l.emit(token.TSemiColon)
 		l.next()
 
 	case r == '.':
@@ -170,7 +172,7 @@ func lex(l *lexer) stateFn {
 		return lexIdentifier
 
 	case r == nilRune:
-		l.emit(TEOF)
+		l.emit(token.TEOF)
 		return nil
 
 	default:
@@ -188,7 +190,7 @@ func lexIdentifier(l *lexer) stateFn {
 		l.next()
 	}
 
-	l.emit(TIdentifier)
+	l.emit(token.TIdentifier)
 
 	return lex
 }
@@ -199,7 +201,7 @@ func lexSpace(l *lexer) stateFn {
 		l.next()
 	}
 
-	l.emit(TSpace)
+	l.emit(token.TSpace)
 
 	return lex
 }
@@ -217,7 +219,7 @@ func lexString(l *lexer) stateFn {
 	// skip the right delimiter
 	l.next()
 
-	l.emit(TString)
+	l.emit(token.TString)
 
 	return lex
 }
@@ -229,7 +231,7 @@ func lexNumber(l *lexer) stateFn {
 		l.next()
 	}
 
-	l.emit(TNumber)
+	l.emit(token.TNumber)
 
 	return lex
 }
@@ -242,11 +244,11 @@ func lexDotPrefix(l *lexer) stateFn {
 	switch r := l.peek(); {
 
 	case r == 's':
-		l.emit(TDotS)
+		l.emit(token.TDotS)
 		l.next()
 
 	case r == nilRune:
-		l.emit(TDot)
+		l.emit(token.TDot)
 	}
 
 	return lex

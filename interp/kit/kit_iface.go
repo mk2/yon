@@ -1,6 +1,9 @@
 package kit
 
-import "container/list"
+import (
+	"container/list"
+	"io"
+)
 
 type Word interface {
 	GetWordType() WordType
@@ -24,4 +27,31 @@ type Vocabulary interface {
 type Memory interface {
 	Stack() Stack
 	Vocab() Vocabulary
+}
+
+type Token interface {
+	GetType() TokenType
+	GetPos() Position
+	GetVal() string
+	String() string
+}
+
+type Lexer interface {
+	NextToken() Token
+	GetTokens() <-chan Token
+}
+
+type Parser interface {
+	NextWord() Word
+	GetWords() <-chan Word
+}
+
+/*
+================================================================================
+IO interface
+================================================================================
+*/
+
+type RuneScanner interface {
+	io.RuneScanner
 }

@@ -14,12 +14,14 @@ const (
 	kDef        = "def"
 	kForceDef   = "def!"
 	kAskDef     = "def?"
+	kApply      = "apply"
+	kCall       = "call"
 )
 
-func (v *Vocabulary) LoadPrelude() error {
+func (v *vocabulary) LoadPrelude() error {
 
 	v.Write(kPopPrint, &word.FuncWord{
-		Name: kDup,
+		Name: kPopPrint,
 		Body: func(m kit.Memory) error {
 			s := m.Stack()
 			fmt.Printf("%v¥n", s.Pop().Value)

@@ -11,19 +11,17 @@ import (
 	"github.com/mk2/yon/interp/lexer"
 	"github.com/mk2/yon/interp/memory"
 	"github.com/mk2/yon/interp/stack"
+	"github.com/mk2/yon/interp/token"
 	"github.com/mk2/yon/interp/vocabulary"
 	"github.com/mk2/yon/interp/word"
 )
-
-type stoppedCh chan struct{}
-type errorCh chan error
 
 type Interpreter struct {
 	source    string
 	program   chan kit.Word
 	memo      kit.Memory
-	stoppedCh stoppedCh
-	errorCh   errorCh
+	stoppedCh kit.StoppedCh
+	errorCh   kit.ErrorCh
 }
 
 /*
@@ -70,9 +68,9 @@ func (interp *Interpreter) Wait() error {
 	}
 }
 
-func (interp *Interpreter) Eval(r io.RuneScanner) (stoppedCh, errorCh) {
+func (interp *Interpreter) Eval(r kit.RuneScanner) (kit.StoppedCh, kit.ErrorCh) {
 
-	tokens := lexer.New(r).GetTokenCh()
+	tokens := lexer.New(r).GetTokens()
 
 	go interp.run()
 
@@ -81,22 +79,22 @@ func (interp *Interpreter) Eval(r io.RuneScanner) (stoppedCh, errorCh) {
 
 			var w kit.Word
 
-			switch t := <-tokens; t.Typ {
+			switch t := <-tokens; t.GetType() {
 
-			case lexer.TSpace:
+			case token.TSpace:
 				continue
 
-			case lexer.TIdentifier:
+			case token.TIdentifier:
 				w = &word.Word{}
 				w.SetWordType(word.TNilWord)
 
-			case lexer.TNumber:
-				w = word.NewNumberWord(t.Val)
+			case token.TNumber:
+				w = word.NewNumberWord(t.GetVal())
 
-			case lexer.TString:
-				w = word.NewStringWord(t.Val)
+			case token.TString:
+				w = word.NewStringWord(t.GetVal())
 
-			case lexer.TEOF:
+			case token.TEOF:
 				interp.stoppedCh <- struct{}{}
 				return
 
@@ -161,7 +159,3 @@ func (interp *Interpreter) run() {
 Interpreter parse methods
 ================================================================================
 */
-
-func (interp *Interpreter) parseIdentifier() {
-
-}

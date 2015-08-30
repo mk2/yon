@@ -19,20 +19,19 @@ const (
 	fSep        = "-"
 )
 
-type Stack struct {
-	kit.Stack
+type stack struct {
 	sync.Mutex
 	list.List
 }
 
-func New() *Stack {
+func New() kit.Stack {
 
-	return &Stack{
+	return &stack{
 		List: *list.New(),
 	}
 }
 
-func (s *Stack) Print() {
+func (s *stack) Print() {
 
 	depth := 0
 
@@ -63,7 +62,7 @@ func (s *Stack) Print() {
 	}
 }
 
-func (s *Stack) Push(v interface{}) *list.Element {
+func (s *stack) Push(v interface{}) *list.Element {
 
 	s.Lock()
 	e := s.PushFront(v)
@@ -72,7 +71,7 @@ func (s *Stack) Push(v interface{}) *list.Element {
 	return e
 }
 
-func (s *Stack) Pop() *list.Element {
+func (s *stack) Pop() *list.Element {
 
 	s.Lock()
 	e := s.Front()
@@ -82,7 +81,7 @@ func (s *Stack) Pop() *list.Element {
 	return e
 }
 
-func (s *Stack) Peek() *list.Element {
+func (s *stack) Peek() *list.Element {
 
 	e := s.Front()
 
