@@ -11,7 +11,6 @@ const (
 )
 
 type Word struct {
-	kit.Word
 	wordType kit.WordType
 }
 

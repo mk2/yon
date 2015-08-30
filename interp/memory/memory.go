@@ -3,7 +3,6 @@ package memory
 import "github.com/mk2/yon/interp/kit"
 
 type memory struct {
-	kit.Memory
 	stack kit.Stack
 	vocab kit.Vocabulary
 }
