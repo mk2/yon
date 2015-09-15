@@ -35,6 +35,17 @@ func (v *vocabulary) Write(k string, w kit.Word) error {
 	return nil
 }
 
+func (v *vocabulary) OverWrite(k string, w kit.Word) (err error) {
+
+	if _, ok := v.words[k]; ok {
+		err = errors.New("already exists key: " + k)
+	}
+
+	v.words[k] = w
+
+	return err
+}
+
 func (v *vocabulary) Read(k string) kit.Word {
 
 	return v.words[k]

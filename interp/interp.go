@@ -7,9 +7,11 @@ import (
 
 	"io"
 
+	"github.com/mk2/yon/interp/history"
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/lexer"
 	"github.com/mk2/yon/interp/memory"
+	"github.com/mk2/yon/interp/parser"
 	"github.com/mk2/yon/interp/stack"
 	"github.com/mk2/yon/interp/token"
 	"github.com/mk2/yon/interp/vocabulary"
@@ -18,7 +20,6 @@ import (
 
 type Interpreter struct {
 	source    string
-	program   chan kit.Word
 	memo      kit.Memory
 	stoppedCh kit.StoppedCh
 	errorCh   kit.ErrorCh
@@ -34,8 +35,7 @@ Interpreter APIs
 func New() (interp *Interpreter) {
 
 	interp = &Interpreter{
-		program:   make(chan kit.Word),
-		memo:      memory.New(stack.New(), vocabulary.New()),
+		memo:      memory.New(stack.New(), vocabulary.New(), history.New()),
 		stoppedCh: make(chan struct{}),
 		errorCh:   make(chan error),
 	}
@@ -68,44 +68,12 @@ func (interp *Interpreter) Wait() error {
 	}
 }
 
-func (interp *Interpreter) Eval(r kit.RuneScanner) (kit.StoppedCh, kit.ErrorCh) {
+func (interp *Interpreter) Eval(runes kit.RuneScanner) (kit.StoppedCh, kit.ErrorCh) {
 
-	tokens := lexer.New(r).GetTokens()
+	tokens := lexer.New(runes)
+	words := parser.New(tokens)
 
-	go interp.run()
-
-	go func() {
-		for {
-
-			var w kit.Word
-
-			switch t := <-tokens; t.GetType() {
-
-			case token.TSpace:
-				continue
-
-			case token.TIdentifier:
-				w = &word.Word{}
-				w.SetWordType(word.TNilWord)
-
-			case token.TNumber:
-				w = word.NewNumberWord(t.GetVal())
-
-			case token.TString:
-				w = word.NewStringWord(t.GetVal())
-
-			case token.TEOF:
-				interp.stoppedCh <- struct{}{}
-				return
-
-			default:
-				w = word.NewNilWord()
-
-			}
-
-			interp.program <- w
-		}
-	}()
+	go interp.run(words)
 
 	return interp.stoppedCh, interp.errorCh
 }
@@ -116,13 +84,23 @@ Interpreter private methods
 ================================================================================
 */
 
-func (interp *Interpreter) run() {
+func (interp *Interpreter) run(words kit.WordScanner) {
 
 	m := interp.memo
 
+	var (
+		w   kit.Word
+		err error
+	)
+
 	for {
 
-		switch w := <-interp.program; w.GetWordType() {
+		if w, err = words.ReadWord(); err != nil {
+			interp.errorCh <- err
+			break
+		}
+
+		switch w.GetWordType() {
 
 		case word.TNumberWord:
 			log.Println("number word")

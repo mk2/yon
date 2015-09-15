@@ -24,9 +24,14 @@ type Vocabulary interface {
 	LoadPrelude() error
 }
 
+type History interface {
+	Leave(w Word) error
+}
+
 type Memory interface {
 	Stack() Stack
 	Vocab() Vocabulary
+	History() History
 }
 
 type Token interface {
@@ -54,4 +59,14 @@ IO interface
 
 type RuneScanner interface {
 	io.RuneScanner
+}
+
+type TokenScanner interface {
+	ReadToken() (Token, error)
+	UnreadToken() error
+}
+
+type WordScanner interface {
+	ReadWord() (Word, error)
+	UnreadWord() error
 }

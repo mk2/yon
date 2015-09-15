@@ -4,22 +4,26 @@ import (
 	"bytes"
 	"log"
 
+	"errors"
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/token"
+	"sync"
 )
 
 const nilRune = rune(-1)
 
 type lexer struct {
-	name       string
-	start      kit.Position
-	pos        kit.Position
-	input      kit.RuneScanner
-	state      stateFn
-	leftDelim  rune
-	rightDelim rune
-	tokens     chan kit.Token
-	buf        *bytes.Buffer
+	name           string
+	start          kit.Position
+	pos            kit.Position
+	input          kit.RuneScanner
+	state          stateFn
+	leftDelim      rune
+	rightDelim     rune
+	tokens         chan kit.Token
+	buf            *bytes.Buffer
+	lastToken      kit.Token
+	onceAgainToken bool
 }
 
 type stateFn func(*lexer) stateFn
@@ -28,11 +32,12 @@ type stateFn func(*lexer) stateFn
 func New(r kit.RuneScanner) kit.Lexer {
 
 	l := &lexer{
-		name:   "",
-		input:  r,
-		state:  nil,
-		tokens: make(chan kit.Token),
-		buf:    new(bytes.Buffer),
+		name:           "",
+		input:          r,
+		state:          nil,
+		tokens:         make(chan kit.Token),
+		buf:            new(bytes.Buffer),
+		onceAgainToken: false,
 	}
 
 	go l.run()
@@ -59,6 +64,41 @@ func (l *lexer) NextToken() kit.Token {
 func (l *lexer) GetTokens() <-chan kit.Token {
 
 	return l.tokens
+}
+
+func (l *lexer) ReadToken() (kit.Token, error) {
+
+	if l.onceAgainToken {
+
+		l.onceAgainToken = false
+
+		if l.lastToken == nil {
+			return nil, errors.New("no last read token")
+		}
+
+		return l.lastToken, nil
+	}
+
+	select {
+
+	case t := <-l.tokens:
+		l.lastToken = t
+		return t, nil
+
+	}
+
+	return nil, errors.New("no token gained")
+}
+
+func (l *lexer) UnreadToken() error {
+
+	if l.onceAgainToken {
+		return errors.New("already called UreadToken")
+	}
+
+	l.onceAgainToken = true
+
+	return nil
 }
 
 /*

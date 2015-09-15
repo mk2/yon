@@ -16,11 +16,16 @@ const (
 	kAskDef     = "def?"
 	kApply      = "apply"
 	kCall       = "call"
+	kPlus       = "+"
+	kMinus      = "-"
+	kMulti      = "*"
+	kDiv        = "/"
+	kRem        = "%"
 )
 
 func (v *vocabulary) LoadPrelude() error {
 
-	v.Write(kPopPrint, &word.FuncWord{
+	v.OverWrite(kPopPrint, &word.FuncWord{
 		Name: kPopPrint,
 		Body: func(m kit.Memory) error {
 			s := m.Stack()
@@ -29,7 +34,7 @@ func (v *vocabulary) LoadPrelude() error {
 		},
 	})
 
-	v.Write(kDup, &word.FuncWord{
+	v.OverWrite(kDup, &word.FuncWord{
 		Name: kDup,
 		Body: func(m kit.Memory) error {
 			s := m.Stack()
