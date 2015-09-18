@@ -34,6 +34,15 @@ type Memory interface {
 	History() History
 }
 
+type Interpreter interface {
+	PrintStack()
+	PrintVocab()
+	PrintHistory()
+	EvalAndWait(runes io.RuneScanner) error
+	Wait() error
+	Eval(runes RuneScanner) (StoppedCh, ErrorCh)
+}
+
 type Token interface {
 	GetType() TokenType
 	GetPos() Position

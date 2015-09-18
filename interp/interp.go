@@ -13,12 +13,11 @@ import (
 	"github.com/mk2/yon/interp/memory"
 	"github.com/mk2/yon/interp/parser"
 	"github.com/mk2/yon/interp/stack"
-	"github.com/mk2/yon/interp/token"
 	"github.com/mk2/yon/interp/vocabulary"
 	"github.com/mk2/yon/interp/word"
 )
 
-type Interpreter struct {
+type interp struct {
 	source    string
 	memo      kit.Memory
 	stoppedCh kit.StoppedCh
@@ -32,50 +31,57 @@ Interpreter APIs
 */
 
 // New returns new interpeter object
-func New() (interp *Interpreter) {
+func New() kit.Interpreter {
 
-	interp = &Interpreter{
+	interp := &interp{
 		memo:      memory.New(stack.New(), vocabulary.New(), history.New()),
 		stoppedCh: make(chan struct{}),
 		errorCh:   make(chan error),
 	}
 
-	return
+	return interp
 }
 
-// PrintStack prints current stack contents
-func (interp *Interpreter) PrintStack() {
+func (ip *interp) PrintStack() {
 
-	interp.memo.Stack().Print()
+	ip.memo.Stack().Print()
 }
 
-func (interp *Interpreter) EvalAndWait(r io.RuneScanner) error {
+func (ip *interp) PrintVocab() {
 
-	interp.Eval(r)
-	return interp.Wait()
 }
 
-func (interp *Interpreter) Wait() error {
+func (ip *interp) PrintHistory() {
+
+}
+
+func (ip *interp) EvalAndWait(runes io.RuneScanner) error {
+
+	ip.Eval(runes)
+	return ip.Wait()
+}
+
+func (ip *interp) Wait() error {
 
 	select {
 
-	case <-interp.stoppedCh:
+	case <-ip.stoppedCh:
 		return nil
 
-	case err := <-interp.errorCh:
+	case err := <-ip.errorCh:
 		return err
 
 	}
 }
 
-func (interp *Interpreter) Eval(runes kit.RuneScanner) (kit.StoppedCh, kit.ErrorCh) {
+func (ip *interp) Eval(runes kit.RuneScanner) (kit.StoppedCh, kit.ErrorCh) {
 
 	tokens := lexer.New(runes)
 	words := parser.New(tokens)
 
-	go interp.run(words)
+	go ip.run(words)
 
-	return interp.stoppedCh, interp.errorCh
+	return ip.stoppedCh, ip.errorCh
 }
 
 /*
@@ -84,20 +90,21 @@ Interpreter private methods
 ================================================================================
 */
 
-func (interp *Interpreter) run(words kit.WordScanner) {
+func (ip *interp) run(words kit.WordScanner) {
 
-	m := interp.memo
+	m := ip.memo
 
 	var (
 		w   kit.Word
 		err error
 	)
 
+RUN_LOOP:
 	for {
 
 		if w, err = words.ReadWord(); err != nil {
-			interp.errorCh <- err
-			break
+			ip.errorCh <- err
+			break RUN_LOOP
 		}
 
 		switch w.GetWordType() {
@@ -105,14 +112,14 @@ func (interp *Interpreter) run(words kit.WordScanner) {
 		case word.TNumberWord:
 			log.Println("number word")
 			if _, err := w.Do(m); err != nil {
-				interp.errorCh <- err
+				ip.errorCh <- err
 				break
 			}
 
 		case word.TStringWord:
 			log.Println("string word")
 			if _, err := w.Do(m); err != nil {
-				interp.errorCh <- err
+				ip.errorCh <- err
 				break
 			}
 
@@ -122,18 +129,12 @@ func (interp *Interpreter) run(words kit.WordScanner) {
 
 		default:
 			log.Println("unknown word: %+v", w)
-			interp.errorCh <- errors.New("unknown word")
+			ip.errorCh <- errors.New("unknown word")
 			break
 
 		}
 
 	}
 
-	interp.stoppedCh <- struct{}{}
+	ip.stoppedCh <- struct{}{}
 }
-
-/*
-================================================================================
-Interpreter parse methods
-================================================================================
-*/

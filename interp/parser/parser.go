@@ -61,6 +61,9 @@ parser functions
 
 func (p *parser) run() {
 
+	for p.state = parse; p.state != nil; {
+		p.state = p.state(p)
+	}
 }
 
 func (p *parser) emit(w kit.Word) {

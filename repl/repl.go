@@ -3,7 +3,7 @@ package repl
 import "github.com/mk2/yon/interp"
 
 type Repl struct {
-	interp *interp.Interpreter
+	interp *interp.interpreter
 }
 
 func New() *Repl {
