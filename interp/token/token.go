@@ -52,7 +52,7 @@ func (t Token) String() string {
 		return t.Val
 
 	case TNumber:
-		return fmt.Sprintf("%lf", t.Val)
+		return fmt.Sprintf("%s", t.Val)
 
 	case TString:
 		return t.Val

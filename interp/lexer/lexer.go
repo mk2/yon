@@ -5,9 +5,9 @@ import (
 	"log"
 
 	"errors"
+
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/token"
-	"sync"
 )
 
 const nilRune = rune(-1)

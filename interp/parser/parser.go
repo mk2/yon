@@ -78,7 +78,7 @@ func (p *parser) next() kit.Token {
 		err error
 	)
 
-	if t, _, err = p.input.ReadToken(); err != nil {
+	if t, err = p.input.ReadToken(); err != nil {
 		return nil
 	}
 
@@ -88,8 +88,8 @@ func (p *parser) next() kit.Token {
 func (p *parser) peek() kit.Token {
 
 	var (
-		t   kit.Token = p.next()
-		err error     = p.input.UnreadToken()
+		t   = p.next()
+		err = p.input.UnreadToken()
 	)
 
 	if err != nil {

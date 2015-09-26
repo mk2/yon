@@ -42,7 +42,7 @@ func (s *stack) Print() {
 			switch t := w.GetWordType(); {
 
 			case t == word.TNumberWord:
-				color.Magenta(fBase, depth, fmt.Sprintf(fNumberWord, 0))
+				color.Magenta(fBase, depth, fmt.Sprintf(fNumberWord, 0.0))
 
 			case t == word.TStringWord:
 				color.Cyan(fBase, depth, fmt.Sprintf(fStringWord, "0"))
@@ -58,7 +58,7 @@ func (s *stack) Print() {
 			color.Cyan(fBase, depth, fmt.Sprintf(fStringWord, str))
 		}
 
-		depth += 1
+		depth++
 	}
 }
 
