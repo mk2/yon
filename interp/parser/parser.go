@@ -1,6 +1,9 @@
 package parser
 
 import (
+	"errors"
+	"log"
+
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/token"
 	"github.com/mk2/yon/interp/word"
@@ -18,6 +21,7 @@ type parser struct {
 
 type stateFn func(*parser) stateFn
 
+// New returns kit.Parser instance
 func New(i kit.TokenScanner) kit.Parser {
 
 	p := &parser{
@@ -51,6 +55,45 @@ func (p *parser) NextWord() kit.Word {
 func (p *parser) GetWords() <-chan kit.Word {
 
 	return p.words
+}
+
+func (p *parser) ReadWord() (kit.Word, error) {
+
+	if p.onceAgainWord {
+
+		log.Println("found unused last token")
+
+		p.onceAgainWord = false
+
+		if p.lastWord == nil {
+			return nil, errors.New("no last read token")
+		}
+
+		return p.lastWord, nil
+	}
+
+	log.Println("waiting for incoming word")
+
+	select {
+
+	case t := <-p.words:
+		p.lastWord = t
+		return t, nil
+
+	}
+
+	return nil, errors.New("no token gained")
+}
+
+func (p *parser) UnreadWord() error {
+
+	if p.onceAgainWord {
+		return errors.New("already called UreadToken")
+	}
+
+	p.onceAgainWord = true
+
+	return nil
 }
 
 /*
@@ -106,9 +149,35 @@ func parse(p *parser) stateFn {
 	case token.TNumber:
 		w := word.NewNumberWord(t.GetVal())
 		p.emit(w)
+		p.next()
 
 	case token.TString:
 		w := word.NewStringWord(t.GetVal())
+		p.emit(w)
+		p.next()
+
+	case token.TSpace:
+		p.next()
+
+	case token.TEOF:
+		p.emit(word.NewNilWord())
+		return nil
+
+	}
+
+	return parse
+}
+
+func parseArray(p *parser) stateFn {
+
+	// skip the first leftside brace "{"
+	p.next()
+
+	w := word.NewArrayWord()
+
+	switch t := p.peek(); t.GetType() {
+
+	case token.TRightBrace:
 		p.emit(w)
 
 	}

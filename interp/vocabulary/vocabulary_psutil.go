@@ -1,8 +1,8 @@
 package vocabulary
 
 const (
-	kPsPs     = "ps"
-	kPsUptime = "uptime"
+	psPs     = "ps"
+	psUptime = "uptime"
 )
 
 func (v *vocabulary) LoadPsUtil() error {

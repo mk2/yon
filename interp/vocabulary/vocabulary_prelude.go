@@ -8,25 +8,25 @@ import (
 )
 
 const (
-	kStackPrint = ".s"
-	kPopPrint   = "."
-	kDup        = "dup"
-	kDef        = "def"
-	kForceDef   = "def!"
-	kAskDef     = "def?"
-	kApply      = "apply"
-	kCall       = "call"
-	kPlus       = "+"
-	kMinus      = "-"
-	kMulti      = "*"
-	kDiv        = "/"
-	kRem        = "%"
+	stackPrint = ".s"
+	popPrint   = "."
+	dup        = "dup"
+	def        = "def"
+	forceDef   = "def!"
+	askDef     = "def?"
+	apply      = "apply"
+	call       = "call"
+	plus       = "+"
+	minus      = "-"
+	multi      = "*"
+	div        = "/"
+	rem        = "%"
 )
 
 func (v *vocabulary) LoadPrelude() error {
 
-	v.OverWrite(kPopPrint, &word.FuncWord{
-		Name: kPopPrint,
+	v.OverWrite(popPrint, &word.FuncWord{
+		Name: popPrint,
 		Body: func(m kit.Memory) error {
 			s := m.Stack()
 			fmt.Printf("%v¥n", s.Pop().Value)
@@ -34,8 +34,8 @@ func (v *vocabulary) LoadPrelude() error {
 		},
 	})
 
-	v.OverWrite(kDup, &word.FuncWord{
-		Name: kDup,
+	v.OverWrite(dup, &word.FuncWord{
+		Name: dup,
 		Body: func(m kit.Memory) error {
 			s := m.Stack()
 			s.Push(s.Peek().Value)

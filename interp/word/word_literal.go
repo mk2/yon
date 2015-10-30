@@ -1,6 +1,10 @@
 package word
 
-import "github.com/mk2/yon/interp/kit"
+import (
+	"strconv"
+
+	"github.com/mk2/yon/interp/kit"
+)
 
 type NumberWord struct {
 	Word
@@ -9,8 +13,16 @@ type NumberWord struct {
 
 func NewNumberWord(val string) *NumberWord {
 
+	var (
+		f   float64
+		err error
+	)
+	if f, err = strconv.ParseFloat(val, 64); err != nil {
+		f = 0.0
+	}
+
 	return &NumberWord{
-		Number: 0,
+		Number: f,
 		Word: Word{
 			wordType: TNumberWord,
 		},

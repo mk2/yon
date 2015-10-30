@@ -70,6 +70,8 @@ func (l *lexer) ReadToken() (kit.Token, error) {
 
 	if l.onceAgainToken {
 
+		log.Printf("found unused last token: %t\n", l.lastToken)
+
 		l.onceAgainToken = false
 
 		if l.lastToken == nil {
@@ -78,6 +80,8 @@ func (l *lexer) ReadToken() (kit.Token, error) {
 
 		return l.lastToken, nil
 	}
+
+	log.Println("waiting for incoming token")
 
 	select {
 
@@ -132,15 +136,15 @@ func (l *lexer) emit(t kit.TokenType) {
 func (l *lexer) peek() rune {
 
 	var (
-		r   rune  = l.next()
-		err error = l.input.UnreadRune()
+		r   = l.next()
+		err = l.input.UnreadRune()
 	)
 
 	if err != nil {
 		return nilRune
 	}
 
-	l.pos -= 1
+	l.pos--
 
 	return r
 }
@@ -156,7 +160,7 @@ func (l *lexer) next() rune {
 		return nilRune
 	}
 
-	l.pos += 1
+	l.pos++
 
 	return r
 }
@@ -180,10 +184,18 @@ func lex(l *lexer) stateFn {
 		l.next()
 
 	case r == '{':
-		l.emit(token.TLeftSquareBracket)
+		l.emit(token.TLeftBrace)
 		l.next()
 
 	case r == '}':
+		l.emit(token.TRightBrace)
+		l.next()
+
+	case r == '[':
+		l.emit(token.TLeftSquareBracket)
+		l.next()
+
+	case r == ']':
 		l.emit(token.TRightSquareBracket)
 		l.next()
 

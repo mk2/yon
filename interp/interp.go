@@ -99,6 +99,8 @@ func (ip *interp) run(words kit.WordScanner) {
 		err error
 	)
 
+	log.Println("start RUN_LOOP")
+
 RUN_LOOP:
 	for {
 
@@ -106,6 +108,8 @@ RUN_LOOP:
 			ip.errorCh <- err
 			break RUN_LOOP
 		}
+
+		log.Printf("word: %t", w)
 
 		switch w.GetWordType() {
 
@@ -125,16 +129,18 @@ RUN_LOOP:
 
 		case word.TNilWord:
 			log.Println("nil word")
-			break
+			break RUN_LOOP
 
 		default:
 			log.Println("unknown word: %+v", w)
 			ip.errorCh <- errors.New("unknown word")
-			break
+			break RUN_LOOP
 
 		}
 
 	}
+
+	log.Println("exit RUN_LOOP")
 
 	ip.stoppedCh <- struct{}{}
 }

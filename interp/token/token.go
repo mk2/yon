@@ -19,6 +19,8 @@ const (
 	TSemiColon
 	TLeftParen
 	TRightParen
+	TLeftBrace
+	TRightBrace
 	TLeftSquareBracket
 	TRightSquareBracket
 )
