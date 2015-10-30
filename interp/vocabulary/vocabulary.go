@@ -1,6 +1,7 @@
 package vocabulary
 
 import (
+	"log"
 	"sync"
 
 	"errors"
@@ -22,6 +23,13 @@ func New() kit.Vocabulary {
 	v.LoadPrelude()
 
 	return v
+}
+
+func (v *vocabulary) Print() {
+
+	for k, w := range v.words {
+		log.Printf("key: %t body:%t", k, w)
+	}
 }
 
 func (v *vocabulary) Write(k string, w kit.Word) error {

@@ -8,6 +8,7 @@ const (
 	TNumberWord
 	TStringWord
 	TArrayWord
+	TNameWord
 )
 
 type Word struct {

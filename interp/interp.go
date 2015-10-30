@@ -49,6 +49,7 @@ func (ip *interp) PrintStack() {
 
 func (ip *interp) PrintVocab() {
 
+	ip.memo.Vocab().Print()
 }
 
 func (ip *interp) PrintHistory() {

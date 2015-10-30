@@ -43,5 +43,15 @@ func (v *vocabulary) LoadPrelude() error {
 		},
 	))
 
+	v.OverWrite(VDef, word.NewFuncWord(
+		VDef,
+		func(m kit.Memory) error {
+			s := m.Stack()
+			name := s.Pop().Value.(string)
+			value := s.Pop().Value.(string)
+			return v.Write(name, word.NewStringWord(value))
+		},
+	))
+
 	return nil
 }

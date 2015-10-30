@@ -8,11 +8,6 @@ type FuncWord struct {
 	Body kit.WordFuncBody
 }
 
-func (w *FuncWord) Do(m kit.Memory) (interface{}, error) {
-
-	return nil, w.Body(m)
-}
-
 func NewFuncWord(name string, body kit.WordFuncBody) *FuncWord {
 
 	return &FuncWord{
@@ -20,4 +15,9 @@ func NewFuncWord(name string, body kit.WordFuncBody) *FuncWord {
 		Name: name,
 		Body: body,
 	}
+}
+
+func (w *FuncWord) Do(m kit.Memory) (interface{}, error) {
+
+	return nil, w.Body(m)
 }

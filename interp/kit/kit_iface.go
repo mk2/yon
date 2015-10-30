@@ -47,6 +47,7 @@ type Vocabulary interface {
 	Write(k string, w Word) error
 	Read(k string) Word
 	LoadPrelude() error
+	Print()
 }
 
 // History will contain any user operation

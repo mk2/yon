@@ -183,6 +183,8 @@ func parseIdentifier(p *parser) stateFn {
 
 	if w := p.memo.Vocab().Read(ident); w != nil {
 		p.emit(w)
+	} else {
+		p.emit(word.NewNameWord(ident))
 	}
 
 	return parse
