@@ -12,6 +12,7 @@ import (
 type parser struct {
 	state         stateFn
 	input         kit.TokenScanner
+	memo          kit.Memory
 	words         chan kit.Word
 	stoppedCh     kit.StoppedCh
 	errorCh       kit.ErrorCh
@@ -22,11 +23,12 @@ type parser struct {
 type stateFn func(*parser) stateFn
 
 // New returns kit.Parser instance
-func New(i kit.TokenScanner) kit.Parser {
+func New(i kit.TokenScanner, memo kit.Memory) kit.Parser {
 
 	p := &parser{
 		state:         parse,
 		input:         i,
+		memo:          memo,
 		words:         make(chan kit.Word),
 		stoppedCh:     make(kit.StoppedCh),
 		errorCh:       make(kit.ErrorCh),
@@ -146,6 +148,12 @@ func parse(p *parser) stateFn {
 
 	switch t := p.peek(); t.GetType() {
 
+	case token.TIdentifier:
+		return parseIdentifier(p)
+
+	case token.TLeftBrace:
+		return parseArray(p)
+
 	case token.TNumber:
 		w := word.NewNumberWord(t.GetVal())
 		p.emit(w)
@@ -163,6 +171,18 @@ func parse(p *parser) stateFn {
 		p.emit(word.NewNilWord())
 		return nil
 
+	}
+
+	return parse
+}
+
+func parseIdentifier(p *parser) stateFn {
+
+	t := p.next()
+	ident := t.GetVal()
+
+	if w := p.memo.Vocab().Read(ident); w != nil {
+		p.emit(w)
 	}
 
 	return parse

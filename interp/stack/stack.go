@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	fBase       = "|%3d| %s"
+	fBase       = "|%5d| %s"
 	fNumberWord = `<number> %f`
 	fStringWord = `<string> "%s"`
 	fSep        = "-"

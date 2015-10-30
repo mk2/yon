@@ -77,7 +77,7 @@ func (ip *interp) Wait() error {
 func (ip *interp) Eval(runes kit.RuneScanner) (kit.StoppedCh, kit.ErrorCh) {
 
 	tokens := lexer.New(runes)
-	words := parser.New(tokens)
+	words := parser.New(tokens, ip.memo)
 
 	go ip.run(words)
 
@@ -127,12 +127,19 @@ RUN_LOOP:
 				break
 			}
 
+		case word.TFuncWord:
+			log.Println("func word")
+			if _, err := w.Do(m); err != nil {
+				ip.errorCh <- err
+				break
+			}
+
 		case word.TNilWord:
 			log.Println("nil word")
 			break RUN_LOOP
 
 		default:
-			log.Println("unknown word: %+v", w)
+			log.Printf("unknown word: %t\n", w)
 			ip.errorCh <- errors.New("unknown word")
 			break RUN_LOOP
 

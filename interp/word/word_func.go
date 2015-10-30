@@ -12,3 +12,12 @@ func (w *FuncWord) Do(m kit.Memory) (interface{}, error) {
 
 	return nil, w.Body(m)
 }
+
+func NewFuncWord(name string, body kit.WordFuncBody) *FuncWord {
+
+	return &FuncWord{
+		Word: Word{wordType: TFuncWord},
+		Name: name,
+		Body: body,
+	}
+}
