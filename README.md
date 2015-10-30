@@ -2,7 +2,7 @@
 
 - yon will be intended to make multi-cluster tool easily.
 - basically, the language like a factor dialect.
-- but it is not intended to expand by itself. So not contains the flexibility which was held by some stack-oriented langueages.
+- but it is not intended to expand by itself. So not having the flexibility which was held by some stack-oriented langueages.
 
 ```factor
 psutil use
