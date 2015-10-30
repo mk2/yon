@@ -54,6 +54,15 @@ func (v *vocabulary) OverWrite(k string, w kit.Word) (err error) {
 	return err
 }
 
+func (v *vocabulary) AliasOverWrite(orig string, alter string) (err error) {
+
+	if w, ok := v.words[orig]; ok {
+		return v.OverWrite(alter, w)
+	}
+
+	return errors.New("not found " + orig)
+}
+
 func (v *vocabulary) Read(k string) kit.Word {
 
 	return v.words[k]

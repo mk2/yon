@@ -11,7 +11,7 @@ import (
 func TestInterpEval(t *testing.T) {
 
 	interp := interp.New()
-	interp.EvalAndWait(bytes.NewBufferString("1 2 `test` 2 dup `value of a` `a` def"))
+	interp.EvalAndWait(bytes.NewBufferString("1 2 `test` 2 dup `value of a` `a` def p"))
 	interp.PrintStack()
 	interp.PrintVocab()
 }

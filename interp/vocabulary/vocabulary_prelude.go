@@ -8,19 +8,28 @@ import (
 )
 
 const (
-	VStackPrint = ".s"
-	VPopPrint   = "."
-	VDup        = "dup"
-	VDef        = "def"
-	VForceDef   = "def!"
-	VAskDef     = "def?"
-	VApply      = "apply"
-	VCall       = "call"
-	VPlus       = "+"
-	VMinus      = "-"
-	VMulti      = "*"
-	VDiv        = "/"
-	VRem        = "%"
+	VStackPrint    = ".s"
+	VPopPrint      = "."
+	VDup           = "dup"
+	VDef           = "def"
+	VForceDef      = "def!"
+	VAskDef        = "def?"
+	VApply         = "apply"
+	VCall          = "call"
+	VEach          = "each"
+	VMap           = "map"
+	VFMap          = "fmap"
+	VRep           = "rep"
+	VSh            = "sh"
+	VPrint         = "print"
+	VPrintSynonym  = "p"
+	VPrintf        = "printf"
+	VPrintfSynonym = "format"
+	VPlus          = "+"
+	VMinus         = "-"
+	VMulti         = "*"
+	VDiv           = "/"
+	VRem           = "%"
 )
 
 func (v *vocabulary) LoadPrelude() error {
@@ -29,10 +38,21 @@ func (v *vocabulary) LoadPrelude() error {
 		VPopPrint,
 		func(m kit.Memory) error {
 			s := m.Stack()
-			fmt.Printf("%v¥n", s.Pop().Value)
+			fmt.Printf("%v\n", s.Pop().Value)
 			return nil
 		},
 	))
+
+	v.OverWrite(VPrint, word.NewFuncWord(
+		VPrint,
+		func(m kit.Memory) error {
+			s := m.Stack()
+			fmt.Printf("%v\n", s.Peek().Value)
+			return nil
+		},
+	))
+
+	v.AliasOverWrite(VPrint, VPrintSynonym)
 
 	v.OverWrite(VDup, word.NewFuncWord(
 		VDup,
