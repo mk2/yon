@@ -4,23 +4,25 @@ import "github.com/mk2/yon/interp/kit"
 
 type ArrayWord struct {
 	Word
-	Array []Word
+	Array []kit.Word
 }
 
 func NewArrayWord() *ArrayWord {
 
 	return &ArrayWord{
 		Word:  Word{wordType: TArrayWord},
-		Array: []Word{},
+		Array: []kit.Word{},
 	}
 }
 
-func (arr *ArrayWord) Do(m kit.Memory) (interface{}, error) {
+func (w *ArrayWord) Do(m kit.Memory) (interface{}, error) {
+
+	m.Stack().Push(w)
 
 	return nil, nil
 }
 
-func (arr *ArrayWord) Put(w Word) {
+func (w *ArrayWord) Put(wd kit.Word) {
 
-	arr.Array = append(arr.Array, w)
+	w.Array = append(w.Array, wd)
 }

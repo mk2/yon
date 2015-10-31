@@ -11,6 +11,7 @@ import (
 
 type vocabulary struct {
 	sync.Mutex
+	sync.Once
 	words map[string]kit.Word
 }
 
@@ -38,7 +39,9 @@ func (v *vocabulary) Write(k string, w kit.Word) error {
 		return errors.New("already exists key: " + k)
 	}
 
+	v.Lock()
 	v.words[k] = w
+	v.Unlock()
 
 	return nil
 }
@@ -49,7 +52,9 @@ func (v *vocabulary) OverWrite(k string, w kit.Word) (err error) {
 		err = errors.New("already exists key: " + k)
 	}
 
+	v.Lock()
 	v.words[k] = w
+	v.Unlock()
 
 	return err
 }

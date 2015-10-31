@@ -67,9 +67,21 @@ func (v *vocabulary) LoadPrelude() error {
 		VDef,
 		func(m kit.Memory) error {
 			s := m.Stack()
-			name := s.Pop().Value.(string)
-			value := s.Pop().Value.(string)
-			return v.Write(name, word.NewStringWord(value))
+			var nw = s.Pop().Value.(kit.Word)
+			value := s.Pop().Value.(kit.Word)
+
+			name := ""
+			switch nw.GetWordType() {
+
+			case word.TStringWord:
+				name = nw.(*word.StringWord).String
+
+			case word.TNameWord:
+				name = nw.(*word.NameWord).Name
+
+			}
+
+			return v.Write(name, value)
 		},
 	))
 

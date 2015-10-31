@@ -128,6 +128,13 @@ RUN_LOOP:
 				break
 			}
 
+		case word.TArrayWord:
+			log.Println("array word")
+			if _, err := w.Do(m); err != nil {
+				ip.errorCh <- err
+				break
+			}
+
 		case word.TFuncWord:
 			log.Println("func word")
 			if _, err := w.Do(m); err != nil {

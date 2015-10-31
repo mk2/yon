@@ -16,8 +16,7 @@ func NewNameWord(name string) *NameWord {
 }
 func (w *NameWord) Do(m kit.Memory) (interface{}, error) {
 
-	s := m.Stack()
-	s.Push(w.Name)
+	m.Stack().Push(w)
 
 	return nil, nil
 }

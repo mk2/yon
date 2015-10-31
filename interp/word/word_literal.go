@@ -31,7 +31,7 @@ func NewNumberWord(val string) *NumberWord {
 
 func (w *NumberWord) Do(m kit.Memory) (interface{}, error) {
 
-	m.Stack().Push(w.Number)
+	m.Stack().Push(w)
 
 	return nil, nil
 }
@@ -53,7 +53,7 @@ func NewStringWord(val string) *StringWord {
 
 func (w *StringWord) Do(m kit.Memory) (interface{}, error) {
 
-	m.Stack().Push(w.String)
+	m.Stack().Push(w)
 
 	return nil, nil
 }

@@ -17,5 +17,7 @@ func NewNilWord() *NilWord {
 
 func (w *NilWord) Do(m kit.Memory) (interface{}, error) {
 
+	// do nothing
+
 	return nil, nil
 }

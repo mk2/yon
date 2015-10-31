@@ -3,6 +3,7 @@ package parser
 import (
 	"errors"
 	"log"
+	"sync"
 
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/token"
@@ -10,6 +11,7 @@ import (
 )
 
 type parser struct {
+	sync.Mutex
 	state         stateFn
 	input         kit.TokenScanner
 	memo          kit.Memory
@@ -100,7 +102,7 @@ func (p *parser) UnreadWord() error {
 
 /*
 ================================================================================
-parser functions
+parser private methods
 ================================================================================
 */
 
@@ -144,6 +146,12 @@ func (p *parser) peek() kit.Token {
 	return t
 }
 
+/*
+================================================================================
+parser functions
+================================================================================
+*/
+
 func parse(p *parser) stateFn {
 
 	switch t := p.peek(); t.GetType() {
@@ -163,6 +171,9 @@ func parse(p *parser) stateFn {
 		w := word.NewStringWord(t.GetVal())
 		p.emit(w)
 		p.next()
+
+	case token.TDblColon:
+		return parseFunc(p)
 
 	case token.TSpace:
 		p.next()
@@ -192,17 +203,63 @@ func parseIdentifier(p *parser) stateFn {
 
 func parseArray(p *parser) stateFn {
 
+	// enabled: emit stealing
+
 	// skip the first leftside brace "{"
 	p.next()
 
-	w := word.NewArrayWord()
-
-	switch t := p.peek(); t.GetType() {
-
-	case token.TRightBrace:
-		p.emit(w)
-
-	}
+	p.emit(parseArrayBody(p))
 
 	return parse
+}
+
+func parseArrayBody(p *parser) *word.ArrayWord {
+
+	w := word.NewArrayWord()
+
+PARSE_ARRAY_BODY_LOOP:
+	for {
+		switch t := p.peek(); t.GetType() {
+
+		case token.TNumber:
+			w.Put(word.NewNumberWord(t.GetVal()))
+			p.next()
+
+		case token.TString:
+			w.Put(word.NewStringWord(t.GetVal()))
+			p.next()
+
+		case token.TIdentifier:
+			ident := t.GetVal()
+			if v := p.memo.Vocab().Read(ident); v != nil {
+				w.Put(v)
+			} else {
+				w.Put(word.NewNameWord(ident))
+			}
+			p.next()
+
+		case token.TLeftBrace:
+			w.Put(parseArrayBody(p))
+
+		case token.TRightBrace:
+			p.next()
+			break PARSE_ARRAY_BODY_LOOP
+
+		case token.TEOF:
+			break PARSE_ARRAY_BODY_LOOP
+
+		case token.TSpace:
+			p.next()
+		}
+	}
+
+	return w
+}
+
+func parseFunc(p *parser) stateFn {
+
+	// skip first double colon
+	p.next()
+
+	return nil
 }

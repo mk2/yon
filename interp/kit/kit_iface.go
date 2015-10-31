@@ -3,6 +3,7 @@ package kit
 import (
 	"container/list"
 	"io"
+	"time"
 )
 
 // Token represents program atom
@@ -70,6 +71,12 @@ type Interpreter interface {
 	EvalAndWait(runes io.RuneScanner) error
 	Wait() error
 	Eval(runes RuneScanner) (StoppedCh, ErrorCh)
+}
+
+// Exception represents error occasion during running program
+type Exception interface {
+	err() error
+	time() *time.Time
 }
 
 /*
