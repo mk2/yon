@@ -239,6 +239,7 @@ PARSE_ARRAY_BODY_LOOP:
 			p.next()
 
 		case token.TLeftBrace:
+			p.next()
 			w.Put(parseArrayBody(p))
 
 		case token.TRightBrace:
