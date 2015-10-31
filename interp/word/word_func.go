@@ -4,28 +4,25 @@ import "github.com/mk2/yon/interp/kit"
 
 type FuncWord struct {
 	Word
-	Name   string
-	Author kit.AuthorType
-	Body   kit.WordFuncBody
+	Name string
+	Body kit.WordFuncBody
 }
 
 func NewPreludeFuncWord(name string, body kit.WordFuncBody) *FuncWord {
 
 	return &FuncWord{
-		Word:   Word{wordType: TFuncWord},
-		Name:   name,
-		Author: AuthorPrelude,
-		Body:   body,
+		Word: Word{wordType: TFuncWord, authorType: AuthorPrelude},
+		Name: name,
+		Body: body,
 	}
 }
 
 func NewFuncWord(name string, author kit.AuthorType, body kit.WordFuncBody) *FuncWord {
 
 	return &FuncWord{
-		Word:   Word{wordType: TFuncWord},
-		Name:   name,
-		Author: author,
-		Body:   body,
+		Word: Word{wordType: TFuncWord, authorType: author},
+		Name: name,
+		Body: body,
 	}
 }
 

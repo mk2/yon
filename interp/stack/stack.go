@@ -107,7 +107,7 @@ func printFuncWord(depth int, w *word.FuncWord) {
 
 func formatFuncWord(w *word.FuncWord) string {
 
-	return fmt.Sprintf(fFuncWord, w.Name, w.Author)
+	return fmt.Sprintf(fFuncWord, w.Name, w.GetAutorType())
 }
 
 func printArrayWord(depth int, w *word.ArrayWord) {
