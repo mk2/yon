@@ -10,7 +10,7 @@ type ArrayWord struct {
 func NewArrayWord() *ArrayWord {
 
 	return &ArrayWord{
-		Word:  Word{wordType: TArrayWord},
+		Word:  Word{wordType: TArrayWord, authorType: AuthorUser},
 		Array: []kit.Word{},
 	}
 }

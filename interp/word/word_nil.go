@@ -9,9 +9,7 @@ type NilWord struct {
 func NewNilWord() *NilWord {
 
 	return &NilWord{
-		Word: Word{
-			wordType: TNilWord,
-		},
+		Word: Word{wordType: TNilWord, authorType: AuthorUser},
 	}
 }
 

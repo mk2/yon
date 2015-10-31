@@ -2,7 +2,6 @@ package lexer
 
 import (
 	"bytes"
-	"log"
 
 	"errors"
 
@@ -70,7 +69,7 @@ func (l *lexer) ReadToken() (kit.Token, error) {
 
 	if l.onceAgainToken {
 
-		log.Printf("found unused last token: %t\n", l.lastToken)
+		kit.Printf("found unused last token: %t\n", l.lastToken)
 
 		l.onceAgainToken = false
 
@@ -81,7 +80,7 @@ func (l *lexer) ReadToken() (kit.Token, error) {
 		return l.lastToken, nil
 	}
 
-	log.Println("waiting for incoming token")
+	kit.Println("waiting for incoming token")
 
 	select {
 
@@ -228,7 +227,7 @@ func lex(l *lexer) stateFn {
 		return nil
 
 	default:
-		log.Printf("no matching: %s", r)
+		kit.Printf("no matching: %s", r)
 
 	}
 

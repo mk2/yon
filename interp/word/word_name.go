@@ -10,7 +10,7 @@ type NameWord struct {
 func NewNameWord(name string) *NameWord {
 
 	return &NameWord{
-		Word: Word{wordType: TNameWord},
+		Word: Word{wordType: TNameWord, authorType: AuthorUser},
 		Name: name,
 	}
 }

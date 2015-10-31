@@ -2,7 +2,6 @@ package parser
 
 import (
 	"errors"
-	"log"
 	"sync"
 
 	"github.com/mk2/yon/interp/kit"
@@ -65,7 +64,7 @@ func (p *parser) ReadWord() (kit.Word, error) {
 
 	if p.onceAgainWord {
 
-		log.Println("found unused last token")
+		kit.Println("found unused last token")
 
 		p.onceAgainWord = false
 
@@ -76,7 +75,7 @@ func (p *parser) ReadWord() (kit.Word, error) {
 		return p.lastWord, nil
 	}
 
-	log.Println("waiting for incoming word")
+	kit.Println("waiting for incoming word")
 
 	select {
 

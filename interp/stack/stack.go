@@ -19,6 +19,7 @@ const (
 	fStringWord = `<string> "%s"`
 	fNameWord   = `<name> %s`
 	fArrayWord  = `<array> {%s}`
+	fFuncWord   = `<func> [name:%s author:%s]`
 	fSep        = "-"
 )
 
@@ -61,6 +62,9 @@ func printWord(depth int, w kit.Word) {
 	case t == word.TNameWord:
 		printNameWord(depth, w.(*word.NameWord))
 
+	case t == word.TFuncWord:
+		printFuncWord(depth, w.(*word.FuncWord))
+
 	case t == word.TArrayWord:
 		printArrayWord(depth, w.(*word.ArrayWord))
 	}
@@ -96,6 +100,16 @@ func formatNameWord(w *word.NameWord) string {
 	return fmt.Sprintf(fNameWord, w.Name)
 }
 
+func printFuncWord(depth int, w *word.FuncWord) {
+
+	color.Magenta(fBase, depth, formatFuncWord(w))
+}
+
+func formatFuncWord(w *word.FuncWord) string {
+
+	return fmt.Sprintf(fFuncWord, w.Name, w.Author)
+}
+
 func printArrayWord(depth int, w *word.ArrayWord) {
 
 	color.Green(fBase, depth, formatArrayWord(w))
@@ -126,6 +140,9 @@ func formatArrayWord(w *word.ArrayWord) string {
 
 		case word.TNameWord:
 			buf.WriteString(formatNameWord(c.(*word.NameWord)))
+
+		case word.TFuncWord:
+			buf.WriteString(formatFuncWord(c.(*word.FuncWord)))
 
 		case word.TArrayWord:
 			buf.WriteString(formatArrayWord(c.(*word.ArrayWord)))

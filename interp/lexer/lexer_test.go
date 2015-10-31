@@ -2,9 +2,9 @@ package lexer_test
 
 import (
 	"bytes"
-	"log"
 	"testing"
 
+	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/lexer"
 	"github.com/mk2/yon/interp/token"
 )
@@ -16,7 +16,7 @@ func TestLexer_new(t *testing.T) {
 	for tkn := l.NextToken(); tkn.GetType() != token.TEOF; tkn = l.NextToken() {
 
 		if tkn.GetType() != token.TSpace {
-			log.Printf("token value: %s", tkn.GetVal())
+			kit.Printf("token value: %s", tkn.GetVal())
 		}
 	}
 }

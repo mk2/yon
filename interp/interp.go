@@ -1,8 +1,6 @@
 package interp
 
 import (
-	"log"
-
 	"errors"
 
 	"io"
@@ -100,7 +98,7 @@ func (ip *interp) run(words kit.WordScanner) {
 		err error
 	)
 
-	log.Println("start RUN_LOOP")
+	kit.Println("start RUN_LOOP")
 
 RUN_LOOP:
 	for {
@@ -110,44 +108,44 @@ RUN_LOOP:
 			break RUN_LOOP
 		}
 
-		log.Printf("word: %t", w)
+		kit.Printf("word: %t", w)
 
 		switch w.GetWordType() {
 
 		case word.TNumberWord:
-			log.Println("number word")
+			kit.Println("number word")
 			if _, err := w.Do(m); err != nil {
 				ip.errorCh <- err
 				break
 			}
 
 		case word.TStringWord:
-			log.Println("string word")
+			kit.Println("string word")
 			if _, err := w.Do(m); err != nil {
 				ip.errorCh <- err
 				break
 			}
 
 		case word.TArrayWord:
-			log.Println("array word")
+			kit.Println("array word")
 			if _, err := w.Do(m); err != nil {
 				ip.errorCh <- err
 				break
 			}
 
 		case word.TFuncWord:
-			log.Println("func word")
+			kit.Println("func word")
 			if _, err := w.Do(m); err != nil {
 				ip.errorCh <- err
 				break
 			}
 
 		case word.TNilWord:
-			log.Println("nil word")
+			kit.Println("nil word")
 			break RUN_LOOP
 
 		default:
-			log.Printf("unknown word: %t\n", w)
+			kit.Printf("unknown word: %t\n", w)
 			ip.errorCh <- errors.New("unknown word")
 			break RUN_LOOP
 
@@ -155,7 +153,7 @@ RUN_LOOP:
 
 	}
 
-	log.Println("exit RUN_LOOP")
+	kit.Println("exit RUN_LOOP")
 
 	ip.stoppedCh <- struct{}{}
 }

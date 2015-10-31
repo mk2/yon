@@ -34,7 +34,7 @@ const (
 
 func (v *vocabulary) LoadPrelude() error {
 
-	v.OverWrite(VPopPrint, word.NewFuncWord(
+	v.OverWrite(VPopPrint, word.NewPreludeFuncWord(
 		VPopPrint,
 		func(m kit.Memory) error {
 			s := m.Stack()
@@ -43,7 +43,7 @@ func (v *vocabulary) LoadPrelude() error {
 		},
 	))
 
-	v.OverWrite(VPrint, word.NewFuncWord(
+	v.OverWrite(VPrint, word.NewPreludeFuncWord(
 		VPrint,
 		func(m kit.Memory) error {
 			s := m.Stack()
@@ -54,7 +54,7 @@ func (v *vocabulary) LoadPrelude() error {
 
 	v.AliasOverWrite(VPrint, VPrintSynonym)
 
-	v.OverWrite(VDup, word.NewFuncWord(
+	v.OverWrite(VDup, word.NewPreludeFuncWord(
 		VDup,
 		func(m kit.Memory) error {
 			s := m.Stack()
@@ -63,7 +63,7 @@ func (v *vocabulary) LoadPrelude() error {
 		},
 	))
 
-	v.OverWrite(VDef, word.NewFuncWord(
+	v.OverWrite(VDef, word.NewPreludeFuncWord(
 		VDef,
 		func(m kit.Memory) error {
 			s := m.Stack()

@@ -23,9 +23,7 @@ func NewNumberWord(val string) *NumberWord {
 
 	return &NumberWord{
 		Number: f,
-		Word: Word{
-			wordType: TNumberWord,
-		},
+		Word:   Word{wordType: TNumberWord, authorType: AuthorUser},
 	}
 }
 
@@ -45,9 +43,7 @@ func NewStringWord(val string) *StringWord {
 
 	return &StringWord{
 		String: val,
-		Word: Word{
-			wordType: TStringWord,
-		},
+		Word:   Word{wordType: TStringWord, authorType: AuthorUser},
 	}
 }
 
