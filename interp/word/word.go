@@ -1,8 +1,9 @@
 package word
 
 import (
-	"github.com/mk2/yon/interp/kit"
 	"sync"
+
+	"github.com/mk2/yon/interp/kit"
 )
 
 const (
@@ -24,6 +25,7 @@ const (
 
 const (
 	AuthorPrelude kit.AuthorType = "prelude"
+	AuthorGo      kit.AuthorType = "go"
 	AuthorUser    kit.AuthorType = "user"
 )
 
@@ -39,25 +41,14 @@ func (w *Word) GetWordType() kit.WordType {
 	return w.wordType
 }
 
-func (w *Word) SetWordType(wordType kit.WordType) {
-
-	w.wordType = wordType
-}
-
 func (w *Word) GetAuthorType() kit.AuthorType {
 
 	return w.authorType
-}
-
-func (w *Word) SetAuthorType(authorType kit.AuthorType) {
-
-	w.Do(func() {
-
-		w.authorType = authorType
-	})
 }
 
 func (w *Word) GetAuthorId() kit.AuthorId {
 
 	return w.authorId
 }
+
+func (w *Word) do

@@ -32,12 +32,13 @@ type Parser interface {
 // words must ...
 //  - Be immutable, as far as possible.
 //  - Be classified-able by AuthorType
-//  - Have unique author id value
+//  - Have unique author id
 type Word interface {
 	GetWordType() WordType
 	GetAuthorType() AuthorType
 	GetAuthorId() AuthorId
 	Do(m Memory) (interface{}, error)
+	DoBody(m Memory) (interface{}, error)
 }
 
 // Stack consists runtime temporary memory
@@ -58,7 +59,9 @@ type Vocabulary interface {
 
 // History will contain any user operation
 type History interface {
-	Leave(w Word) error
+	Record(Word) error
+	RecordAt(Word, time.Time) error
+	Between(time.Time, time.Time) []Word
 }
 
 // Memory contains any instances of Stakc, Vocabulary, History

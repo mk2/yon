@@ -2,6 +2,7 @@ package kit
 
 type WordType int
 type WordFuncBody func(Memory) error
+type WordDoWrapper func(WordFuncBody) error
 
 type TokenType int
 type Position int

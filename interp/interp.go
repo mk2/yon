@@ -33,8 +33,8 @@ func New() kit.Interpreter {
 
 	interp := &interp{
 		memo:      memory.New(stack.New(), vocabulary.New(), history.New()),
-		stoppedCh: make(chan struct{}),
-		errorCh:   make(chan error),
+		stoppedCh: kit.NewStoppedCh(),
+		errorCh:   kit.NewErrorCh(),
 	}
 
 	return interp
