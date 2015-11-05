@@ -18,7 +18,6 @@ const (
 	VCall          = "call"
 	VEach          = "each"
 	VMap           = "map"
-	VFMap          = "fmap"
 	VRep           = "rep"
 	VSh            = "sh"
 	VPrint         = "print"

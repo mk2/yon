@@ -1,6 +1,9 @@
 package word
 
-import "github.com/mk2/yon/interp/kit"
+import (
+	"github.com/mk2/yon/interp/kit"
+	"sync"
+)
 
 const (
 	TNilWord kit.WordType = iota
@@ -16,7 +19,7 @@ const (
 	fStringWord = `<string> "%s"`
 	fNameWord   = `<name> %s`
 	fArrayWord  = `<array> {%s}`
-	fFuncWord   = `<func> [name:%s author:%s]`
+	fFuncWord   = `<func> [name:%s authorType:%s authorId:%s]`
 )
 
 const (
@@ -25,8 +28,10 @@ const (
 )
 
 type Word struct {
+	sync.Once
 	wordType   kit.WordType
 	authorType kit.AuthorType
+	authorId   kit.AuthorId
 }
 
 func (w *Word) GetWordType() kit.WordType {
@@ -39,12 +44,20 @@ func (w *Word) SetWordType(wordType kit.WordType) {
 	w.wordType = wordType
 }
 
-func (w *Word) GetAutorType() kit.AuthorType {
+func (w *Word) GetAuthorType() kit.AuthorType {
 
 	return w.authorType
 }
 
 func (w *Word) SetAuthorType(authorType kit.AuthorType) {
 
-	w.authorType = authorType
+	w.Do(func() {
+
+		w.authorType = authorType
+	})
+}
+
+func (w *Word) GetAuthorId() kit.AuthorId {
+
+	return w.authorId
 }

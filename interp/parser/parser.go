@@ -66,7 +66,9 @@ func (p *parser) ReadWord() (kit.Word, error) {
 
 		kit.Println("found unused last token")
 
+		p.Lock()
 		p.onceAgainWord = false
+		p.Unlock()
 
 		if p.lastWord == nil {
 			return nil, errors.New("no last read token")
@@ -94,7 +96,9 @@ func (p *parser) UnreadWord() error {
 		return errors.New("already called UreadToken")
 	}
 
+	p.Lock()
 	p.onceAgainWord = true
+	p.Unlock()
 
 	return nil
 }

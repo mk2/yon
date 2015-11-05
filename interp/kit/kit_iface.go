@@ -29,9 +29,14 @@ type Parser interface {
 }
 
 // Word represents abstract value wrapper
+// words must ...
+//  - Be immutable, as far as possible.
+//  - Be classified-able by AuthorType
+//  - Have unique author id value
 type Word interface {
 	GetWordType() WordType
-	SetWordType(WordType)
+	GetAuthorType() AuthorType
+	GetAuthorId() AuthorId
 	Do(m Memory) (interface{}, error)
 }
 

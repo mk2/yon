@@ -7,11 +7,13 @@ import (
 
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/token"
+	"sync"
 )
 
 const nilRune = rune(-1)
 
 type lexer struct {
+	sync.Mutex
 	name           string
 	start          kit.Position
 	pos            kit.Position
@@ -71,7 +73,9 @@ func (l *lexer) ReadToken() (kit.Token, error) {
 
 		kit.Printf("found unused last token: %t\n", l.lastToken)
 
+		l.Lock()
 		l.onceAgainToken = false
+		l.Unlock()
 
 		if l.lastToken == nil {
 			return nil, errors.New("no last read token")
@@ -99,7 +103,9 @@ func (l *lexer) UnreadToken() error {
 		return errors.New("already called UreadToken")
 	}
 
+	l.Lock()
 	l.onceAgainToken = true
+	l.Unlock()
 
 	return nil
 }
