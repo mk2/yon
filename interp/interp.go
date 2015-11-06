@@ -3,8 +3,6 @@ package interp
 import (
 	"errors"
 
-	"io"
-
 	"github.com/mk2/yon/interp/history"
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/lexer"
@@ -54,7 +52,7 @@ func (ip *interp) PrintHistory() {
 
 }
 
-func (ip *interp) EvalAndWait(runes io.RuneScanner) error {
+func (ip *interp) EvalAndWait(runes kit.RuneScanner) error {
 
 	ip.Eval(runes)
 	return ip.Wait()

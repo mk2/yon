@@ -50,5 +50,3 @@ func (w *Word) GetAuthorId() kit.AuthorId {
 
 	return w.authorId
 }
-
-func (w *Word) do

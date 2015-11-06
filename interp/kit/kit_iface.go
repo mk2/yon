@@ -38,7 +38,6 @@ type Word interface {
 	GetAuthorType() AuthorType
 	GetAuthorId() AuthorId
 	Do(m Memory) (interface{}, error)
-	DoBody(m Memory) (interface{}, error)
 }
 
 // Stack consists runtime temporary memory
