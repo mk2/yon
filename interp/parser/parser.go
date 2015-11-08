@@ -18,6 +18,8 @@ type parser struct {
 	stoppedCh     kit.StoppedCh
 	errorCh       kit.ErrorCh
 	lastWord      kit.Word
+	leftDelim     kit.TokenType
+	rightDelim    kit.TokenType
 	onceAgainWord bool
 }
 
@@ -34,6 +36,8 @@ func New(i kit.TokenScanner, memo kit.Memory) kit.Parser {
 		stoppedCh:     make(kit.StoppedCh),
 		errorCh:       make(kit.ErrorCh),
 		lastWord:      nil,
+		leftDelim:     token.T, // TODO
+		rightDelim:    nil,
 		onceAgainWord: false,
 	}
 

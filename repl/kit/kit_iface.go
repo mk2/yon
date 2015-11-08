@@ -4,12 +4,15 @@ type Repl interface {
 	GetClient() ReplClient
 	GetPrimaryServer() ReplServer
 	GetServers() []ReplServer
+	Eval(string) string
+	EvalFile(string) (string, error)
 }
 
 type ReplClient interface {
-	Eval(string)
-	EvalFile(string)
+	ShowHelp(string) string
 }
 
 type ReplServer interface {
+	Start() error
+	Send(string) error
 }

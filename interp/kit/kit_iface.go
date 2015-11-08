@@ -75,7 +75,7 @@ type Interpreter interface {
 	PrintStack()
 	PrintVocab()
 	PrintHistory()
-	EvalAndWait(runes io.RuneScanner) error
+	EvalAndWait(runes RuneScanner) error
 	Wait() error
 	Eval(runes RuneScanner) (StoppedCh, ErrorCh)
 }

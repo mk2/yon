@@ -30,3 +30,15 @@ func (w *FuncWord) Do(m kit.Memory) (interface{}, error) {
 
 	return nil, w.Body(m)
 }
+
+func ArrayWordFuncBody(a *ArrayWord) kit.WordFuncBody {
+
+	return func(m kit.Memory) (err error) {
+
+		for _, w := range a.Array {
+			_, err = w.Do(m)
+		}
+
+		return err
+	}
+}

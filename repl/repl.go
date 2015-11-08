@@ -10,6 +10,16 @@ func New() kit.Repl {
 	return &repl{}
 }
 
+func (r *repl) Eval(input string) (output string) {
+
+	return
+}
+
+func (r *repl) EvalFile(filePath string) (output string, err error) {
+
+	return
+}
+
 func (r *repl) GetClient() kit.ReplClient {
 
 	return nil
