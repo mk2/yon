@@ -28,6 +28,13 @@ type Parser interface {
 	GetWords() <-chan Word
 }
 
+// Author contains word's owner information.
+type Author interface {
+	GetAuthorType() AuthorType
+	// GetAuthorId returns author id (mostly given random generated string)
+	GetAuthorId() AuthorId
+}
+
 // Word represents abstract value wrapper
 // words must ...
 //  - Be immutable, as far as possible.
@@ -37,7 +44,24 @@ type Word interface {
 	GetWordType() WordType
 	GetAuthorType() AuthorType
 	GetAuthorId() AuthorId
+	GetAuthor() Author
+	String() string
 	Do(m Memory) (interface{}, error)
+}
+
+// ArrayWord represents Array container word
+type ArrayWord interface {
+	Word
+	Put(Word)
+}
+
+type NumberWord interface {
+	Word
+	Number() float64
+}
+
+type StringWord interface {
+	Word
 }
 
 // Stack consists runtime temporary memory

@@ -106,7 +106,7 @@ RUN_LOOP:
 			break RUN_LOOP
 		}
 
-		kit.Printf("word: %t", w)
+		kit.Printf("word: %+v", w)
 
 		switch w.GetWordType() {
 
@@ -143,7 +143,7 @@ RUN_LOOP:
 			break RUN_LOOP
 
 		default:
-			kit.Printf("unknown word: %t\n", w)
+			kit.Printf("unknown word: %+v\n", w)
 			ip.errorCh <- errors.New("unknown word")
 			break RUN_LOOP
 

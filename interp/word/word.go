@@ -29,24 +29,28 @@ const (
 	AuthorUser    kit.AuthorType = "user"
 )
 
-type Word struct {
+type word struct {
 	sync.Once
-	wordType   kit.WordType
-	authorType kit.AuthorType
-	authorId   kit.AuthorId
+	wordType kit.WordType
+	author   kit.Author
 }
 
-func (w *Word) GetWordType() kit.WordType {
+func (w *word) GetWordType() kit.WordType {
 
 	return w.wordType
 }
 
-func (w *Word) GetAuthorType() kit.AuthorType {
+func (w *word) GetAuthorType() kit.AuthorType {
 
-	return w.authorType
+	return w.author.GetAuthorType()
 }
 
-func (w *Word) GetAuthorId() kit.AuthorId {
+func (w *word) GetAuthorId() kit.AuthorId {
 
-	return w.authorId
+	return w.author.GetAuthorId()
+}
+
+func (w *word) GetAuthor() kit.Author {
+
+	return w.author
 }

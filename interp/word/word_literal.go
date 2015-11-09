@@ -3,15 +3,16 @@ package word
 import (
 	"strconv"
 
+	"github.com/mk2/yon/interp/author"
 	"github.com/mk2/yon/interp/kit"
 )
 
-type NumberWord struct {
-	Word
-	Number float64
+type numberWord struct {
+	word
+	number float64
 }
 
-func NewNumberWord(val string) *NumberWord {
+func NewNumberWord(val string) kit.NumberWord {
 
 	var (
 		f   float64
@@ -21,35 +22,50 @@ func NewNumberWord(val string) *NumberWord {
 		f = 0.0
 	}
 
-	return &NumberWord{
-		Number: f,
-		Word:   Word{wordType: TNumberWord, authorType: AuthorUser},
+	return &numberWord{
+		word:   word{wordType: TNumberWord, author: author.NewUserAuthor()},
+		number: f,
 	}
 }
 
-func (w *NumberWord) Do(m kit.Memory) (interface{}, error) {
+func (w *numberWord) Do(m kit.Memory) (interface{}, error) {
 
 	m.Stack().Push(w)
 
 	return nil, nil
 }
 
-type StringWord struct {
-	Word
-	String string
+func (w *numberWord) Number() float64 {
+
+	return w.number
 }
 
-func NewStringWord(val string) *StringWord {
+func (w *numberWord) String() string {
 
-	return &StringWord{
-		String: val,
-		Word:   Word{wordType: TStringWord, authorType: AuthorUser},
+	return strconv.FormatFloat(w.number, 'E', -1, 64)
+}
+
+type stringWord struct {
+	word
+	str string
+}
+
+func NewStringWord(val string) kit.StringWord {
+
+	return &stringWord{
+		str:  val,
+		word: word{wordType: TStringWord, author: author.NewUserAuthor()},
 	}
 }
 
-func (w *StringWord) Do(m kit.Memory) (interface{}, error) {
+func (w *stringWord) Do(m kit.Memory) (interface{}, error) {
 
 	m.Stack().Push(w)
 
 	return nil, nil
+}
+
+func (w *stringWord) String() string {
+
+	return w.str
 }

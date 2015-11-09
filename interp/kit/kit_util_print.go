@@ -3,7 +3,7 @@ package kit
 import (
 	"log"
 
-	"github.com/mk2/prism/env"
+	"github.com/mk2/yon/interp/env"
 )
 
 func Printf(format string, args ...interface{}) {

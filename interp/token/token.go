@@ -8,6 +8,7 @@ import (
 
 const (
 	TError kit.TokenType = iota
+	TNil
 	TEOF
 	TSpace
 	TIdentifier

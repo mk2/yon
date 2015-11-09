@@ -1,21 +1,29 @@
 package word
 
-import "github.com/mk2/yon/interp/kit"
+import (
+	"github.com/mk2/yon/interp/author"
+	"github.com/mk2/yon/interp/kit"
+)
 
-type NilWord struct {
-	Word
+type nilWord struct {
+	word
 }
 
-func NewNilWord() *NilWord {
+func NewNilWord() kit.Word {
 
-	return &NilWord{
-		Word: Word{wordType: TNilWord, authorType: AuthorUser},
+	return &nilWord{
+		word: word{wordType: TNilWord, author: author.NewPreludeAuthor()},
 	}
 }
 
-func (w *NilWord) Do(m kit.Memory) (interface{}, error) {
+func (w *nilWord) Do(m kit.Memory) (interface{}, error) {
 
 	// do nothing
 
 	return nil, nil
+}
+
+func (w *nilWord) String() string {
+
+	return "nil"
 }

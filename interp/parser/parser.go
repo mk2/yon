@@ -18,8 +18,8 @@ type parser struct {
 	stoppedCh     kit.StoppedCh
 	errorCh       kit.ErrorCh
 	lastWord      kit.Word
-	leftDelim     kit.TokenType
-	rightDelim    kit.TokenType
+	leftDelim     kit.Token
+	rightDelim    kit.Token
 	onceAgainWord bool
 }
 
@@ -36,7 +36,7 @@ func New(i kit.TokenScanner, memo kit.Memory) kit.Parser {
 		stoppedCh:     make(kit.StoppedCh),
 		errorCh:       make(kit.ErrorCh),
 		lastWord:      nil,
-		leftDelim:     token.T, // TODO
+		leftDelim:     nil,
 		rightDelim:    nil,
 		onceAgainWord: false,
 	}
@@ -88,10 +88,7 @@ func (p *parser) ReadWord() (kit.Word, error) {
 	case t := <-p.words:
 		p.lastWord = t
 		return t, nil
-
 	}
-
-	return nil, errors.New("no token gained")
 }
 
 func (p *parser) UnreadWord() error {
@@ -167,6 +164,7 @@ func parse(p *parser) stateFn {
 		return parseIdentifier(p)
 
 	case token.TLeftBrace:
+		p.leftDelim = t
 		return parseArray(p)
 
 	case token.TNumber:
@@ -215,16 +213,16 @@ func parseArray(p *parser) stateFn {
 	// skip the first leftside brace "{"
 	p.next()
 
-	p.emit(parseArrayBody(p))
+	p.emit(parseWordChain(p))
 
 	return parse
 }
 
-func parseArrayBody(p *parser) *word.ArrayWord {
+func parseWordChain(p *parser) kit.Word {
 
 	w := word.NewArrayWord()
 
-PARSE_ARRAY_BODY_LOOP:
+PARSE_WORD_CHAIN_LOOP:
 	for {
 		switch t := p.peek(); t.GetType() {
 
@@ -247,14 +245,14 @@ PARSE_ARRAY_BODY_LOOP:
 
 		case token.TLeftBrace:
 			p.next()
-			w.Put(parseArrayBody(p))
+			w.Put(parseWordChain(p))
 
 		case token.TRightBrace:
 			p.next()
-			break PARSE_ARRAY_BODY_LOOP
+			break PARSE_WORD_CHAIN_LOOP
 
 		case token.TEOF:
-			break PARSE_ARRAY_BODY_LOOP
+			break PARSE_WORD_CHAIN_LOOP
 
 		case token.TSpace:
 			p.next()

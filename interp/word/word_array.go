@@ -1,28 +1,36 @@
 package word
 
-import "github.com/mk2/yon/interp/kit"
+import (
+	"github.com/mk2/yon/interp/author"
+	"github.com/mk2/yon/interp/kit"
+)
 
-type ArrayWord struct {
-	Word
-	Array []kit.Word
+type arrayWord struct {
+	word
+	array []kit.Word
 }
 
-func NewArrayWord() *ArrayWord {
+func NewArrayWord() kit.ArrayWord {
 
-	return &ArrayWord{
-		Word:  Word{wordType: TArrayWord, authorType: AuthorUser},
-		Array: []kit.Word{},
+	return &arrayWord{
+		word:  word{wordType: TArrayWord, author: author.NewUserAuthor()},
+		array: []kit.Word{},
 	}
 }
 
-func (w *ArrayWord) Do(m kit.Memory) (interface{}, error) {
+func (w *arrayWord) Do(m kit.Memory) (interface{}, error) {
 
 	m.Stack().Push(w)
 
 	return nil, nil
 }
 
-func (w *ArrayWord) Put(wd kit.Word) {
+func (w *arrayWord) Put(wd kit.Word) {
 
-	w.Array = append(w.Array, wd)
+	w.array = append(w.array, wd)
+}
+
+func (w *arrayWord) String() string {
+
+	return ""
 }
