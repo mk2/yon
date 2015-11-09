@@ -49,6 +49,10 @@ type Word interface {
 	Do(m Memory) (interface{}, error)
 }
 
+type ChainWord interface {
+	Word
+}
+
 // ArrayWord represents Array container word
 type ArrayWord interface {
 	Word
@@ -61,6 +65,15 @@ type NumberWord interface {
 }
 
 type StringWord interface {
+	Word
+}
+
+type NameWord interface {
+	Word
+	Name() string
+}
+
+type FuncWord interface {
 	Word
 }
 

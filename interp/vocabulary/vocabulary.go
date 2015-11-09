@@ -29,7 +29,7 @@ func New() kit.Vocabulary {
 func (v *vocabulary) Print() {
 
 	for k, w := range v.words {
-		log.Printf("key: %t body:%t", k, w)
+		log.Printf("key: %v body:%+v", k, w)
 	}
 }
 

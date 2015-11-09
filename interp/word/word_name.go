@@ -10,7 +10,7 @@ type nameWord struct {
 	name string
 }
 
-func NewNameWord(name string) kit.Word {
+func NewNameWord(name string) kit.NameWord {
 
 	return &nameWord{
 		word: word{wordType: TNameWord, author: author.NewUserAuthor()},
@@ -22,6 +22,11 @@ func (w *nameWord) Do(m kit.Memory) (interface{}, error) {
 	m.Stack().Push(w)
 
 	return nil, nil
+}
+
+func (w *nameWord) Name() string {
+
+	return w.name
 }
 
 func (w *nameWord) String() string {

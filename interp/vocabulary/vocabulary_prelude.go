@@ -12,8 +12,6 @@ const (
 	VPopPrint      = "."
 	VDup           = "dup"
 	VDef           = "def"
-	VForceDef      = "def!"
-	VAskDef        = "def?"
 	VApply         = "apply"
 	VCall          = "call"
 	VEach          = "each"
@@ -65,22 +63,35 @@ func (v *vocabulary) LoadPrelude() error {
 	v.OverWrite(VDef, word.NewPreludeFuncWord(
 		VDef,
 		func(m kit.Memory) error {
-			s := m.Stack()
-			var nw = s.Pop().Value.(kit.Word)
-			value := s.Pop().Value.(kit.Word)
+			var nw = m.Stack().Pop().Value.(kit.Word)
 
+			value := m.Stack().Pop().Value.(kit.Word)
 			name := ""
+
 			switch nw.GetWordType() {
 
 			case word.TStringWord:
-				name = nw.(*word.StringWord).String
+				name = nw.(kit.StringWord).String()
 
 			case word.TNameWord:
-				name = nw.(*word.NameWord).Name
+				name = nw.(kit.NameWord).Name()
 
 			}
 
 			return v.Write(name, value)
+		},
+	))
+
+	v.OverWrite(VEach, word.NewPreludeFuncWord(
+		VEach,
+		func(m kit.Memory) error {
+
+			var (
+				fn    = m.Stack().Pop().Value.(kit.FuncWord)
+				chain = m.Stack().Pop().Value.(kit.Word)
+			)
+
+			return nil
 		},
 	))
 

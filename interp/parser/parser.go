@@ -218,6 +218,14 @@ func parseArray(p *parser) stateFn {
 	return parse
 }
 
+func parseFunc(p *parser) stateFn {
+
+	// skip first double colon
+	p.next()
+
+	return nil
+}
+
 func parseWordChain(p *parser) kit.Word {
 
 	w := word.NewArrayWord()
@@ -260,12 +268,4 @@ PARSE_WORD_CHAIN_LOOP:
 	}
 
 	return w
-}
-
-func parseFunc(p *parser) stateFn {
-
-	// skip first double colon
-	p.next()
-
-	return nil
 }

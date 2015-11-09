@@ -11,12 +11,12 @@ type funcWord struct {
 	body kit.WordFuncBody
 }
 
-func NewPreludeFuncWord(name string, body kit.WordFuncBody) kit.Word {
+func NewPreludeFuncWord(name string, body kit.WordFuncBody) kit.FuncWord {
 
 	return NewFuncWord(name, author.NewPreludeAuthor(), body)
 }
 
-func NewFuncWord(name string, author kit.Author, body kit.WordFuncBody) kit.Word {
+func NewFuncWord(name string, author kit.Author, body kit.WordFuncBody) kit.FuncWord {
 
 	return &funcWord{
 		word: word{wordType: TFuncWord, author: author},
