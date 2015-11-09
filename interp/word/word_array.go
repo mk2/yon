@@ -30,6 +30,11 @@ func (w *arrayWord) Put(wd kit.Word) {
 	w.array = append(w.array, wd)
 }
 
+func (w *arrayWord) Array() []kit.Word {
+
+	return w.array
+}
+
 func (w *arrayWord) String() string {
 
 	return ""

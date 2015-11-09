@@ -42,6 +42,11 @@ func ArrayWordFuncBody(a *arrayWord) kit.WordFuncBody {
 	}
 }
 
+func (w *funcWord) Name() string {
+
+	return w.name
+}
+
 func (f *funcWord) String() string {
 
 	return ""
