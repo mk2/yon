@@ -17,17 +17,20 @@ type Word interface {
 // ChainWord is basic chainable words
 type ChainWord interface {
 	Word
-	// Push stacks the given word on the top of chain, and returns latest pushed word.
-	Push(v Word) Word
-	Pop() Word
-	Peek() Word
+	Push(Word) Word
 }
 
 // ArrayWord represents Array container word
 type ArrayWord interface {
-	Word
+	ChainWord
 	Put(Word)
 	Array() []Word
+}
+
+type DictWord interface {
+	ChainWord
+	Put(Word, Word)
+	Tuple() map[Word]Word
 }
 
 // NumberWord holds number literal

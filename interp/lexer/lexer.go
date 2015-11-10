@@ -231,28 +231,36 @@ func lex(l *lexer) stateFn {
 		return lexSpace
 
 	case isLetter(r):
-		return lexIdentifier
+		return lexIdentifierAndKeyword
 
 	case r == nilRune:
 		l.emit(token.TEOF)
 		return nil
 
 	default:
-		kit.Printf("no matching: %s", r)
+		kit.Printf("no matching: %v", r)
 
 	}
 
 	return lex
 }
 
-func lexIdentifier(l *lexer) stateFn {
+func lexIdentifierAndKeyword(l *lexer) stateFn {
+
+	var lastR rune
 
 	for r := l.peek(); isLetter(r); r = l.peek() {
 		l.buf.WriteRune(r)
+		lastR = r
 		l.next()
 	}
 
-	l.emit(token.TIdentifier)
+	if lastR == ':' {
+		l.buf.Truncate(l.buf.Len() - 1)
+		l.emit(token.TKeyword)
+	} else {
+		l.emit(token.TIdentifier)
+	}
 
 	return lex
 }
@@ -329,7 +337,7 @@ func isNumber(r rune) bool {
 
 func isLetter(r rune) bool {
 
-	return 'a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' || r == '-' || r == '_' || r == '?' || r == '!'
+	return 'a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' || r == '-' || r == '_' || r == '?' || r == '!' || r == ':'
 }
 
 func isSpace(r rune) bool {

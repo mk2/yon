@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/mk2/yon/interp/author"
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/token"
 	"github.com/mk2/yon/interp/word"
@@ -187,8 +188,9 @@ func parse(p *parser) stateFn {
 		p.emit(w)
 		p.next()
 
-	case token.TDblColon:
-		return parseFunc(p)
+	case token.TLeftSquareBracket:
+		p.leftDelim = t
+		return parseAnonFunc(p)
 
 	case token.TSpace:
 		p.next()
@@ -228,44 +230,56 @@ func parseArray(p *parser) stateFn {
 	return parse
 }
 
-func parseFunc(p *parser) stateFn {
+// parseAnonFunc parses `[ number | string | ident | array | tuple ]`
+func parseAnonFunc(p *parser) stateFn {
 
 	// skip first double colon
 	p.next()
 
-	return nil
+	b := word.ChainWordFuncBody(parseWordChain(p))
+
+	p.emit(word.NewFuncWord("", author.NewUserAuthor(), b))
+
+	return parse
 }
 
-func parseWordChain(p *parser) kit.Word {
+func parseWordChain(p *parser) kit.ChainWord {
 
-	w := word.NewArrayWord()
+	w := word.NewChainWord()
 
 PARSE_WORD_CHAIN_LOOP:
 	for {
 		switch t := p.peek(); t.GetType() {
 
 		case token.TNumber:
-			w.Put(word.NewNumberWord(t.GetVal()))
+			w.Push(word.NewNumberWord(t.GetVal()))
 			p.next()
 
 		case token.TString:
-			w.Put(word.NewStringWord(t.GetVal()))
+			w.Push(word.NewStringWord(t.GetVal()))
 			p.next()
 
 		case token.TIdentifier:
 			ident := t.GetVal()
 			if v := p.memo.Vocab().Read(ident); v != nil {
-				w.Put(v)
+				w.Push(v)
 			} else {
-				w.Put(word.NewNameWord(ident))
+				w.Push(word.NewNameWord(ident))
 			}
 			p.next()
 
+		case token.TKeyword:
+			// if a TKeyword token found, it indicates a begin of DictWord.
+
 		case token.TLeftBrace:
 			p.next()
-			w.Put(parseWordChain(p))
+			w.Push(parseWordChain(p))
 
 		case token.TRightBrace:
+			p.next()
+			break PARSE_WORD_CHAIN_LOOP
+
+		case token.TRightSquareBracket:
 			p.next()
 			break PARSE_WORD_CHAIN_LOOP
 

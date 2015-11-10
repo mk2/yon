@@ -11,12 +11,12 @@ import (
 
 func TestLexer_new(t *testing.T) {
 
-	l := lexer.New(bytes.NewBufferString("a b:; 123 1.23 `test test`"))
+	l := lexer.New(bytes.NewBufferString("a b:; 123 1.23 `test test` test:"))
 
 	for tkn := l.NextToken(); tkn.GetType() != token.TEOF; tkn = l.NextToken() {
 
 		if tkn.GetType() != token.TSpace {
-			kit.Printf("token value: %s", tkn.GetVal())
+			kit.Printf("token type: %v token value: %s", tkn.GetType(), tkn.GetVal())
 		}
 	}
 }

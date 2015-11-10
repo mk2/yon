@@ -167,6 +167,7 @@ func (s *stack) Push(v kit.Word) kit.Word {
 func (s *stack) Pop() kit.Word {
 
 	s.Lock()
+	// TODO add nil check
 	e := s.Front()
 	s.Remove(e)
 	s.Unlock()
@@ -176,6 +177,7 @@ func (s *stack) Pop() kit.Word {
 
 func (s *stack) Peek() kit.Word {
 
+	// TODO add nil check
 	e := s.Front()
 
 	return e.Value.(kit.Word)

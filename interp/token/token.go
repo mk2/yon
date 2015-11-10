@@ -11,6 +11,7 @@ const (
 	TNil
 	TEOF
 	TSpace
+	TKeyword
 	TIdentifier
 	TNumber
 	TDot

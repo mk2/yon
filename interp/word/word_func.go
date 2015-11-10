@@ -30,11 +30,11 @@ func (w *funcWord) Do(m kit.Memory) (interface{}, error) {
 	return nil, w.body(m)
 }
 
-func ArrayWordFuncBody(a *arrayWord) kit.WordFuncBody {
+func ChainWordFuncBody(a kit.ChainWord) kit.WordFuncBody {
 
 	return func(m kit.Memory) (err error) {
 
-		for _, w := range a.array {
+		for _, w := range a.(kit.ArrayWord).Array() {
 			_, err = w.Do(m)
 		}
 
