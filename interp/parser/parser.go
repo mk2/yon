@@ -3,6 +3,7 @@ package parser
 import (
 	"errors"
 	"sync"
+	"time"
 
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/token"
@@ -88,7 +89,13 @@ func (p *parser) ReadWord() (kit.Word, error) {
 	case t := <-p.words:
 		p.lastWord = t
 		return t, nil
+
+	case <-time.After(kit.ParserTimeout):
+		// timeout
+
 	}
+
+	return nil, errors.New("no word gained")
 }
 
 func (p *parser) UnreadWord() error {
@@ -157,6 +164,9 @@ parser functions
 */
 
 func parse(p *parser) stateFn {
+
+	p.leftDelim = nil
+	p.rightDelim = nil
 
 	switch t := p.peek(); t.GetType() {
 

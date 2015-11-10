@@ -155,28 +155,28 @@ func formatArrayWord(w kit.ArrayWord) string {
 	return fmt.Sprintf(fArrayWord, buf.String())
 }
 
-func (s *stack) Push(v interface{}) *list.Element {
+func (s *stack) Push(v kit.Word) kit.Word {
 
 	s.Lock()
 	e := s.PushFront(v)
 	s.Unlock()
 
-	return e
+	return e.Value.(kit.Word)
 }
 
-func (s *stack) Pop() *list.Element {
+func (s *stack) Pop() kit.Word {
 
 	s.Lock()
 	e := s.Front()
 	s.Remove(e)
 	s.Unlock()
 
-	return e
+	return e.Value.(kit.Word)
 }
 
-func (s *stack) Peek() *list.Element {
+func (s *stack) Peek() kit.Word {
 
 	e := s.Front()
 
-	return e
+	return e.Value.(kit.Word)
 }

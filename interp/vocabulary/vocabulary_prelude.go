@@ -35,7 +35,7 @@ func (v *vocabulary) LoadPrelude() error {
 		VPopPrint,
 		func(m kit.Memory) error {
 			s := m.Stack()
-			fmt.Printf("%v\n", s.Pop().Value)
+			fmt.Printf("%v\n", s.Pop())
 			return nil
 		},
 	))
@@ -44,7 +44,7 @@ func (v *vocabulary) LoadPrelude() error {
 		VPrint,
 		func(m kit.Memory) error {
 			s := m.Stack()
-			fmt.Printf("%v\n", s.Peek().Value)
+			fmt.Printf("%v\n", s.Peek())
 			return nil
 		},
 	))
@@ -55,7 +55,7 @@ func (v *vocabulary) LoadPrelude() error {
 		VDup,
 		func(m kit.Memory) error {
 			s := m.Stack()
-			s.Push(s.Peek().Value)
+			s.Push(s.Peek())
 			return nil
 		},
 	))
@@ -63,9 +63,9 @@ func (v *vocabulary) LoadPrelude() error {
 	v.OverWrite(VDef, word.NewPreludeFuncWord(
 		VDef,
 		func(m kit.Memory) error {
-			var nw = m.Stack().Pop().Value.(kit.Word)
+			var nw = m.Stack().Pop()
 
-			value := m.Stack().Pop().Value.(kit.Word)
+			value := m.Stack().Pop()
 			name := ""
 
 			switch nw.GetWordType() {
@@ -87,8 +87,8 @@ func (v *vocabulary) LoadPrelude() error {
 		func(m kit.Memory) error {
 
 			var (
-				fn    = m.Stack().Pop().Value.(kit.FuncWord)
-				chain = m.Stack().Pop().Value.(kit.Word)
+				fn    = m.Stack().Pop()
+				chain = m.Stack().Pop()
 			)
 
 			return nil

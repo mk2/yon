@@ -2,12 +2,14 @@ package lexer
 
 import (
 	"bytes"
+	"time"
 
 	"errors"
 
+	"sync"
+
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/token"
-	"sync"
 )
 
 const nilRune = rune(-1)
@@ -71,7 +73,7 @@ func (l *lexer) ReadToken() (kit.Token, error) {
 
 	if l.onceAgainToken {
 
-		kit.Printf("found unused last token: %t\n", l.lastToken)
+		kit.Printf("found unused last token: %+v\n", l.lastToken)
 
 		l.Lock()
 		l.onceAgainToken = false
@@ -91,6 +93,9 @@ func (l *lexer) ReadToken() (kit.Token, error) {
 	case t := <-l.tokens:
 		l.lastToken = t
 		return t, nil
+
+	case <-time.After(kit.LexerTimeout):
+		// timeout
 
 	}
 

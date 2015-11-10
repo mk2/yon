@@ -1,7 +1,6 @@
 package kit
 
 import (
-	"container/list"
 	"io"
 	"time"
 )
@@ -37,9 +36,9 @@ type Author interface {
 
 // Stack consists runtime temporary memory
 type Stack interface {
-	Push(v interface{}) *list.Element
-	Pop() *list.Element
-	Peek() *list.Element
+	Push(v Word) Word
+	Pop() Word
+	Peek() Word
 	Print()
 }
 
