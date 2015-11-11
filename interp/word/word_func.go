@@ -1,12 +1,14 @@
 package word
 
 import (
+	"container/list"
+
 	"github.com/mk2/yon/interp/author"
 	"github.com/mk2/yon/interp/kit"
 )
 
 type funcWord struct {
-	word
+	chainWord
 	name string
 	body kit.WordFuncBody
 }
@@ -19,10 +21,18 @@ func NewPreludeFuncWord(name string, body kit.WordFuncBody) kit.FuncWord {
 func NewFuncWord(name string, author kit.Author, body kit.WordFuncBody) kit.FuncWord {
 
 	return &funcWord{
-		word: word{wordType: TFuncWord, author: author},
+		chainWord: chainWord{
+			word: word{wordType: TFuncWord, author: author},
+			List: *list.New(),
+		},
 		name: name,
 		body: body,
 	}
+}
+
+func NewFuncWordFromChainWord(name string, author kit.Author, c kit.ChainWord) kit.FuncWord {
+
+	return NewFuncWord(name, author, funcBodyFromChainWord(c))
 }
 
 func (w *funcWord) Do(m kit.Memory) (interface{}, error) {
@@ -30,7 +40,7 @@ func (w *funcWord) Do(m kit.Memory) (interface{}, error) {
 	return nil, w.body(m)
 }
 
-func ChainWordFuncBody(a kit.ChainWord) kit.WordFuncBody {
+func funcBodyFromChainWord(a kit.ChainWord) kit.WordFuncBody {
 
 	return func(m kit.Memory) (err error) {
 

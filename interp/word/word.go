@@ -11,6 +11,7 @@ const (
 	TFuncWord
 	TNumberWord
 	TStringWord
+	TChainWord
 	TArrayWord
 	TNameWord
 )

@@ -225,7 +225,7 @@ func parseArray(p *parser) stateFn {
 	// skip the first leftside brace "{"
 	p.next()
 
-	p.emit(parseWordChain(p))
+	p.emit(word.NewArrayWordFromChainWord(parseWordChain(p)))
 
 	return parse
 }
@@ -236,9 +236,7 @@ func parseAnonFunc(p *parser) stateFn {
 	// skip first double colon
 	p.next()
 
-	b := word.ChainWordFuncBody(parseWordChain(p))
-
-	p.emit(word.NewFuncWord("", author.NewUserAuthor(), b))
+	p.emit(word.NewFuncWordFromChainWord("", author.NewUserAuthor(), parseWordChain(p)))
 
 	return parse
 }

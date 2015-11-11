@@ -86,10 +86,10 @@ func (v *vocabulary) LoadPrelude() error {
 		VEach,
 		func(m kit.Memory) error {
 
-			var (
-				fn    = m.Stack().Pop()
-				chain = m.Stack().Pop()
-			)
+			// var (
+			// 	fn    = m.Stack().Pop()
+			// 	chain = m.Stack().Pop()
+			// )
 
 			return nil
 		},

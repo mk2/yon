@@ -1,5 +1,7 @@
 package kit
 
+import "container/list"
+
 // Word represents abstract value wrapper
 // words must ...
 //  - Be immutable, as far as possible.
@@ -17,6 +19,7 @@ type Word interface {
 // ChainWord is basic chainable words
 type ChainWord interface {
 	Word
+	ExtractList() *list.List
 	Push(Word) Word
 }
 
