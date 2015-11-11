@@ -16,7 +16,6 @@ func NewChainWord() kit.ChainWord {
 
 	return &chainWord{
 		word: word{wordType: TChainWord, author: author.NewUserAuthor()},
-		List: *list.New(),
 	}
 }
 
@@ -27,7 +26,12 @@ func (w *chainWord) ExtractList() *list.List {
 
 func (w *chainWord) String() string {
 
-	return ""
+	return "chain"
+}
+
+func (w *chainWord) Format() string {
+
+	return fChainWord
 }
 
 func (w *chainWord) Do(m kit.Memory) (interface{}, error) {
@@ -37,5 +41,30 @@ func (w *chainWord) Do(m kit.Memory) (interface{}, error) {
 
 func (w *chainWord) Push(v kit.Word) kit.Word {
 
-	return w.PushFront(v).Value.(kit.Word)
+	return w.PushBack(v).Value.(kit.Word)
+}
+
+func (w *chainWord) Each(f func(kit.Word)) {
+
+	for e := w.Front(); e != nil; e = e.Next() {
+		if e.Value != nil {
+			w := e.Value.(kit.Word)
+			f(w)
+		}
+	}
+}
+
+func (w *chainWord) FlatEach(f func(kit.Word)) {
+
+	for e := w.Front(); e != nil; e = e.Next() {
+		if e.Value != nil {
+			w := e.Value.(kit.Word)
+			switch w.GetWordType() {
+			case TChainWord:
+				w.(kit.ChainWord).FlatEach(f)
+			default:
+				f(w)
+			}
+		}
+	}
 }

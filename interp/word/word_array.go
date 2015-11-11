@@ -1,7 +1,9 @@
 package word
 
 import (
+	"bytes"
 	"container/list"
+	"fmt"
 
 	"github.com/mk2/yon/interp/author"
 	"github.com/mk2/yon/interp/kit"
@@ -9,7 +11,6 @@ import (
 
 type arrayWord struct {
 	chainWord
-	array []kit.Word
 }
 
 func NewArrayWordFromChainWord(c kit.ChainWord) kit.ArrayWord {
@@ -29,7 +30,6 @@ func NewArrayWordFromList(l *list.List) kit.ArrayWord {
 			word: word{wordType: TArrayWord, author: author.NewUserAuthor()},
 			List: *l,
 		},
-		array: []kit.Word{},
 	}
 }
 
@@ -42,15 +42,47 @@ func (w *arrayWord) Do(m kit.Memory) (interface{}, error) {
 
 func (w *arrayWord) Put(wd kit.Word) {
 
-	w.array = append(w.array, wd)
+	w.PushBack(wd)
 }
 
 func (w *arrayWord) Array() []kit.Word {
 
-	return w.array
+	var ws []kit.Word
+	w.Each(func(wd kit.Word) {
+		ws = append(ws, wd)
+	})
+
+	return ws
 }
 
 func (w *arrayWord) String() string {
 
-	return ""
+	var (
+		buf     = new(bytes.Buffer)
+		isFirst = true
+	)
+	w.Each(func(wd kit.Word) {
+		if !isFirst {
+			buf.WriteString(", ")
+		}
+		buf.WriteString(wd.String())
+		isFirst = false
+	})
+	return buf.String()
+}
+
+func (w *arrayWord) Format() string {
+
+	var (
+		buf     = new(bytes.Buffer)
+		isFirst = true
+	)
+	w.Each(func(wd kit.Word) {
+		if !isFirst {
+			buf.WriteString(", ")
+		}
+		buf.WriteString(wd.Format())
+		isFirst = false
+	})
+	return fmt.Sprintf(fArrayWord, buf.String())
 }

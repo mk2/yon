@@ -1,7 +1,7 @@
 package word
 
 import (
-	"container/list"
+	"fmt"
 
 	"github.com/mk2/yon/interp/author"
 	"github.com/mk2/yon/interp/kit"
@@ -23,7 +23,6 @@ func NewFuncWord(name string, author kit.Author, body kit.WordFuncBody) kit.Func
 	return &funcWord{
 		chainWord: chainWord{
 			word: word{wordType: TFuncWord, author: author},
-			List: *list.New(),
 		},
 		name: name,
 		body: body,
@@ -57,7 +56,12 @@ func (w *funcWord) Name() string {
 	return w.name
 }
 
-func (f *funcWord) String() string {
+func (w *funcWord) String() string {
 
-	return ""
+	return w.name
+}
+
+func (w *funcWord) Format() string {
+
+	return fmt.Sprintf(fFuncWord, w.name)
 }

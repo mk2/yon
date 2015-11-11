@@ -1,6 +1,7 @@
 package word
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/mk2/yon/interp/author"
@@ -45,6 +46,11 @@ func (w *numberWord) String() string {
 	return strconv.FormatFloat(w.number, 'E', -1, 64)
 }
 
+func (w *numberWord) Format() string {
+
+	return fmt.Sprintf(fNumberWord, w.number)
+}
+
 type stringWord struct {
 	word
 	str string
@@ -68,4 +74,9 @@ func (w *stringWord) Do(m kit.Memory) (interface{}, error) {
 func (w *stringWord) String() string {
 
 	return w.str
+}
+
+func (w *stringWord) Format() string {
+
+	return fmt.Sprintf(fStringWord, w.str)
 }

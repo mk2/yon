@@ -27,3 +27,8 @@ func (w *nilWord) String() string {
 
 	return "nil"
 }
+
+func (w *nilWord) Format() string {
+
+	return fNilWord
+}

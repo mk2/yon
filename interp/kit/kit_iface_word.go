@@ -13,6 +13,7 @@ type Word interface {
 	GetAuthorId() AuthorId
 	GetAuthor() Author
 	String() string
+	Format() string
 	Do(m Memory) (interface{}, error)
 }
 
@@ -21,6 +22,8 @@ type ChainWord interface {
 	Word
 	ExtractList() *list.List
 	Push(Word) Word
+	Each(func(Word))
+	FlatEach(func(Word))
 }
 
 // ArrayWord represents Array container word

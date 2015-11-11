@@ -1,10 +1,7 @@
 package stack
 
 import (
-	"bytes"
 	"container/list"
-
-	"fmt"
 
 	"sync"
 
@@ -14,13 +11,8 @@ import (
 )
 
 const (
-	fBase       = "|%5d| %s"
-	fNumberWord = `<number> %f`
-	fStringWord = `<string> "%s"`
-	fNameWord   = `<name> %s`
-	fArrayWord  = `<array> {%s}`
-	fFuncWord   = `<func> [name:%s author:%s]`
-	fSep        = "-"
+	fBase = "|%5d| %s"
+	fSep  = "-"
 )
 
 type stack struct {
@@ -72,87 +64,27 @@ func printWord(depth int, w kit.Word) {
 
 func printNumberWord(depth int, w kit.NumberWord) {
 
-	color.Magenta(fBase, depth, formatNumberWord(w))
-}
-
-func formatNumberWord(w kit.NumberWord) string {
-
-	return fmt.Sprintf(fNumberWord, w.Number())
+	color.Magenta(fBase, depth, w.Format())
 }
 
 func printStringWord(depth int, w kit.StringWord) {
 
-	color.Cyan(fBase, depth, formatStringWord(w))
-}
-
-func formatStringWord(w kit.StringWord) string {
-
-	return fmt.Sprintf(fStringWord, w.String())
+	color.Cyan(fBase, depth, w.Format())
 }
 
 func printNameWord(depth int, w kit.NameWord) {
 
-	color.Yellow(fBase, depth, formatNameWord(w))
-}
-
-func formatNameWord(w kit.NameWord) string {
-
-	return fmt.Sprintf(fNameWord, w.Name())
+	color.Yellow(fBase, depth, w.Format())
 }
 
 func printFuncWord(depth int, w kit.FuncWord) {
 
-	color.Magenta(fBase, depth, formatFuncWord(w))
-}
-
-func formatFuncWord(w kit.FuncWord) string {
-
-	return fmt.Sprintf(fFuncWord, w.Name(), w.GetAuthorType())
+	color.Magenta(fBase, depth, w.Format())
 }
 
 func printArrayWord(depth int, w kit.ArrayWord) {
 
-	color.Green(fBase, depth, formatArrayWord(w))
-}
-
-func formatArrayWord(w kit.ArrayWord) string {
-
-	var buf *bytes.Buffer
-	if buf = bytes.NewBufferString(""); buf == nil {
-		return ""
-	}
-
-	isFirst := true
-
-	for _, c := range w.Array() {
-
-		if !isFirst {
-			buf.WriteRune(',')
-		}
-
-		switch c.GetWordType() {
-
-		case word.TNumberWord:
-			buf.WriteString(formatNumberWord(c.(kit.NumberWord)))
-
-		case word.TStringWord:
-			buf.WriteString(formatStringWord(c.(kit.StringWord)))
-
-		case word.TNameWord:
-			buf.WriteString(formatNameWord(c.(kit.NameWord)))
-
-		case word.TFuncWord:
-			buf.WriteString(formatFuncWord(c.(kit.FuncWord)))
-
-		case word.TArrayWord:
-			buf.WriteString(formatArrayWord(c.(kit.ArrayWord)))
-
-		}
-
-		isFirst = false
-	}
-
-	return fmt.Sprintf(fArrayWord, buf.String())
+	color.Green(fBase, depth, w.Format())
 }
 
 func (s *stack) Push(v kit.Word) kit.Word {

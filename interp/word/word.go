@@ -21,7 +21,9 @@ const (
 	fStringWord = `<string> "%s"`
 	fNameWord   = `<name> %s`
 	fArrayWord  = `<array> {%s}`
-	fFuncWord   = `<func> [name:%s authorType:%s authorId:%s]`
+	fChainWord  = `<chain>`
+	fFuncWord   = `<func> [name:%s]`
+	fNilWord    = `<nil>`
 )
 
 const (
