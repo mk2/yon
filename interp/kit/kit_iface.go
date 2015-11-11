@@ -62,6 +62,11 @@ type Memory interface {
 	Stack() Stack
 	Vocab() Vocabulary
 	History() History
+	Printf(string, ...interface{})
+	Errorf(string, ...interface{})
+	Println(...interface{})
+	Stdout() string
+	Stderr() string
 }
 
 // Interpreter represents abstract interpret runtimeVolabulary
@@ -69,6 +74,8 @@ type Interpreter interface {
 	PrintStack()
 	PrintVocab()
 	PrintHistory()
+	StdoutString() string
+	StderrString() string
 	EvalAndWait(runes RuneScanner) error
 	Wait() error
 	Eval(runes RuneScanner) (StoppedCh, ErrorCh)

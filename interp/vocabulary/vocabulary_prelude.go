@@ -1,8 +1,6 @@
 package vocabulary
 
 import (
-	"fmt"
-
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/word"
 )
@@ -35,7 +33,7 @@ func (v *vocabulary) LoadPrelude() error {
 		VPopPrint,
 		func(m kit.Memory) error {
 			s := m.Stack()
-			fmt.Printf("%v\n", s.Pop())
+			m.Printf("%v\n", s.Pop())
 			return nil
 		},
 	))
@@ -44,7 +42,7 @@ func (v *vocabulary) LoadPrelude() error {
 		VPrint,
 		func(m kit.Memory) error {
 			s := m.Stack()
-			fmt.Printf("%v\n", s.Peek())
+			m.Printf("%v\n", s.Peek())
 			return nil
 		},
 	))

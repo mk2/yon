@@ -15,4 +15,5 @@ type ReplClient interface {
 type ReplServer interface {
 	Start() error
 	Send(string) error
+	Receive(int) (string, error)
 }

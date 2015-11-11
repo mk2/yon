@@ -52,6 +52,16 @@ func (ip *interp) PrintHistory() {
 
 }
 
+func (ip *interp) StdoutString() string {
+
+	return ip.memo.Stdout()
+}
+
+func (ip *interp) StderrString() string {
+
+	return ip.memo.Stderr()
+}
+
 func (ip *interp) EvalAndWait(runes kit.RuneScanner) error {
 
 	ip.Eval(runes)
