@@ -1,13 +1,16 @@
-.PHONY: clean get-deps test
+.PHONY: clean get-deps test-interp test
 
 default: test
 
-test:
-	# invoke interpreter test suite
+GO=go
+
+test: test-interp
+
+test-interp:
 	cd interp; make
 
 get-deps:
-	go get -u github.com/Scalingo/codegangsta-cli
-	go get -u github.com/fatih/color
-	go get -u github.com/mattn/go-isatty
-	go get -u github.com/shiena/ansicolor
+	go get github.com/Scalingo/codegangsta-cli
+	go get github.com/fatih/color
+	go get github.com/mattn/go-isatty
+	go get github.com/shiena/ansicolor
