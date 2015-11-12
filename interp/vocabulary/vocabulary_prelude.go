@@ -1,6 +1,8 @@
 package vocabulary
 
 import (
+	"errors"
+
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/word"
 )
@@ -84,10 +86,14 @@ func (v *vocabulary) LoadPrelude() error {
 		VEach,
 		func(m kit.Memory) error {
 
-			// var (
-			// 	fn    = m.Stack().Pop()
-			// 	chain = m.Stack().Pop()
-			// )
+			var (
+				fn = m.Stack().Pop()
+				w  = m.Stack().Pop()
+			)
+
+			if fn.GetWordType() != word.TFuncWord || w.GetWordType() != word.TArrayWord {
+				return errors.New("invalid word gain")
+			}
 
 			return nil
 		},

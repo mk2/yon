@@ -1,0 +1,11 @@
+{
+	"ImportPath": "github.com/mk2/yon",
+	"GoVersion": "go1.5.1",
+	"Deps": [
+		{
+			"ImportPath": "github.com/Scalingo/codegangsta-cli",
+			"Comment": "1.2.0-142-gb5b7239",
+			"Rev": "b5b723900d3cc42c474d0dd80b69389eac7b4c55"
+		}
+	]
+}
