@@ -7,23 +7,35 @@ import (
 	"errors"
 
 	"github.com/mk2/yon/interp/kit"
+	"strings"
 )
 
 type vocabulary struct {
 	sync.Mutex
 	sync.Once
-	words map[string]kit.Word
+	words   map[string]kit.Word
+	classes map[string]map[string]kit.Word
 }
 
 func New() kit.Vocabulary {
 
 	v := &vocabulary{
-		words: make(map[string]kit.Word, 0),
+		words:   make(map[string]kit.Word, 0),
+		classes: make(map[string]map[string]kit.Word, 0),
 	}
 
 	v.LoadPrelude()
 
 	return v
+}
+
+func (v *vocabulary) NewClass(className string) error {
+
+	v.Lock()
+	v.classes[className] = make(map[string]kit.Word, 0)
+	v.Unlock()
+
+	return nil
 }
 
 func (v *vocabulary) Print() {
@@ -68,7 +80,33 @@ func (v *vocabulary) AliasOverWrite(orig string, alter string) (err error) {
 	return errors.New("not found " + orig)
 }
 
-func (v *vocabulary) Read(k string) kit.Word {
+func (v *vocabulary) ReadClass(className string, k string) kit.Word {
 
-	return v.words[k]
+	if class, classOk := v.classes[className]; classOk {
+		if w, wordOk := class[k]; wordOk {
+			return w
+		}
+	}
+
+	return nil
+}
+
+func (v *vocabulary) Read(fqk string) kit.Word {
+
+	return v.words[fqk]
+}
+
+// ExtractClass returns the extracted class name and key from the given fully qualified key.
+func ExtractClass(fqk string) (string, string) {
+
+	fqkLen := len(fqk)
+	names := strings.Split(fqk, ".")
+	key := names[len(names)-1]
+	classEnd := len(fqk)-len(key)-1
+
+	if classEnd < 0 {
+		return "", key
+	} else {
+		return fqk[:fqkLen - len(key) - 1], key
+	}
 }

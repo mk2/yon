@@ -44,9 +44,18 @@ type Stack interface {
 
 // Vocabulary holds any named words
 type Vocabulary interface {
-	Write(k string, w Word) error
-	Read(k string) Word
+	// Write registers the given word to the vocabulary with the given fully qualified key
+	Write(string, Word) error
+	// ReadClass returns the word searched by the given class name and key name
+	ReadClass(string, string) Word
+	// Read returns the word searching by the given fully qualified key
+	// if the fully qualified key doesn't have any class name, search all class until the key found.
+	Read(string) Word
+	// LoadPrelude registers prelude words.
 	LoadPrelude() error
+	// NewClass makes new class. (it used for the word classification)
+	NewClass(string) error
+	// Print writes formatted vocabulary to stdout.
 	Print()
 }
 

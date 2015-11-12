@@ -15,6 +15,7 @@ const (
 	VApply         = "apply"
 	VCall          = "call"
 	VEach          = "each"
+	VIf            = "if"
 	VMap           = "map"
 	VRep           = "rep"
 	VSh            = "sh"
@@ -30,6 +31,8 @@ const (
 )
 
 func (v *vocabulary) LoadPrelude() error {
+
+	v.NewClass("prelude")
 
 	v.OverWrite(VPopPrint, word.NewPreludeFuncWord(
 		VPopPrint,
