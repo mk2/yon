@@ -1,3 +1,7 @@
+# yon
+
+[![Build Status](https://travis-ci.org/mk2/yon.svg)](https://travis-ci.org/mk2/yon)
+
 # TBD
 
 - yon will be intended to make multi-cluster tool easily.
