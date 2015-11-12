@@ -75,3 +75,6 @@ _testmain.go
 
 # sublime
 *.sublime-workspace
+
+# for godep
+_workspace
