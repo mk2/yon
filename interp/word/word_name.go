@@ -19,7 +19,7 @@ func NewNameWord(name string) kit.NameWord {
 		name: name,
 	}
 }
-func (w *nameWord) Do(m kit.Memory) (interface{}, error) {
+func (w *nameWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 
 	m.Stack().Push(w)
 

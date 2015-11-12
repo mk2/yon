@@ -16,7 +16,7 @@ func NewNilWord() kit.Word {
 	}
 }
 
-func (w *nilWord) Do(m kit.Memory) (interface{}, error) {
+func (w *nilWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 
 	// do nothing
 

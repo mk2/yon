@@ -22,7 +22,7 @@ const (
 	fNameWord   = `<name> %s`
 	fArrayWord  = `<array> {%s}`
 	fChainWord  = `<chain>`
-	fFuncWord   = `<func> [name:%s]`
+	fFuncWord   = `<func> [name:%s quoted:%t]`
 	fNilWord    = `<nil>`
 )
 
@@ -56,4 +56,14 @@ func (w *word) GetAuthorId() kit.AuthorId {
 func (w *word) GetAuthor() kit.Author {
 
 	return w.author
+}
+
+func CheckChainWord(w kit.Word) bool {
+
+	switch w.GetWordType() {
+	case TChainWord | TArrayWord | TFuncWord:
+		return true
+	default:
+		return false
+	}
 }

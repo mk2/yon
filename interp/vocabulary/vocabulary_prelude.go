@@ -33,7 +33,7 @@ func (v *vocabulary) LoadPrelude() error {
 
 	v.OverWrite(VPopPrint, word.NewPreludeFuncWord(
 		VPopPrint,
-		func(m kit.Memory) error {
+		func(m kit.Memory, args ...interface{}) error {
 			s := m.Stack()
 			m.Printf("%v\n", s.Pop())
 			return nil
@@ -42,7 +42,7 @@ func (v *vocabulary) LoadPrelude() error {
 
 	v.OverWrite(VPrint, word.NewPreludeFuncWord(
 		VPrint,
-		func(m kit.Memory) error {
+		func(m kit.Memory, args ...interface{}) error {
 			s := m.Stack()
 			m.Printf("%v\n", s.Peek())
 			return nil
@@ -53,7 +53,7 @@ func (v *vocabulary) LoadPrelude() error {
 
 	v.OverWrite(VDup, word.NewPreludeFuncWord(
 		VDup,
-		func(m kit.Memory) error {
+		func(m kit.Memory, args ...interface{}) error {
 			s := m.Stack()
 			s.Push(s.Peek())
 			return nil
@@ -62,7 +62,7 @@ func (v *vocabulary) LoadPrelude() error {
 
 	v.OverWrite(VDef, word.NewPreludeFuncWord(
 		VDef,
-		func(m kit.Memory) error {
+		func(m kit.Memory, args ...interface{}) error {
 			var nw = m.Stack().Pop()
 
 			value := m.Stack().Pop()
@@ -84,16 +84,21 @@ func (v *vocabulary) LoadPrelude() error {
 
 	v.OverWrite(VEach, word.NewPreludeFuncWord(
 		VEach,
-		func(m kit.Memory) error {
+		func(m kit.Memory, args ...interface{}) error {
 
 			var (
 				fn = m.Stack().Pop()
 				w  = m.Stack().Pop()
 			)
 
-			if fn.GetWordType() != word.TFuncWord || w.GetWordType() != word.TArrayWord {
+			if fn.GetWordType() != word.TFuncWord || !word.CheckChainWord(w) {
 				return errors.New("invalid word gain")
 			}
+
+			w.(kit.ChainWord).Each(func(wd kit.Word) {
+				m.Stack().Push(wd)
+				fn.Do(m)
+			})
 
 			return nil
 		},

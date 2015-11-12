@@ -14,7 +14,7 @@ type Word interface {
 	GetAuthor() Author
 	String() string
 	Format() string
-	Do(m Memory) (interface{}, error)
+	Do(Memory, ...interface{}) (interface{}, error)
 }
 
 // ChainWord is basic chainable words

@@ -34,7 +34,7 @@ func (w *chainWord) Format() string {
 	return fChainWord
 }
 
-func (w *chainWord) Do(m kit.Memory) (interface{}, error) {
+func (w *chainWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 
 	return nil, nil
 }

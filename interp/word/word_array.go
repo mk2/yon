@@ -33,7 +33,7 @@ func NewArrayWordFromList(l *list.List) kit.ArrayWord {
 	}
 }
 
-func (w *arrayWord) Do(m kit.Memory) (interface{}, error) {
+func (w *arrayWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 
 	m.Stack().Push(w)
 

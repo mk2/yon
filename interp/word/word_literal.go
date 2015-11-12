@@ -29,7 +29,7 @@ func NewNumberWord(val string) kit.NumberWord {
 	}
 }
 
-func (w *numberWord) Do(m kit.Memory) (interface{}, error) {
+func (w *numberWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 
 	m.Stack().Push(w)
 
@@ -64,7 +64,7 @@ func NewStringWord(val string) kit.StringWord {
 	}
 }
 
-func (w *stringWord) Do(m kit.Memory) (interface{}, error) {
+func (w *stringWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 
 	m.Stack().Push(w)
 

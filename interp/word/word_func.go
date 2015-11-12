@@ -9,8 +9,9 @@ import (
 
 type funcWord struct {
 	chainWord
-	name string
-	body kit.WordFuncBody
+	name   string
+	quoted bool
+	body   kit.WordFuncBody
 }
 
 func NewPreludeFuncWord(name string, body kit.WordFuncBody) kit.FuncWord {
@@ -26,6 +27,7 @@ func NewFuncWord(name string, author kit.Author, body kit.WordFuncBody) kit.Func
 		},
 		name: name,
 		body: body,
+		quoted: name == "",
 	}
 }
 
@@ -34,18 +36,24 @@ func NewFuncWordFromChainWord(name string, author kit.Author, c kit.ChainWord) k
 	return NewFuncWord(name, author, funcBodyFromChainWord(c))
 }
 
-func (w *funcWord) Do(m kit.Memory) (interface{}, error) {
+func (w *funcWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 
-	return nil, w.body(m)
+	if w.quoted {
+		w.quoted = false
+		m.Stack().Push(w)
+		return nil,nil
+	} else {
+		return nil, w.body(m, args...)
+	}
 }
 
 func funcBodyFromChainWord(a kit.ChainWord) kit.WordFuncBody {
 
-	return func(m kit.Memory) (err error) {
+	return func(m kit.Memory, args ...interface{}) (err error) {
 
-		for _, w := range a.(kit.ArrayWord).Array() {
+		a.Each(func(w kit.Word) {
 			_, err = w.Do(m)
-		}
+		})
 
 		return err
 	}
@@ -63,5 +71,5 @@ func (w *funcWord) String() string {
 
 func (w *funcWord) Format() string {
 
-	return fmt.Sprintf(fFuncWord, w.name)
+	return fmt.Sprintf(fFuncWord, w.name, w.quoted)
 }

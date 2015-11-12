@@ -1,7 +1,7 @@
 package kit
 
 type WordType int
-type WordFuncBody func(Memory) error
+type WordFuncBody func(Memory, ...interface{}) error
 type WordDoWrapper func(WordFuncBody) error
 
 type TokenType int
@@ -9,6 +9,7 @@ type Position int
 
 // AuthorType indicates the word author public name
 type AuthorType string
+
 // AuthorId indicates the word author private name (its must be unique string)
 type AuthorId string
 
