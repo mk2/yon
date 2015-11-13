@@ -28,6 +28,12 @@ name   -- name   literal
 $ yon repl
 ```
 
+## Vocabulary table
+
+word|stack effect|misc
+:--:|:----------:|:--:
+dup|(x -- x x)|duplicate the top word on stack
+
 ## TODOs
 - [ ] dictionary literal
 - [ ] more stable and usable quoted function
@@ -40,4 +46,5 @@ $ yon repl
 
 ## Future TODOs
 - [ ] event handling
+- [ ] stack-effect annotation
 - [ ] serf integration (yon's most valuable feature, if realized)
