@@ -31,6 +31,7 @@ $ yon repl
 ## TODOs
 - [ ] dictionary literal
 - [ ] more stable and usable quoted function
+- [ ] comment support
 - [ ] explicit function declaration (now only quoted function declaration)
 - [ ] execute code from file
 - [ ] error handling support
