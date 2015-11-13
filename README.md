@@ -31,6 +31,7 @@ $ yon repl
 ## Vocabulary table
 
 ### Prelude vocabulary
+Prelude vocabulary contains all basic words (dup, over, rot, each, comparators, and arithmetic operators)
 
 #### Prefix
 
@@ -43,6 +44,30 @@ prelude~
 word|stack effect|misc
 :--:|:----------:|:--:
 dup|(x -- x x)|duplicate the top word on stack
+
+### PsUtil vocabulary
+This vocabulary have not been implemented yet.
+
+#### Prefix
+
+```
+psutil~
+```
+
+#### Table
+TBD
+
+### User vocabulary
+The vocabulary contains all user defined words.
+
+#### Prefix
+
+```
+user~
+```
+
+#### Table
+There are no initial words.
 
 ## TODOs
 - [ ] dictionary literal
