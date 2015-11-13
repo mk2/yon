@@ -30,6 +30,16 @@ $ yon repl
 
 ## Vocabulary table
 
+### Prelude vocabulary
+
+#### Prefix
+
+```
+prelude~
+```
+
+#### Table
+
 word|stack effect|misc
 :--:|:----------:|:--:
 dup|(x -- x x)|duplicate the top word on stack
