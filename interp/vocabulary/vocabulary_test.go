@@ -7,15 +7,15 @@ import (
 
 func TestExtractClass(t *testing.T) {
 
-	class, key := vocabulary.ExtractClass("prelude.dup")
+	class, key := vocabulary.ExtractClass("prelude~dup")
 
 	if class != "prelude" || key != "dup" {
 		t.Errorf("invalid extracting class: %s - %s", class, key)
 	}
 
-	class, key = vocabulary.ExtractClass("test.test.key")
+	class, key = vocabulary.ExtractClass("test~test~key")
 
-	if class != "test.test" || key != "key" {
+	if class != "test~test" || key != "key" {
 		t.Errorf("invalid extracting class: %s - %s", class, key)
 	}
 

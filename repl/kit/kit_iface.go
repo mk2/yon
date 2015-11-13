@@ -7,7 +7,6 @@ type ReplClient interface {
 }
 
 type Repl interface {
-	ReplClient
 	GetClient() ReplClient
 	GetPrimaryServer() ReplServer
 	GetServers() []ReplServer
@@ -16,5 +15,5 @@ type Repl interface {
 
 type ReplServer interface {
 	Send(string) error
-	Receive(int) (string, string)
+	Receive(int) string
 }

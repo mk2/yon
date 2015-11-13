@@ -29,7 +29,7 @@ func (s *server) Send(input string) error {
 	return s.interp.EvalAndWait(s.buf)
 }
 
-func (s *server) Receive(timeoutSeconds int) (string, string) {
+func (s *server) Receive(timeoutSeconds int) string {
 
-	return s.interp.StderrString(), s.interp.StderrString()
+	return s.interp.StderrString()
 }

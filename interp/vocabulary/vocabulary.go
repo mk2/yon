@@ -102,7 +102,7 @@ func (v *vocabulary) AliasOverWrite(c string, k string, alter string) (err error
 		v.OverWrite(c, alter, w)
 	}
 
-	return errors.New("not found: " + c + "." + k)
+	return errors.New("not found: " + c + "~" + k)
 }
 
 func (v *vocabulary) ReadClass(c string, k string) kit.Word {
@@ -145,7 +145,7 @@ func (v *vocabulary) Read(fqk string) kit.Word {
 func ExtractClass(fqk string) (string, string) {
 
 	fqkLen := len(fqk)
-	names := strings.Split(fqk, ".")
+	names := strings.Split(fqk, "~")
 	key := names[len(names)-1]
 	classEnd := len(fqk) - len(key) - 1
 

@@ -217,9 +217,6 @@ func lex(l *lexer) stateFn {
 		l.emit(token.TSemiColon)
 		l.next()
 
-	case r == '.':
-		return lexDotPrefix
-
 	case r == '"' || r == '`':
 		l.leftDelim = r
 		return lexString
@@ -298,24 +295,6 @@ func lexNumber(l *lexer) stateFn {
 	return lex
 }
 
-func lexDotPrefix(l *lexer) stateFn {
-
-	// skip the first dot '.'
-	l.next()
-
-	switch r := l.peek(); {
-
-	case r == 's':
-		l.emit(token.TDotS)
-		l.next()
-
-	case r == nilRune:
-		l.emit(token.TDot)
-	}
-
-	return lex
-}
-
 /*
 ================================================================================
 Rune check functions
@@ -329,7 +308,9 @@ func isNumber(r rune) bool {
 
 func isLetter(r rune) bool {
 
-	return 'a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' || r == '-' || r == '_' || r == '?' || r == '!'
+	return 'a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' ||
+		r == '-' || r == '_' || r == '?' || r == '!' || r == '.' || r == '+' || r == '%' || r == '/' || r == '=' ||
+		r == '*' || r == '^'
 }
 
 func isSpace(r rune) bool {
