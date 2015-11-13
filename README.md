@@ -2,13 +2,13 @@
 
 [![Build Status](https://travis-ci.org/mk2/yon.svg)](https://travis-ci.org/mk2/yon)
 
-## About
+## :grey_question: About
 - `yon` is the language built by Go.
 - It will be intended to make multi-node tool easily.
 - Its idea and grammar is basically based on a concatnative language, like forth and factor.
 - But `yon` does not have a flexibility most concatnative languages have.
 
-## Code
+## :notes: Code
 
 ```factor
 "test" -- string literal
@@ -28,9 +28,9 @@ name   -- name   literal
 $ yon repl
 ```
 
-## Vocabulary table
+## :books: Vocabularies
 
-### Prelude vocabulary
+### :green_book: Prelude vocabulary
 Prelude vocabulary contains all basic words (dup, over, rot, each, comparators, and arithmetic operators)
 
 #### Prefix
@@ -45,7 +45,7 @@ word|stack effect|misc
 :--:|:----------:|:--:
 dup|(x -- x x)|duplicate the top word on stack
 
-### PsUtil vocabulary
+### :blue_book: PsUtil vocabulary
 This vocabulary have not been implemented yet.
 
 #### Prefix
@@ -57,7 +57,7 @@ psutil~
 #### Table
 TBD
 
-### User vocabulary
+### :notebook_with_decorative_cover User vocabulary
 The vocabulary contains all user defined words.
 
 #### Prefix
@@ -69,7 +69,7 @@ user~
 #### Table
 There are no initial words.
 
-## TODOs
+## :memo: TODOs
 - [ ] dictionary literal
 - [ ] more stable and usable quoted function
 - [ ] comment support
@@ -79,7 +79,7 @@ There are no initial words.
 - [ ] better repl interface
 - [ ] history recording
 
-## Future TODOs
+## :art: Future TODOs
 - [ ] event handling
 - [ ] stack-effect annotation
 - [ ] serf integration (yon's most valuable feature, if realized)
