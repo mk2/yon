@@ -11,7 +11,7 @@ import (
 
 func TestLexer_new(t *testing.T) {
 
-	l := lexer.New(bytes.NewBufferString("a b `test` 123 1.23 test: {}"))
+	l := lexer.New(bytes.NewBufferString("a b `test` 123 1.23 test {}"))
 
 	var cnt = 0
 	for tkn := l.NextToken(); tkn.GetType() != token.TEOF; tkn = l.NextToken() {
@@ -33,7 +33,7 @@ func TestLexer_new(t *testing.T) {
 		case 4:
 			assertTokenType(t, tkn.GetType(), token.TNumber)
 		case 5:
-			assertTokenType(t, tkn.GetType(), token.TKeyword)
+			assertTokenType(t, tkn.GetType(), token.TIdentifier)
 		case 6:
 			assertTokenType(t, tkn.GetType(), token.TLeftBrace)
 		case 7:

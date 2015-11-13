@@ -199,6 +199,9 @@ func parse(p *parser) stateFn {
 		p.emit(word.NewNilWord())
 		return nil
 
+	default:
+		p.next()
+
 	}
 
 	return parse
@@ -211,6 +214,12 @@ func parseIdentifier(p *parser) stateFn {
 
 	if w := p.memo.Vocab().Read(ident); w != nil {
 		p.emit(w)
+	} else if ident == "true" {
+		p.emit(word.NewBoolWord(true))
+	} else if ident == "false" {
+		p.emit(word.NewBoolWord(false))
+	} else if ident == "nil" {
+		p.emit(word.NewNilWord())
 	} else {
 		p.emit(word.NewNameWord(ident))
 	}
@@ -225,7 +234,7 @@ func parseArray(p *parser) stateFn {
 	// skip the first leftside brace "{"
 	p.next()
 
-	p.emit(word.NewArrayWordFromChainWord(parseWordChain(p)))
+	p.emit(word.NewArrayWordFromChainWord(parseChainWordBody(p, false)))
 
 	return parse
 }
@@ -236,28 +245,40 @@ func parseAnonFunc(p *parser) stateFn {
 	// skip first double colon
 	p.next()
 
-	p.emit(word.NewFuncWordFromChainWord("", author.NewUserAuthor(), parseWordChain(p)))
+	p.emit(word.NewFuncWordFromChainWord("", author.NewUserAuthor(), parseChainWordBody(p, true)))
 
 	return parse
 }
 
-func parseWordChain(p *parser) kit.ChainWord {
+func parseChainWord(p *parser) stateFn {
+
+	// skip the first `{`
+	p.next()
+
+	return parse
+}
+
+func parseChainWordBody(p *parser, parsingFunc bool) kit.ChainWord {
 
 	w := word.NewChainWord()
 
 PARSE_WORD_CHAIN_LOOP:
 	for {
-		switch t := p.peek(); t.GetType() {
+		switch t := p.peek(); {
 
-		case token.TNumber:
+		case w.Size() > 0 && t.GetType() == token.TDblColon:
+			// TDblColon indicates the word is a dict word
+			p.next()
+
+		case t.GetType() == token.TNumber:
 			w.Push(word.NewNumberWord(t.GetVal()))
 			p.next()
 
-		case token.TString:
+		case t.GetType() == token.TString:
 			w.Push(word.NewStringWord(t.GetVal()))
 			p.next()
 
-		case token.TIdentifier:
+		case t.GetType() == token.TIdentifier:
 			ident := t.GetVal()
 			if v := p.memo.Vocab().Read(ident); v != nil {
 				w.Push(v)
@@ -266,25 +287,22 @@ PARSE_WORD_CHAIN_LOOP:
 			}
 			p.next()
 
-		case token.TKeyword:
-			// if a TKeyword token found, it indicates a begin of DictWord.
-
-		case token.TLeftBrace:
+		case t.GetType() == token.TLeftBrace:
 			p.next()
-			w.Push(parseWordChain(p))
+			w.Push(parseChainWordBody(p, parsingFunc))
 
-		case token.TRightBrace:
+		case !parsingFunc && t.GetType() == token.TRightBrace:
 			p.next()
 			break PARSE_WORD_CHAIN_LOOP
 
-		case token.TRightSquareBracket:
+		case parsingFunc && t.GetType() == token.TRightSquareBracket:
 			p.next()
 			break PARSE_WORD_CHAIN_LOOP
 
-		case token.TEOF:
+		case t.GetType() == token.TEOF:
 			break PARSE_WORD_CHAIN_LOOP
 
-		case token.TSpace:
+		case t.GetType() == token.TSpace:
 			p.next()
 		}
 	}

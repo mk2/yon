@@ -11,14 +11,17 @@ const (
 	VStackPrint    = ".s"
 	VPopPrint      = "."
 	VDup           = "dup"
+	VRot           = "rot"
+	VOver          = "over"
 	VDef           = "def"
 	VApply         = "apply"
 	VCall          = "call"
 	VEach          = "each"
 	VIf            = "if"
 	VMap           = "map"
-	VRep           = "rep"
+	VTime          = "time"
 	VSh            = "sh"
+	VAddEh         = "addeh"
 	VPrint         = "print"
 	VPrintSynonym  = "p"
 	VPrintf        = "printf"
@@ -28,11 +31,26 @@ const (
 	VMulti         = "*"
 	VDiv           = "/"
 	VRem           = "%"
+	VTrue          = "true"
+	VFalse         = "false"
+	VNil           = "nil"
 )
 
 func (v *vocabulary) LoadPrelude() error {
 
 	v.NewClass("prelude")
+
+	v.OverWrite(VOver, word.NewPreludeFuncWord(
+		VOver,
+		func(m kit.Memory, args ...interface{}) error {
+			upper := m.Stack().Pop()
+			bottom := m.Stack().Pop()
+			m.Stack().Push(bottom)
+			m.Stack().Push(upper)
+			m.Stack().Push(bottom)
+			return nil
+		},
+	))
 
 	v.OverWrite(VPopPrint, word.NewPreludeFuncWord(
 		VPopPrint,

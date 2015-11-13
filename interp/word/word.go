@@ -11,6 +11,7 @@ const (
 	TFuncWord
 	TNumberWord
 	TStringWord
+	TBoolWord
 	TChainWord
 	TArrayWord
 	TNameWord
@@ -19,6 +20,7 @@ const (
 const (
 	fNumberWord = `<number> %f`
 	fStringWord = `<string> "%s"`
+	fBoolWord   = `<bool> "%t"`
 	fNameWord   = `<name> %s`
 	fArrayWord  = `<array> {%s}`
 	fChainWord  = `<chain>`

@@ -93,6 +93,21 @@ func (v *vocabulary) ReadClass(className string, k string) kit.Word {
 
 func (v *vocabulary) Read(fqk string) kit.Word {
 
+	className, key := ExtractClass(fqk)
+
+	if className == "" {
+		if class, preludeOk := v.classes["prelude"]; preludeOk {
+			if w, classOk := class[key]; classOk {
+				return w
+			}
+		}
+		if class, psutilOk := v.classes["psutil"]; psutilOk {
+			if w, classOk := class[key]; classOk {
+				return w
+			}
+		}
+	}
+
 	return v.words[fqk]
 }
 
@@ -102,11 +117,11 @@ func ExtractClass(fqk string) (string, string) {
 	fqkLen := len(fqk)
 	names := strings.Split(fqk, ".")
 	key := names[len(names)-1]
-	classEnd := len(fqk)-len(key)-1
+	classEnd := len(fqk) - len(key) - 1
 
 	if classEnd < 0 {
 		return "", key
 	} else {
-		return fqk[:fqkLen - len(key) - 1], key
+		return fqk[:fqkLen-len(key)-1], key
 	}
 }

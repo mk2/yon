@@ -12,7 +12,9 @@ type Word interface {
 	GetAuthorType() AuthorType
 	GetAuthorId() AuthorId
 	GetAuthor() Author
+	// String returns string representation of the word.
 	String() string
+	// Format returns readble formatted string of the word.
 	Format() string
 	Do(Memory, ...interface{}) (interface{}, error)
 }
@@ -24,6 +26,7 @@ type ChainWord interface {
 	Push(Word) Word
 	Each(func(Word))
 	FlatEach(func(Word))
+	Size() int
 }
 
 // ArrayWord represents Array container word
@@ -36,7 +39,7 @@ type ArrayWord interface {
 type DictWord interface {
 	ChainWord
 	Put(Word, Word)
-	Tuple() map[Word]Word
+	Map() map[Word]Word
 }
 
 // NumberWord holds number literal
@@ -48,6 +51,11 @@ type NumberWord interface {
 // StringWord holds string literal
 type StringWord interface {
 	Word
+}
+
+type BoolWord interface {
+	Word
+	Eval() bool
 }
 
 // NameWord holds any name identifier

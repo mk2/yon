@@ -43,21 +43,24 @@ func (s *stack) Print() {
 
 func printWord(depth int, w kit.Word) {
 
-	switch t := w.GetWordType(); {
+	switch w.GetWordType() {
 
-	case t == word.TNumberWord:
+	case word.TNumberWord:
 		printNumberWord(depth, w.(kit.NumberWord))
 
-	case t == word.TStringWord:
+	case word.TStringWord:
 		printStringWord(depth, w.(kit.StringWord))
 
-	case t == word.TNameWord:
+	case word.TNameWord:
 		printNameWord(depth, w.(kit.NameWord))
 
-	case t == word.TFuncWord:
+	case word.TBoolWord:
+		printBoolWord(depth, w.(kit.BoolWord))
+
+	case word.TFuncWord:
 		printFuncWord(depth, w.(kit.FuncWord))
 
-	case t == word.TArrayWord:
+	case word.TArrayWord:
 		printArrayWord(depth, w.(kit.ArrayWord))
 	}
 }
@@ -75,6 +78,11 @@ func printStringWord(depth int, w kit.StringWord) {
 func printNameWord(depth int, w kit.NameWord) {
 
 	color.Yellow(fBase, depth, w.Format())
+}
+
+func printBoolWord(depth int, w kit.BoolWord) {
+
+	color.Red(fBase, depth, w.Format())
 }
 
 func printFuncWord(depth int, w kit.FuncWord) {

@@ -25,8 +25,8 @@ func NewFuncWord(name string, author kit.Author, body kit.WordFuncBody) kit.Func
 		chainWord: chainWord{
 			word: word{wordType: TFuncWord, author: author},
 		},
-		name: name,
-		body: body,
+		name:   name,
+		body:   body,
 		quoted: name == "",
 	}
 }
@@ -41,7 +41,7 @@ func (w *funcWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 	if w.quoted {
 		w.quoted = false
 		m.Stack().Push(w)
-		return nil,nil
+		return nil, nil
 	} else {
 		return nil, w.body(m, args...)
 	}

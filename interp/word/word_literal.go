@@ -80,3 +80,42 @@ func (w *stringWord) Format() string {
 
 	return fmt.Sprintf(fStringWord, w.str)
 }
+
+type boolWord struct {
+	word
+	b bool
+}
+
+func NewBoolWord(b bool) kit.BoolWord {
+
+	return &boolWord{
+		word: word{wordType: TBoolWord, author: author.NewUserAuthor()},
+		b:    b,
+	}
+}
+
+func (w *boolWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
+
+	m.Stack().Push(w)
+
+	return nil, nil
+}
+
+func (w *boolWord) Eval() bool {
+
+	return w.b
+}
+
+func (w *boolWord) String() string {
+
+	if w.b {
+		return "true"
+	} else {
+		return "false"
+	}
+}
+
+func (w *boolWord) Format() string {
+
+	return fmt.Sprintf(fBoolWord, w.b)
+}

@@ -134,6 +134,13 @@ RUN_LOOP:
 				break
 			}
 
+		case word.TBoolWord:
+			kit.Println("bool word")
+			if _, err := w.Do(m); err != nil {
+				ip.errorCh <- err
+				break
+			}
+
 		case word.TArrayWord:
 			kit.Println("array word")
 			if _, err := w.Do(m); err != nil {

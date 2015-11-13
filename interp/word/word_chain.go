@@ -68,3 +68,8 @@ func (w *chainWord) FlatEach(f func(kit.Word)) {
 		}
 	}
 }
+
+func (w *chainWord) Size() int {
+
+	return w.Len()
+}
