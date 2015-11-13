@@ -22,7 +22,7 @@ name   -- name   literal
 [1 dup] -- quoted function literal
 ```
 
-## Command line
+## :tv: Command line
 ```sh
 # start yon REPL, and enter some codes
 $ yon repl
@@ -57,7 +57,7 @@ psutil~
 #### Table
 TBD
 
-### :notebook_with_decorative_cover User vocabulary
+### :notebook_with_decorative_cover: User vocabulary
 The vocabulary contains all user defined words.
 
 #### Prefix
