@@ -7,6 +7,7 @@
 - It will be intended to make multi-node tool easily.
 - Its idea and grammar is basically based on a concatnative language, like forth and factor.
 - But `yon` does not have a flexibility most concatnative languages have.
+- And `yon` is under development.
 
 ## :notes: Code
 
