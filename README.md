@@ -42,9 +42,9 @@ prelude~
 
 #### Table
 
-word|stack effect|misc
-:--:|:----------:|:--:
-`dup`|`(x -- x x)`|duplicate the top word on stack
+word|fully qualified key|stack effect|misc
+:--:|:-----------------:|:----------:|:--:
+`dup`|`prelude~dup`|`(x -- x x)`|duplicate the top word on stack
 
 ### :blue_book: PsUtil vocabulary
 This vocabulary have not been implemented yet.
