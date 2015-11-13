@@ -1,13 +1,13 @@
 package vocabulary
 
 import (
-	"log"
 	"sync"
 
 	"errors"
 
-	"github.com/mk2/yon/interp/kit"
 	"strings"
+
+	"github.com/mk2/yon/interp/kit"
 )
 
 type vocabulary struct {
@@ -16,6 +16,12 @@ type vocabulary struct {
 	words   map[string]kit.Word
 	classes map[string]map[string]kit.Word
 }
+
+const (
+	CPrelude = "prelude"
+	CPsUtil  = "psutil"
+	CUser    = "user"
+)
 
 func New() kit.Vocabulary {
 
@@ -40,49 +46,68 @@ func (v *vocabulary) NewClass(className string) error {
 
 func (v *vocabulary) Print() {
 
-	for k, w := range v.words {
-		log.Printf("key: %v body:%+v", k, w)
+	for c, ws := range v.classes {
+		for k, w := range ws {
+			kit.Printf("%-16s :: %s", (c + "." + k), w.Format())
+		}
 	}
 }
 
-func (v *vocabulary) Write(k string, w kit.Word) error {
+func (v *vocabulary) ExistWord(c string, k string) (kit.Word, error) {
 
-	if _, ok := v.words[k]; ok {
+	if _, classOk := v.classes[c]; !classOk {
+		return nil, errors.New("class not found: " + c)
+	}
+
+	if _, wordOk := v.classes[c][k]; !wordOk {
+		return nil, errors.New("word not found: " + k)
+	}
+
+	return v.classes[c][k], nil
+}
+
+func (v *vocabulary) Write(c string, k string, w kit.Word) error {
+
+	if _, classOk := v.classes[c]; !classOk {
+		return errors.New("class not found: " + c)
+	}
+
+	if _, wordOk := v.classes[c][k]; wordOk {
 		return errors.New("already exists key: " + k)
 	}
 
 	v.Lock()
-	v.words[k] = w
+	v.classes[c][k] = w
 	v.Unlock()
 
 	return nil
 }
 
-func (v *vocabulary) OverWrite(k string, w kit.Word) (err error) {
+func (v *vocabulary) OverWrite(c string, k string, w kit.Word) (err error) {
 
-	if _, ok := v.words[k]; ok {
-		err = errors.New("already exists key: " + k)
+	err = v.Write(c, k, w)
+
+	if err != nil {
+		v.Lock()
+		v.classes[c][k] = w
+		v.Unlock()
 	}
-
-	v.Lock()
-	v.words[k] = w
-	v.Unlock()
 
 	return err
 }
 
-func (v *vocabulary) AliasOverWrite(orig string, alter string) (err error) {
+func (v *vocabulary) AliasOverWrite(c string, k string, alter string) (err error) {
 
-	if w, ok := v.words[orig]; ok {
-		return v.OverWrite(alter, w)
+	if w := v.ReadClass(c, k); w != nil {
+		v.OverWrite(c, alter, w)
 	}
 
-	return errors.New("not found " + orig)
+	return errors.New("not found: " + c + "." + k)
 }
 
-func (v *vocabulary) ReadClass(className string, k string) kit.Word {
+func (v *vocabulary) ReadClass(c string, k string) kit.Word {
 
-	if class, classOk := v.classes[className]; classOk {
+	if class, classOk := v.classes[c]; classOk {
 		if w, wordOk := class[k]; wordOk {
 			return w
 		}
@@ -93,22 +118,27 @@ func (v *vocabulary) ReadClass(className string, k string) kit.Word {
 
 func (v *vocabulary) Read(fqk string) kit.Word {
 
-	className, key := ExtractClass(fqk)
+	c, k := ExtractClass(fqk)
 
-	if className == "" {
-		if class, preludeOk := v.classes["prelude"]; preludeOk {
-			if w, classOk := class[key]; classOk {
+	if c == "" {
+		if class, preludeOk := v.classes[CPrelude]; preludeOk {
+			if w, classOk := class[k]; classOk {
 				return w
 			}
 		}
-		if class, psutilOk := v.classes["psutil"]; psutilOk {
-			if w, classOk := class[key]; classOk {
+		if class, psutilOk := v.classes[CPsUtil]; psutilOk {
+			if w, classOk := class[k]; classOk {
+				return w
+			}
+		}
+		if class, userOk := v.classes[CUser]; userOk {
+			if w, classOk := class[k]; classOk {
 				return w
 			}
 		}
 	}
 
-	return v.words[fqk]
+	return v.ReadClass(c, k)
 }
 
 // ExtractClass returns the extracted class name and key from the given fully qualified key.

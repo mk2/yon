@@ -44,8 +44,10 @@ type Stack interface {
 
 // Vocabulary holds any named words
 type Vocabulary interface {
-	// Write registers the given word to the vocabulary with the given fully qualified key
-	Write(string, Word) error
+	// Write register the word with the class and the key.
+	Write(string, string, Word) error
+	// OverWrite register the word with the class and the key.
+	OverWrite(string, string, Word) error
 	// ReadClass returns the word searched by the given class name and key name
 	ReadClass(string, string) Word
 	// Read returns the word searching by the given fully qualified key

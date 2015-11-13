@@ -9,13 +9,11 @@ import interpkit "github.com/mk2/yon/interp/kit"
 import "github.com/mk2/yon/repl/kit"
 
 type server struct {
-	interp     interpkit.Interpreter
-	buf        *bytes.Buffer
-	clientTxCh kit.TxCh // TODO
-	clientRxCh kit.RxCh // TODO
+	interp interpkit.Interpreter
+	buf    *bytes.Buffer
 }
 
-func New() kit.ReplServer { // TODO
+func New() kit.ReplServer {
 
 	return &server{
 		interp: interp.New(),
@@ -23,17 +21,15 @@ func New() kit.ReplServer { // TODO
 	}
 }
 
-func (s *server) Start() error {
-
-	return nil
-}
-
 func (s *server) Send(input string) error {
 
-	return nil
+	s.buf.Reset()
+	s.buf.WriteString(input)
+
+	return s.interp.EvalAndWait(s.buf)
 }
 
-func (s *server) Receive(timeoutSeconds int) (string, error) {
+func (s *server) Receive(timeoutSeconds int) (string, string) {
 
-	return "", nil
+	return s.interp.StderrString(), s.interp.StderrString()
 }

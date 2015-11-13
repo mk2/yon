@@ -20,11 +20,11 @@ const (
 const (
 	fNumberWord = `<number> %f`
 	fStringWord = `<string> "%s"`
-	fBoolWord   = `<bool> "%t"`
-	fNameWord   = `<name> %s`
-	fArrayWord  = `<array> {%s}`
+	fBoolWord   = `<bool>   "%t"`
+	fNameWord   = `<name>   %s`
+	fArrayWord  = `<array>  {%s}`
 	fChainWord  = `<chain>`
-	fFuncWord   = `<func> [name:%s quoted:%t]`
+	fFuncWord   = `<func>   [name:%-8s quoted:%t]`
 	fNilWord    = `<nil>`
 )
 

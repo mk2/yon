@@ -19,7 +19,7 @@ const (
 	VEach          = "each"
 	VIf            = "if"
 	VMap           = "map"
-	VTime          = "time"
+	VTimes         = "times"
 	VSh            = "sh"
 	VAddEh         = "addeh"
 	VPrint         = "print"
@@ -31,16 +31,28 @@ const (
 	VMulti         = "*"
 	VDiv           = "/"
 	VRem           = "%"
-	VTrue          = "true"
-	VFalse         = "false"
 	VNil           = "nil"
+	VEq            = "="
+	VNEq           = "/="
+	VGt            = ">"
+	VLt            = "<"
+	VGte           = ">="
+	VLte           = "<="
 )
 
 func (v *vocabulary) LoadPrelude() error {
 
 	v.NewClass("prelude")
 
-	v.OverWrite(VOver, word.NewPreludeFuncWord(
+	v.OverWrite(CPrelude, VStackPrint, word.NewPreludeFuncWord(
+		VStackPrint,
+		func(m kit.Memory, args ...interface{}) error {
+			m.Stack().Print()
+			return nil
+		},
+	))
+
+	v.OverWrite(CPrelude, VOver, word.NewPreludeFuncWord(
 		VOver,
 		func(m kit.Memory, args ...interface{}) error {
 			upper := m.Stack().Pop()
@@ -52,7 +64,7 @@ func (v *vocabulary) LoadPrelude() error {
 		},
 	))
 
-	v.OverWrite(VPopPrint, word.NewPreludeFuncWord(
+	v.OverWrite(CPrelude, VPopPrint, word.NewPreludeFuncWord(
 		VPopPrint,
 		func(m kit.Memory, args ...interface{}) error {
 			s := m.Stack()
@@ -61,7 +73,7 @@ func (v *vocabulary) LoadPrelude() error {
 		},
 	))
 
-	v.OverWrite(VPrint, word.NewPreludeFuncWord(
+	v.OverWrite(CPrelude, VPrint, word.NewPreludeFuncWord(
 		VPrint,
 		func(m kit.Memory, args ...interface{}) error {
 			s := m.Stack()
@@ -70,9 +82,9 @@ func (v *vocabulary) LoadPrelude() error {
 		},
 	))
 
-	v.AliasOverWrite(VPrint, VPrintSynonym)
+	v.AliasOverWrite(CPrelude, VPrint, VPrintSynonym)
 
-	v.OverWrite(VDup, word.NewPreludeFuncWord(
+	v.OverWrite(CPrelude, VDup, word.NewPreludeFuncWord(
 		VDup,
 		func(m kit.Memory, args ...interface{}) error {
 			s := m.Stack()
@@ -81,7 +93,7 @@ func (v *vocabulary) LoadPrelude() error {
 		},
 	))
 
-	v.OverWrite(VDef, word.NewPreludeFuncWord(
+	v.OverWrite(CPrelude, VDef, word.NewPreludeFuncWord(
 		VDef,
 		func(m kit.Memory, args ...interface{}) error {
 			var nw = m.Stack().Pop()
@@ -99,11 +111,11 @@ func (v *vocabulary) LoadPrelude() error {
 
 			}
 
-			return v.Write(name, value)
+			return v.Write(CUser, name, value)
 		},
 	))
 
-	v.OverWrite(VEach, word.NewPreludeFuncWord(
+	v.OverWrite(CPrelude, VEach, word.NewPreludeFuncWord(
 		VEach,
 		func(m kit.Memory, args ...interface{}) error {
 

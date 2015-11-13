@@ -1,19 +1,20 @@
 package kit
 
-type Repl interface {
-	GetClient() ReplClient
-	GetPrimaryServer() ReplServer
-	GetServers() []ReplServer
+type ReplClient interface {
+	ShowHelp(string) string
 	Eval(string) string
 	EvalFile(string) (string, error)
 }
 
-type ReplClient interface {
-	ShowHelp(string) string
+type Repl interface {
+	ReplClient
+	GetClient() ReplClient
+	GetPrimaryServer() ReplServer
+	GetServers() []ReplServer
 }
 
+
 type ReplServer interface {
-	Start() error
 	Send(string) error
-	Receive(int) (string, error)
+	Receive(int) (string, string)
 }
