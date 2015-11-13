@@ -1,4 +1,4 @@
-# yon
+# :clock4: yon
 
 [![Build Status](https://travis-ci.org/mk2/yon.svg)](https://travis-ci.org/mk2/yon)
 
