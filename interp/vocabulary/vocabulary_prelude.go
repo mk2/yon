@@ -187,6 +187,18 @@ func (v *vocabulary) LoadPrelude() error {
 		},
 	))
 
+	v.OverWrite(CPrelude, VApply, word.NewPreludeFuncWord(
+		VApply,
+		func(m kit.Memory, args ...interface{}) error {
+
+			if w := m.Stack().Peek(); w != nil {
+				w.Do(m)
+			}
+
+			return nil
+		},
+	))
+
 	//
 	// Comparator functions {{{
 	//

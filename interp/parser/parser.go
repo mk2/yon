@@ -229,33 +229,33 @@ func parseIdentifier(p *parser) stateFn {
 
 func parseArray(p *parser) stateFn {
 
-	// enabled: emit stealing
-
-	// skip the first leftside brace "{"
-	p.next()
-
-	p.emit(word.NewArrayWordFromChainWord(parseChainWordBody(p, false)))
+	p.emit(parseArrayBody(p))
 
 	return parse
 }
 
-// parseAnonFunc parses `[ number | string | ident | array | tuple ]`
+// parseAnonFunc parses `[ number | string | ident | array | tuple | func ]`
 func parseAnonFunc(p *parser) stateFn {
 
-	// skip first double colon
-	p.next()
-
-	p.emit(word.NewFuncWordFromChainWord("", author.NewUserAuthor(), parseChainWordBody(p, true)))
+	p.emit(parseAnonFuncBody(p))
 
 	return parse
 }
 
-func parseChainWord(p *parser) stateFn {
+func parseArrayBody(p *parser) kit.ArrayWord {
 
-	// skip the first `{`
+	// skip the first bracket
 	p.next()
 
-	return parse
+	return word.NewArrayWordFromChainWord(parseChainWordBody(p, false))
+}
+
+func parseAnonFuncBody(p *parser) kit.FuncWord {
+
+	// skip the first square bracket
+	p.next()
+
+	return word.NewFuncWordFromChainWord("", author.NewUserAuthor(), parseChainWordBody(p, true))
 }
 
 func parseChainWordBody(p *parser, parsingFunc bool) kit.ChainWord {
@@ -289,7 +289,11 @@ PARSE_WORD_CHAIN_LOOP:
 
 		case t.GetType() == token.TLeftBrace:
 			p.next()
-			w.Push(parseChainWordBody(p, parsingFunc))
+			w.Push(parseChainWordBody(p, false))
+
+		case t.GetType() == token.TLeftSquareBracket:
+			p.next()
+			w.Push(parseChainWordBody(p, true))
 
 		case !parsingFunc && t.GetType() == token.TRightBrace:
 			p.next()
