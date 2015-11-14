@@ -1,4 +1,4 @@
-.PHONY: clean get-deps test-interp test
+.PHONY: clean dist release build build-release get-deps test-interp test
 
 default: test
 
@@ -6,8 +6,13 @@ GO=go
 
 dist: build
 
+release: release-build
+
 build:
-	cd cmd; go build -o yon; mv yon ../
+	cd cmd; go build -o yon -installsuffix .; mv yon ../
+
+release-build:
+	cd cmd; go build -o yon -installsuffix . -tags=interp_release; mv yon ../
 
 test: test-interp
 

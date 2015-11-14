@@ -57,8 +57,8 @@ type Vocabulary interface {
 	LoadPrelude() error
 	// NewClass makes new class. (it used for the word classification)
 	NewClass(string) error
-	// Print writes formatted vocabulary to stdout.
-	Print()
+	// Print returns formatted vocabulary
+	Print() string
 }
 
 // History will contain any user operation
@@ -88,6 +88,8 @@ type Interpreter interface {
 	StdoutString() string
 	StderrString() string
 	EvalAndWait(runes RuneScanner) error
+	SetClass(string) error
+	GetClass() (string, error)
 	Wait() error
 	Eval(runes RuneScanner) (StoppedCh, ErrorCh)
 }

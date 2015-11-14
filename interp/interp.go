@@ -14,7 +14,7 @@ import (
 )
 
 type interp struct {
-	source    string
+	class     string
 	memo      kit.Memory
 	stoppedCh kit.StoppedCh
 	errorCh   kit.ErrorCh
@@ -30,6 +30,7 @@ Interpreter APIs
 func New() kit.Interpreter {
 
 	interp := &interp{
+		class:     vocabulary.CUser,
 		memo:      memory.New(stack.New(), vocabulary.New(), history.New()),
 		stoppedCh: kit.NewStoppedCh(),
 		errorCh:   kit.NewErrorCh(),
@@ -60,6 +61,18 @@ func (ip *interp) StdoutString() string {
 func (ip *interp) StderrString() string {
 
 	return ip.memo.Stderr()
+}
+
+func (ip *interp) SetClass(class string) error {
+
+	ip.class = class
+
+	return nil
+}
+
+func (ip *interp) GetClass() (string, error) {
+
+	return ip.class, nil
 }
 
 func (ip *interp) EvalAndWait(runes kit.RuneScanner) error {

@@ -27,15 +27,13 @@ func NewCommand() cli.Command {
 			repl := New()
 			log.Println("repl started!!")
 
-			var s string
-
 			for {
-				fmt.Printf("(scratch) ")
-				if _, err := fmt.Scanln(&s); err != nil {
+				fmt.Printf("(user) ")
+				if s, err := repl.GetClient().Read(); err != nil {
 					continue
+				} else {
+					fmt.Printf("=> \n%s\n", repl.GetClient().Eval(s))
 				}
-				fmt.Printf("=> %s\n", repl.GetClient().Eval(s))
-				s = ""
 			}
 		},
 	}

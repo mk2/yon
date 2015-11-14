@@ -8,6 +8,8 @@ import (
 )
 
 const (
+	VHistPrint     = ".h"
+	VVocabPrint    = ".v"
 	VStackPrint    = ".s"
 	VPopPrint      = "."
 	VDup           = "dup"
@@ -15,7 +17,6 @@ const (
 	VOver          = "over"
 	VDef           = "def"
 	VApply         = "apply"
-	VCall          = "call"
 	VEach          = "each"
 	VIf            = "if"
 	VMap           = "map"
@@ -44,6 +45,14 @@ func (v *vocabulary) LoadPrelude() error {
 
 	v.NewClass("prelude")
 
+	v.OverWrite(CPrelude, VVocabPrint, word.NewPreludeFuncWord(
+		VVocabPrint,
+		func(m kit.Memory, args ...interface{}) error {
+			m.Println(m.Vocab().Print())
+			return nil
+		},
+	))
+
 	v.OverWrite(CPrelude, VStackPrint, word.NewPreludeFuncWord(
 		VStackPrint,
 		func(m kit.Memory, args ...interface{}) error {
@@ -60,6 +69,20 @@ func (v *vocabulary) LoadPrelude() error {
 			m.Stack().Push(bottom)
 			m.Stack().Push(upper)
 			m.Stack().Push(bottom)
+			return nil
+		},
+	))
+
+	v.OverWrite(CPrelude, VRot, word.NewPreludeFuncWord(
+		VRot,
+		func(m kit.Memory, args ...interface{}) error {
+			var ws = make([]kit.Word, 0)
+			for w := m.Stack().Pop(); w != nil; w = m.Stack().Pop() {
+				ws = append(ws, w)
+			}
+			for _, w := range ws {
+				m.Stack().Push(w)
+			}
 			return nil
 		},
 	))
@@ -136,6 +159,76 @@ func (v *vocabulary) LoadPrelude() error {
 			return nil
 		},
 	))
+
+	v.OverWrite(CPrelude, VIf, word.NewPreludeFuncWord(
+		VIf,
+		func(m kit.Memory, args ...interface{}) error {
+
+			var (
+				ifFalseFn = m.Stack().Pop()
+				ifTrueFn  = m.Stack().Pop()
+				boolW     = m.Stack().Pop()
+			)
+
+			if ifFalseFn.GetWordType() != word.TFuncWord ||
+				ifTrueFn.GetWordType() != word.TFuncWord {
+				return errors.New("invalid stack values")
+			}
+
+			if boolW.GetWordType() == word.TBoolWord {
+				if boolW.(kit.BoolWord).Eval() {
+					ifTrueFn.Do(m)
+				} else {
+					ifFalseFn.Do(m)
+				}
+			}
+
+			return nil
+		},
+	))
+
+	//
+	// Comparator functions {{{
+	//
+
+	v.OverWrite(CPrelude, VEq, word.NewPreludeFuncWord(
+		VEq,
+		func(m kit.Memory, args ...interface{}) error {
+
+			var (
+				rhs = m.Stack().Pop()
+				lhs = m.Stack().Pop()
+			)
+
+			if rhs == nil || lhs == nil {
+				return errors.New("nil word given")
+			}
+
+			return nil
+		},
+	))
+
+	//
+	// }}} Comparator functions
+	//
+
+	//
+	// arithmetic operators {{{
+	//
+
+	v.OverWrite(CPrelude, VPlus, word.NewPreludeFuncWord(
+		VPlus,
+		func(m kit.Memory, args ...interface{}) error {
+
+			// TODO implement
+
+			return nil
+		},
+	))
+
+	//
+	// }}} arithmetic operators
+	//
 
 	return nil
 }

@@ -1,6 +1,7 @@
 package kit
 
 type ReplClient interface {
+	Read() (string, error)
 	ShowHelp(string) string
 	Eval(string) string
 	EvalFile(string) (string, error)

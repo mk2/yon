@@ -8,12 +8,13 @@ import (
 	"strings"
 
 	"github.com/mk2/yon/interp/kit"
+	"bytes"
+	"fmt"
 )
 
 type vocabulary struct {
 	sync.Mutex
 	sync.Once
-	words   map[string]kit.Word
 	classes map[string]map[string]kit.Word
 }
 
@@ -23,10 +24,13 @@ const (
 	CUser    = "user"
 )
 
+const (
+	ClassSep = "~"
+)
+
 func New() kit.Vocabulary {
 
 	v := &vocabulary{
-		words:   make(map[string]kit.Word, 0),
 		classes: make(map[string]map[string]kit.Word, 0),
 	}
 
@@ -44,13 +48,17 @@ func (v *vocabulary) NewClass(className string) error {
 	return nil
 }
 
-func (v *vocabulary) Print() {
+func (v *vocabulary) Print() string {
+
+	buf := new(bytes.Buffer)
 
 	for c, ws := range v.classes {
 		for k, w := range ws {
-			kit.Printf("%-16s :: %s", (c + "." + k), w.Format())
+			fmt.Fprintf(buf, "%-16s :: %s\n", (c + ClassSep + k), w.Format())
 		}
 	}
+
+	return buf.String()
 }
 
 func (v *vocabulary) ExistWord(c string, k string) (kit.Word, error) {
@@ -145,7 +153,7 @@ func (v *vocabulary) Read(fqk string) kit.Word {
 func ExtractClass(fqk string) (string, string) {
 
 	fqkLen := len(fqk)
-	names := strings.Split(fqk, "~")
+	names := strings.Split(fqk, ClassSep)
 	key := names[len(names)-1]
 	classEnd := len(fqk) - len(key) - 1
 

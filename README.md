@@ -3,7 +3,10 @@
 [![Build Status](https://travis-ci.org/mk2/yon.svg)](https://travis-ci.org/mk2/yon)
 
 ## :grey_question: About
+
+### Summary
 - `yon` is the language built by Go.
+- `yon` treats the whole significant literal as the word. (`2` is word, `"test"` is word, `true` is also word.)
 - It will be intended to make multi-node tool easily.
 - Its idea and grammar is basically based on a concatnative language, like forth and factor.
 - But `yon` does not have a flexibility most concatnative languages have.

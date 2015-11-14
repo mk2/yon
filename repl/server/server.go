@@ -31,5 +31,5 @@ func (s *server) Send(input string) error {
 
 func (s *server) Receive(timeoutSeconds int) string {
 
-	return s.interp.StderrString()
+	return s.interp.StdoutString()
 }
