@@ -48,6 +48,7 @@ prelude~
 word|fully qualified key|stack effect|misc
 :--:|:-----------------:|:----------:|:--:
 `dup`|`prelude~dup`|`(x -- x x)`|duplicate the top word on stack
+`if`|`prelude~if`|`(b x y -- )`|take the bool word b, and execute x or y wheter b is true or false
 
 ### :blue_book: PsUtil vocabulary
 This vocabulary have not been implemented yet.
