@@ -6,6 +6,19 @@
 			"ImportPath": "github.com/Scalingo/codegangsta-cli",
 			"Comment": "1.2.0-142-gb5b7239",
 			"Rev": "b5b723900d3cc42c474d0dd80b69389eac7b4c55"
+		},
+		{
+			"ImportPath": "github.com/fatih/color",
+			"Comment": "v0.1-10-g8640971",
+			"Rev": "8640971291e54b520f781270275b7ed8762ac909"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-isatty",
+			"Rev": "d6aaa2f596ae91a0a58d8e7f2c79670991468e4f"
+		},
+		{
+			"ImportPath": "github.com/shiena/ansicolor",
+			"Rev": "d445752f6f66f9cd987722f109149f6799cdf1de"
 		}
 	]
 }
