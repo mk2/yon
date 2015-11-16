@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/mk2/yon.svg)](https://travis-ci.org/mk2/yon)
 
-## :grey_question: About
+## About
 
 ### Summary
 - `yon` is the interpreting language built by Go.
@@ -11,6 +11,23 @@
 - `yon` treats the whole significant literal as the word. (`2` is word, `"test"` is word, `true` is also word.)
 - But `yon` does not have a flexibility most concatnative languages have.
 - And `yon` is under development.
+
+## How to try?
+### Clone
+```sh
+$ go get -u github.com/mk2/yon
+$ cd $GOPATH/src/github.com/mk2/yon
+```
+
+### Make
+```sh
+$ make release
+```
+
+### Start REPL
+```sh
+$ yon repl
+```
 
 ## :notes: Code
 
