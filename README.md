@@ -12,7 +12,7 @@
 - But `yon` does not have a flexibility most concatnative languages have.
 - And `yon` is under development.
 
-## How to try?
+## How to try
 ### Clone
 ```sh
 $ go get -u github.com/mk2/yon
@@ -55,15 +55,22 @@ Prelude vocabulary contains all basic words (dup, over, rot, each, comparators, 
 #### Prefix
 
 ```
-prelude~
+prelude
 ```
 
 #### Table
 
 word|fully qualified key|stack effect|misc
 :--:|:-----------------:|:----------:|:--:
-`dup`|`prelude~dup`|`(x -- x x)`|duplicate the top word on stack
-`if`|`prelude~if`|`(b x y -- )`|take the bool word b, and execute x or y wheter b is true or false
+`.`|`prelude~.`|`(x -- )`|pop top word on stack
+`.s`|`prelude~.s`|`( -- )`|show stack contents
+`.v`|`prelude~.v`|`( -- )`|show vocabularies
+`dup`|`prelude~dup`|`(x -- x x)`|duplicate top word on stack
+`over`|`prelude~over`|`(x y -- y x y)`|copy second depth word to top
+`rot`|`prelude~rot`|`(x y z -- z y x)`|duplicate top word on stack
+`def`|`prelude~def`|`(n x -- )`|register x with n name in user class
+`if`|`prelude~if`|`(x y b -- )`|take bool word b, and execute x or y wheter b is true or false
+`each`|`prelude~each`|`(x c -- )`|take chainable-word c, and exxecut x to each c element
 
 ### :blue_book: PsUtil vocabulary
 This vocabulary have not been implemented yet.
@@ -71,7 +78,7 @@ This vocabulary have not been implemented yet.
 #### Prefix
 
 ```
-psutil~
+psutil
 ```
 
 #### Table
@@ -83,7 +90,7 @@ The vocabulary contains all user defined words.
 #### Prefix
 
 ```
-user~
+user
 ```
 
 #### Table
