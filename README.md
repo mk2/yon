@@ -21,11 +21,15 @@ $ cd $GOPATH/src/github.com/mk2/yon
 
 ### Make
 ```sh
+# automatically restore dependencies (require Godep)
+$ make restore-deps
+# build yon executable, this brings the `yon` binary in current directory
 $ make release
 ```
 
 ### Start REPL
 ```sh
+# Lets enjoy yon!
 $ yon repl
 ```
 
@@ -41,12 +45,6 @@ name   -- name   literal
 {"test" 1 true} -- array literal
 {"version":1 name:yon} -- dictionary literal
 [1 dup] -- quoted function literal
-```
-
-## :tv: Command line
-```sh
-# start yon REPL, and enter some codes
-$ yon repl
 ```
 
 ## :books: Vocabularies
