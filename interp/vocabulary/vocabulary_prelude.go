@@ -172,7 +172,8 @@ func (v *vocabulary) LoadPrelude() error {
 			)
 
 			if ifFalseFn.GetWordType() != word.TFuncWord ||
-				ifTrueFn.GetWordType() != word.TFuncWord {
+				ifTrueFn.GetWordType() != word.TFuncWord ||
+				boolW.GetWordType() != word.TBoolWord {
 				return errors.New("invalid stack values")
 			}
 

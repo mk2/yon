@@ -9,6 +9,7 @@ import (
 const (
 	TNilWord kit.WordType = iota
 	TFuncWord
+	TDictWord
 	TNumberWord
 	TStringWord
 	TBoolWord

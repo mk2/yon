@@ -11,7 +11,7 @@ import (
 
 func TestLexer_new(t *testing.T) {
 
-	l := lexer.New(bytes.NewBufferString("a b `test` 123 1.23 test {}"))
+	l := lexer.New(bytes.NewBufferString("a 'b `test` 123 1.23 test {}"))
 
 	var cnt = 0
 	for tkn := l.NextToken(); tkn.GetType() != token.TEOF; tkn = l.NextToken() {

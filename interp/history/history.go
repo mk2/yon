@@ -1,8 +1,9 @@
 package history
 
 import (
-	"github.com/mk2/yon/interp/kit"
 	"time"
+
+	"github.com/mk2/yon/interp/kit"
 )
 
 type history struct {

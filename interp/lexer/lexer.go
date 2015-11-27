@@ -310,7 +310,7 @@ func isLetter(r rune) bool {
 
 	return 'a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' ||
 		r == '-' || r == '_' || r == '?' || r == '!' || r == '.' || r == '+' || r == '%' || r == '/' || r == '=' ||
-		r == '*' || r == '^'
+		r == '*' || r == '^' || r == '\''
 }
 
 func isSpace(r rune) bool {

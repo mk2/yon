@@ -247,7 +247,11 @@ func parseArrayBody(p *parser) kit.ArrayWord {
 	// skip the first bracket
 	p.next()
 
-	return word.NewArrayWordFromChainWord(parseChainWordBody(p, false))
+	if w, t := parseChainWordBody(p, word.TArrayWord); t == word.TArrayWord {
+		return word.NewArrayWordFromChainWord(w)
+	}
+
+	return nil
 }
 
 func parseAnonFuncBody(p *parser) kit.FuncWord {
@@ -255,12 +259,17 @@ func parseAnonFuncBody(p *parser) kit.FuncWord {
 	// skip the first square bracket
 	p.next()
 
-	return word.NewFuncWordFromChainWord("", author.NewUserAuthor(), parseChainWordBody(p, true))
+	if w, t := parseChainWordBody(p, word.TFuncWord); t == word.TFuncWord {
+		return word.NewFuncWordFromChainWord("", author.NewUserAuthor(), w)
+	}
+
+	return nil
 }
 
-func parseChainWordBody(p *parser, parsingFunc bool) kit.ChainWord {
+func parseChainWordBody(p *parser, expectType kit.WordType) (kit.ChainWord, kit.WordType) {
 
 	w := word.NewChainWord()
+	actualType := expectType
 
 PARSE_WORD_CHAIN_LOOP:
 	for {
@@ -268,6 +277,7 @@ PARSE_WORD_CHAIN_LOOP:
 
 		case w.Size() > 0 && t.GetType() == token.TDblColon:
 			// TDblColon indicates the word is a dict word
+			actualType = word.TDictWord
 			p.next()
 
 		case t.GetType() == token.TNumber:
@@ -288,18 +298,16 @@ PARSE_WORD_CHAIN_LOOP:
 			p.next()
 
 		case t.GetType() == token.TLeftBrace:
-			p.next()
-			w.Push(parseChainWordBody(p, false))
+			w.Push(parseArrayBody(p))
 
 		case t.GetType() == token.TLeftSquareBracket:
-			p.next()
-			w.Push(parseChainWordBody(p, true))
+			w.Push(parseAnonFuncBody(p))
 
-		case !parsingFunc && t.GetType() == token.TRightBrace:
+		case expectType == word.TArrayWord && t.GetType() == token.TRightBrace:
 			p.next()
 			break PARSE_WORD_CHAIN_LOOP
 
-		case parsingFunc && t.GetType() == token.TRightSquareBracket:
+		case expectType == word.TFuncWord && t.GetType() == token.TRightSquareBracket:
 			p.next()
 			break PARSE_WORD_CHAIN_LOOP
 
@@ -311,5 +319,5 @@ PARSE_WORD_CHAIN_LOOP:
 		}
 	}
 
-	return w
+	return w, actualType
 }
