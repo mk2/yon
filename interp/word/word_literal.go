@@ -89,7 +89,7 @@ type boolWord struct {
 func NewBoolWord(b bool) kit.BoolWord {
 
 	return &boolWord{
-		word: word{wordType: TBoolWord, author: author.NewUserAuthor()},
+		word: word{wordType: TBoolWord, author: author.NewPreludeAuthor()},
 		b:    b,
 	}
 }

@@ -176,7 +176,7 @@ func parse(p *parser) stateFn {
 
 	case token.TLeftBrace:
 		p.leftDelim = t
-		return parseArray(p)
+		return parseArrayDict(p)
 
 	case token.TNumber:
 		w := word.NewNumberWord(t.GetVal())
@@ -214,12 +214,6 @@ func parseIdentifier(p *parser) stateFn {
 
 	if w := p.memo.Vocab().Read(ident); w != nil {
 		p.emit(w)
-	} else if ident == "true" {
-		p.emit(word.NewBoolWord(true))
-	} else if ident == "false" {
-		p.emit(word.NewBoolWord(false))
-	} else if ident == "nil" {
-		p.emit(word.NewNilWord())
 	} else {
 		p.emit(word.NewNameWord(ident))
 	}
@@ -227,9 +221,13 @@ func parseIdentifier(p *parser) stateFn {
 	return parse
 }
 
-func parseArray(p *parser) stateFn {
+func parseArrayDict(p *parser) stateFn {
 
-	p.emit(parseArrayBody(p))
+	if aw, dw := parseArrayDictBody(p); aw != nil {
+		p.emit(aw)
+	} else if dw != nil {
+		p.emit(dw)
+	}
 
 	return parse
 }
@@ -242,16 +240,18 @@ func parseAnonFunc(p *parser) stateFn {
 	return parse
 }
 
-func parseArrayBody(p *parser) kit.ArrayWord {
+func parseArrayDictBody(p *parser) (kit.ArrayWord, kit.DictWord) {
 
 	// skip the first bracket
 	p.next()
 
 	if w, t := parseChainWordBody(p, word.TArrayWord); t == word.TArrayWord {
-		return word.NewArrayWordFromChainWord(w)
+		return word.NewArrayWordFromChainWord(w), nil
+	} else if t == word.TDictWord {
+		return nil, word.NewDictWordFromChainWord(w)
 	}
 
-	return nil
+	return nil, nil
 }
 
 func parseAnonFuncBody(p *parser) kit.FuncWord {
@@ -298,7 +298,11 @@ PARSE_WORD_CHAIN_LOOP:
 			p.next()
 
 		case t.GetType() == token.TLeftBrace:
-			w.Push(parseArrayBody(p))
+			if aw, dw := parseArrayDictBody(p); aw != nil {
+				w.Push(aw)
+			} else if dw != nil {
+				w.Push(dw)
+			}
 
 		case t.GetType() == token.TLeftSquareBracket:
 			w.Push(parseAnonFuncBody(p))

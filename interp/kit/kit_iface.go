@@ -59,6 +59,12 @@ type Vocabulary interface {
 	NewClass(string) error
 	// Print returns formatted vocabulary
 	Print() string
+	// Nil returns constant nil word
+	Nil() Word
+	// True returns constant true word
+	True() Word
+	// False returns constant false word
+	False() Word
 }
 
 // History will contain any user operation

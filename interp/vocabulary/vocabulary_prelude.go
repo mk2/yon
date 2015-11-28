@@ -33,18 +33,26 @@ const (
 	VMulti         = "*"
 	VDiv           = "/"
 	VRem           = "%"
-	VNil           = "nil"
 	VEq            = "="
 	VNEq           = "/="
 	VGt            = ">"
 	VLt            = "<"
 	VGte           = ">="
 	VLte           = "<="
+	VNil           = "nil"
+	VTrue          = "true"
+	VFalse         = "false"
 )
 
 func (v *vocabulary) LoadPrelude() error {
 
 	v.NewClass("prelude")
+
+	v.OverWrite(CPrelude, VNil, word.NewNilWord())
+
+	v.OverWrite(CPrelude, VTrue, word.NewBoolWord(true))
+
+	v.OverWrite(CPrelude, VFalse, word.NewBoolWord(false))
 
 	v.OverWrite(CPrelude, VVocabPrint, word.NewPreludeFuncWord(
 		VVocabPrint,

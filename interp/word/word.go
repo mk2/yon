@@ -24,6 +24,7 @@ const (
 	fBoolWord   = `<bool>   "%t"`
 	fNameWord   = `<name>   %s`
 	fArrayWord  = `<array>  {%s}`
+	fDictWord   = `<dict>   {%s}`
 	fChainWord  = `<chain>`
 	fFuncWord   = `<func>   [name:%-8s quoted:%t]`
 	fNilWord    = `<nil>`

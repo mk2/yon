@@ -7,9 +7,10 @@ import (
 
 	"strings"
 
-	"github.com/mk2/yon/interp/kit"
 	"bytes"
 	"fmt"
+
+	"github.com/mk2/yon/interp/kit"
 )
 
 type vocabulary struct {
@@ -111,6 +112,21 @@ func (v *vocabulary) AliasOverWrite(c string, k string, alter string) (err error
 	}
 
 	return errors.New("not found: " + c + "~" + k)
+}
+
+func (v *vocabulary) Nil() kit.Word {
+
+	return v.ReadClass(CPrelude, VNil)
+}
+
+func (v *vocabulary) True() kit.Word {
+
+	return v.ReadClass(CPrelude, VTrue)
+}
+
+func (v *vocabulary) False() kit.Word {
+
+	return v.ReadClass(CPrelude, VFalse)
 }
 
 func (v *vocabulary) ReadClass(c string, k string) kit.Word {
