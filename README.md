@@ -5,11 +5,10 @@
 ## About
 
 ### Summary
-- `yon` is the interpreting language built by Go.
-- Its idea and grammar is basically based on a concatnative language, like forth and factor.
+- `yon` is the concatenative interpreting language built by Go.
+- Its idea and grammar is basically inspired by some concatnative languages, like forth and factor.
 - It will be intended to make multi-node tool easily.
-- `yon` treats the whole significant literal as the word. (`2` is word, `"test"` is word, `true` is also word.)
-- But `yon` does not have a flexibility most concatenative languages have.
+- `yon` treats whole significant literal as the word. (`2` is word, `"test"` is word, `true` is also word.)
 - And `yon` is under development.
 
 ## How to try
