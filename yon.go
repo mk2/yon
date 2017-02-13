@@ -1,10 +1,11 @@
 package yon
 
 import (
-	"github.com/Scalingo/codegangsta-cli"
 	"github.com/mk2/yon/repl"
+	"github.com/urfave/cli"
 )
 
+// New for instantiate yon instance
 func New() *cli.App {
 
 	app := cli.NewApp()

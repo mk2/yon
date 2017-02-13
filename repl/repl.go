@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Scalingo/codegangsta-cli"
 	"github.com/mk2/yon/repl/client"
 	"github.com/mk2/yon/repl/kit"
 	"github.com/mk2/yon/repl/server"
+	"github.com/urfave/cli"
 )
 
 type repl struct {
