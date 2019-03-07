@@ -4,4 +4,4 @@ go:
   - "1.6"
   - "1.5"
   - tip
-install: make get-deps
+install: make ensure-deps
