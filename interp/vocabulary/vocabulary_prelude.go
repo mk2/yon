@@ -57,7 +57,7 @@ func (v *vocabulary) LoadPrelude() error {
 	v.OverWrite(CPrelude, VVocabPrint, word.NewPreludeFuncWord(
 		VVocabPrint,
 		func(m kit.Memory, args ...interface{}) error {
-			m.Println(m.Vocab().Print())
+			m.Printf(m.Vocab().Print())
 			return nil
 		},
 	))
@@ -74,10 +74,10 @@ func (v *vocabulary) LoadPrelude() error {
 		VOver,
 		func(m kit.Memory, args ...interface{}) error {
 			upper := m.Stack().Pop()
-			bottom := m.Stack().Pop()
-			m.Stack().Push(bottom)
+			bottom := m.Stack().Peek()
 			m.Stack().Push(upper)
 			m.Stack().Push(bottom)
+			m.Printf(m.Stack().Print())
 			return nil
 		},
 	))
@@ -92,6 +92,7 @@ func (v *vocabulary) LoadPrelude() error {
 			for _, w := range ws {
 				m.Stack().Push(w)
 			}
+			m.Printf(m.Stack().Print())
 			return nil
 		},
 	))
@@ -121,6 +122,7 @@ func (v *vocabulary) LoadPrelude() error {
 		func(m kit.Memory, args ...interface{}) error {
 			s := m.Stack()
 			s.Push(s.Peek())
+			m.Printf(m.Stack().Print())
 			return nil
 		},
 	))
