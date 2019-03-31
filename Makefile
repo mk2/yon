@@ -9,18 +9,18 @@ dist: build
 release: release-build
 
 build:
-	cd cmd; go build -o yon -installsuffix .; mv yon ../
+	cd cmd; go build -o yon; mv yon ../
 
 release-build:
-	cd cmd; go build -o yon -installsuffix . -tags=interp_release; mv yon ../
+	cd cmd; go build -o yon -tags=interp_release; mv yon ../
 
 test: test-interp
 
 test-interp:
 	cd interp; make
 
-ensure-deps:
-	dep ensure
+download:
+	go mod download
 
 clean:
 	rm -f yon

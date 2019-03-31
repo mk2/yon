@@ -1,7 +1,4 @@
 language: go
 go:
-  - "1.7"
-  - "1.6"
-  - "1.5"
-  - tip
-install: make get-deps
+  - master
+install: make download
