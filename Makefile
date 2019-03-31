@@ -1,6 +1,6 @@
 .PHONY: clean dist release build build-release update-deps get-deps test-interp test
 
-default: test
+default: build test
 
 GO=go
 
@@ -19,7 +19,7 @@ test: test-interp
 test-interp:
 	cd interp; go test
 
-download:
+restore:
 	go mod download
 
 clean:
