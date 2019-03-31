@@ -238,11 +238,26 @@ func (v *vocabulary) LoadPrelude() error {
 	// arithmetic operators {{{
 	//
 
+	// `+` operator
 	v.OverWrite(CPrelude, VPlus, word.NewPreludeFuncWord(
 		VPlus,
 		func(m kit.Memory, args ...interface{}) error {
 
-			// TODO implement
+			var (
+				rhs = m.Stack().Pop()
+				lhs = m.Stack().Pop()
+			)
+
+			if rhs == nil || lhs == nil {
+				return errors.New("nil word given")
+			}
+
+			if rhs.GetWordType() != word.TNumberWord || lhs.GetWordType() != word.TNumberWord {
+				return errors.New("not number word given")
+			}
+
+			s := m.Stack()
+			s.Push(word.NewNumberWordFromFloat64(rhs.(kit.NumberWord).Number() + lhs.(kit.NumberWord).Number()))
 
 			return nil
 		},

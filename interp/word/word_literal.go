@@ -13,6 +13,14 @@ type numberWord struct {
 	number float64
 }
 
+func NewNumberWordFromFloat64(number float64) kit.NumberWord {
+
+	return &numberWord{
+		word:   word{wordType: TNumberWord, author: author.NewUserAuthor()},
+		number: number,
+	}
+}
+
 func NewNumberWord(val string) kit.NumberWord {
 
 	var (
