@@ -40,7 +40,7 @@ func NewNumberWord(val string) kit.NumberWord {
 func (w *numberWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 
 	m.Stack().Push(w)
-	m.Printf(w.Format())
+	m.Printf(w.String())
 
 	return nil, nil
 }
@@ -76,7 +76,7 @@ func NewStringWord(val string) kit.StringWord {
 func (w *stringWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 
 	m.Stack().Push(w)
-	m.Printf(w.Format())
+	m.Printf(w.String())
 
 	return nil, nil
 }
@@ -107,7 +107,7 @@ func NewBoolWord(b bool) kit.BoolWord {
 func (w *boolWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 
 	m.Stack().Push(w)
-	m.Printf(w.Format())
+	m.Printf(w.String())
 
 	return nil, nil
 }
