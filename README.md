@@ -24,8 +24,8 @@ $ cd $GOPATH/src/github.com/mk2/yon
 ### Make
 
 ```sh
-# automatically restore dependencies (require Godep)
-$ make ensure-deps
+# automatically restore dependencies (require go mod)
+$ make restore
 # build yon executable, this brings the `yon` binary in current directory
 $ make release
 ```
@@ -34,7 +34,7 @@ $ make release
 
 ```sh
 # Lets enjoy yon!
-$ yon repl
+$ ./yon repl
 ```
 
 ## :notes: Code
