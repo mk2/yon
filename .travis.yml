@@ -1,4 +1,12 @@
 language: go
 go:
   - master
-install: make download
+os:
+  - linux
+  - osx
+dist: trusty
+sudo: false
+install: true
+script:
+  - env GO111MODULE=on cd cmd; go build
+  - env GO111MODULE=on cd interp; go test
