@@ -25,9 +25,9 @@ $ cd $GOPATH/src/github.com/mk2/yon
 
 ```sh
 # automatically restore dependencies (require go mod)
-$ make restore
+$ env GO111MODULE=on make restore
 # build yon executable, this brings the `yon` binary in current directory
-$ make release
+$ env GO111MODULE=on make release
 ```
 
 ### Start REPL
