@@ -33,7 +33,7 @@ func (s *stack) Print() string {
 	depth := 0
 	var buf bytes.Buffer
 
-	buf.WriteString("Stack Status:\n")
+	buf.WriteString("\n")
 	for e := s.Front(); e != nil; e = e.Next() {
 
 		if w, ok := e.Value.(kit.Word); ok {
@@ -70,7 +70,7 @@ func printWord(depth int, w kit.Word) string {
 		return printArrayWord(depth, w.(kit.ArrayWord))
 	}
 
-	return ""
+	return "<unknown word type>"
 }
 
 func printNumberWord(depth int, w kit.NumberWord) string {

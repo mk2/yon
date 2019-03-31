@@ -130,7 +130,7 @@ func (v *vocabulary) LoadPrelude() error {
 		func(m kit.Memory, args ...interface{}) error {
 			var nw = m.Stack().Pop()
 
-			value := m.Stack().Pop()
+			value := m.Stack().Peek()
 			name := ""
 
 			switch nw.GetWordType() {
@@ -142,6 +142,7 @@ func (v *vocabulary) LoadPrelude() error {
 				name = nw.(kit.NameWord).Name()
 
 			}
+			m.Printf("%v is defined to %s", value, name)
 
 			return v.Write(CUser, name, value)
 		},
