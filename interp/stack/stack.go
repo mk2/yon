@@ -44,7 +44,7 @@ func (s *stack) Print() string {
 		depth++
 	}
 
-	return string(buf.Bytes())
+	return buf.String()
 }
 
 func printWord(depth int, w kit.Word) string {
