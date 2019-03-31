@@ -226,7 +226,7 @@ func (v *vocabulary) LoadPrelude() error {
 		VApply,
 		func(m kit.Memory, args ...interface{}) error {
 
-			if w := m.Stack().Peek(); w != nil {
+			if w := m.Stack().Pop(); w != nil {
 				w.Do(m)
 			}
 
