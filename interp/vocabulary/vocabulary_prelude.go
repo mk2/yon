@@ -65,7 +65,7 @@ func (v *vocabulary) LoadPrelude() error {
 	v.OverWrite(CPrelude, VStackPrint, word.NewPreludeFuncWord(
 		VStackPrint,
 		func(m kit.Memory, args ...interface{}) error {
-			m.Stack().Print()
+			m.Printf(m.Stack().Print())
 			return nil
 		},
 	))

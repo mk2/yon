@@ -39,7 +39,7 @@ type Stack interface {
 	Push(v Word) Word
 	Pop() Word
 	Peek() Word
-	Print()
+	Print() string
 }
 
 // Vocabulary holds any named words

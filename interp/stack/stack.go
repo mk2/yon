@@ -3,9 +3,10 @@ package stack
 import (
 	"container/list"
 
+	"bytes"
 	"sync"
 
-	"github.com/fatih/color"
+	. "github.com/logrusorgru/aurora"
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/word"
 )
@@ -27,72 +28,79 @@ func New() kit.Stack {
 	}
 }
 
-func (s *stack) Print() {
+func (s *stack) Print() string {
 
 	depth := 0
+	var buf bytes.Buffer
 
+	buf.WriteString("Stack Status:\n")
 	for e := s.Front(); e != nil; e = e.Next() {
 
 		if w, ok := e.Value.(kit.Word); ok {
-			printWord(depth, w)
+			buf.WriteString(printWord(depth, w))
+			buf.WriteString("\n")
 		}
 
 		depth++
 	}
+
+	return string(buf.Bytes())
 }
 
-func printWord(depth int, w kit.Word) {
+func printWord(depth int, w kit.Word) string {
 
 	switch w.GetWordType() {
 
 	case word.TNumberWord:
-		printNumberWord(depth, w.(kit.NumberWord))
+		return printNumberWord(depth, w.(kit.NumberWord))
 
 	case word.TStringWord:
-		printStringWord(depth, w.(kit.StringWord))
+		return printStringWord(depth, w.(kit.StringWord))
 
 	case word.TNameWord:
-		printNameWord(depth, w.(kit.NameWord))
+		return printNameWord(depth, w.(kit.NameWord))
 
 	case word.TBoolWord:
-		printBoolWord(depth, w.(kit.BoolWord))
+		return printBoolWord(depth, w.(kit.BoolWord))
 
 	case word.TFuncWord:
-		printFuncWord(depth, w.(kit.FuncWord))
+		return printFuncWord(depth, w.(kit.FuncWord))
 
 	case word.TArrayWord:
-		printArrayWord(depth, w.(kit.ArrayWord))
+		return printArrayWord(depth, w.(kit.ArrayWord))
 	}
+
+	return ""
 }
 
-func printNumberWord(depth int, w kit.NumberWord) {
+func printNumberWord(depth int, w kit.NumberWord) string {
 
-	color.Magenta(fBase, depth, w.Format())
+	return Sprintf(Magenta(fBase), depth, w.Format())
 }
 
-func printStringWord(depth int, w kit.StringWord) {
+func printStringWord(depth int, w kit.StringWord) string {
 
-	color.Cyan(fBase, depth, w.Format())
+	return Sprintf(Cyan(fBase), depth, w.Format())
 }
 
-func printNameWord(depth int, w kit.NameWord) {
+func printNameWord(depth int, w kit.NameWord) string {
 
-	color.Yellow(fBase, depth, w.Format())
+	return Sprintf(Brown(fBase), depth, w.Format())
 }
 
-func printBoolWord(depth int, w kit.BoolWord) {
+func printBoolWord(depth int, w kit.BoolWord) string {
 
-	color.Red(fBase, depth, w.Format())
+	return Sprintf(Red(fBase), depth, w.Format())
 }
 
-func printFuncWord(depth int, w kit.FuncWord) {
+func printFuncWord(depth int, w kit.FuncWord) string {
 
-	color.Magenta(fBase, depth, w.Format())
+	return Sprintf(Gray(fBase), depth, w.Format())
 }
 
-func printArrayWord(depth int, w kit.ArrayWord) {
+func printArrayWord(depth int, w kit.ArrayWord) string {
 
-	color.Green(fBase, depth, w.Format())
+	return Sprintf(Green(fBase), depth, w.Format())
 }
 
 func (s *stack) Push(v kit.Word) kit.Word {
