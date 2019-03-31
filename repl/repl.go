@@ -32,7 +32,7 @@ func NewCommand() cli.Command {
 				if s, err := repl.GetClient().Read(); err != nil {
 					continue
 				} else {
-					fmt.Printf("=> \n%s\n", repl.GetClient().Eval(s))
+					fmt.Printf("=> %s\n", repl.GetClient().Eval(s))
 				}
 			}
 		},
