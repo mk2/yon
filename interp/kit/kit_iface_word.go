@@ -23,6 +23,7 @@ type Word interface {
 type ChainWord interface {
 	Word
 	ExtractList() *list.List
+	Unshift(Word) Word
 	Push(Word) Word
 	Each(func(Word))
 	FlatEach(func(Word))

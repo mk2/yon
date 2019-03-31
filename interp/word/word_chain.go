@@ -39,6 +39,11 @@ func (w *chainWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 	return nil, nil
 }
 
+func (w *chainWord) Unshift(v kit.Word) kit.Word {
+
+	return w.PushFront(v).Value.(kit.Word)
+}
+
 func (w *chainWord) Push(v kit.Word) kit.Word {
 
 	return w.PushBack(v).Value.(kit.Word)

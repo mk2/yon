@@ -12,10 +12,12 @@ const (
 	VVocabPrint    = ".v"
 	VStackPrint    = ".s"
 	VPopPrint      = "."
+	VMakeArray     = "arr"
 	VDup           = "dup"
 	VRot           = "rot"
 	VOver          = "over"
 	VDef           = "def"
+	VShowDefs      = "defs"
 	VApply         = "apply"
 	VEach          = "each"
 	VIf            = "if"
@@ -77,6 +79,19 @@ func (v *vocabulary) LoadPrelude() error {
 			bottom := m.Stack().Peek()
 			m.Stack().Push(upper)
 			m.Stack().Push(bottom)
+			m.Printf(m.Stack().Print())
+			return nil
+		},
+	))
+
+	v.OverWrite(CPrelude, VMakeArray, word.NewPreludeFuncWord(
+		VMakeArray,
+		func(m kit.Memory, args ...interface{}) error {
+			arr := word.NewArrayWord()
+			for w := m.Stack().Pop(); w != nil; w = m.Stack().Pop() {
+				arr.Unshift(w)
+			}
+			m.Stack().Push(arr)
 			m.Printf(m.Stack().Print())
 			return nil
 		},
@@ -147,6 +162,13 @@ func (v *vocabulary) LoadPrelude() error {
 			m.Printf("%v is defined to %s", value, name)
 
 			return v.Write(CUser, name, value)
+		},
+	))
+
+	v.OverWrite(CPrelude, VShowDefs, word.NewPreludeFuncWord(
+		VShowDefs,
+		func(m kit.Memory, args ...interface{}) error {
+			return nil
 		},
 	))
 
