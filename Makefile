@@ -17,7 +17,7 @@ release-build:
 test: test-interp
 
 test-interp:
-	cd interp; go test
+	cd interp; make
 
 restore:
 	go mod download
