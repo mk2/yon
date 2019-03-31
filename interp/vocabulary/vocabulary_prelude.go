@@ -257,7 +257,32 @@ func (v *vocabulary) LoadPrelude() error {
 			}
 
 			s := m.Stack()
-			s.Push(word.NewNumberWordFromFloat64(rhs.(kit.NumberWord).Number() + lhs.(kit.NumberWord).Number()))
+			s.Push(word.NewNumberWordFromFloat64(lhs.(kit.NumberWord).Number() + rhs.(kit.NumberWord).Number()))
+
+			return nil
+		},
+	))
+
+	// `-` operator
+	v.OverWrite(CPrelude, VMinus, word.NewPreludeFuncWord(
+		VMinus,
+		func(m kit.Memory, args ...interface{}) error {
+
+			var (
+				rhs = m.Stack().Pop()
+				lhs = m.Stack().Pop()
+			)
+
+			if rhs == nil || lhs == nil {
+				return errors.New("nil word given")
+			}
+
+			if rhs.GetWordType() != word.TNumberWord || lhs.GetWordType() != word.TNumberWord {
+				return errors.New("not number word given")
+			}
+
+			s := m.Stack()
+			s.Push(word.NewNumberWordFromFloat64(lhs.(kit.NumberWord).Number() - rhs.(kit.NumberWord).Number()))
 
 			return nil
 		},

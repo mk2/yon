@@ -118,9 +118,9 @@ func (w *boolWord) String() string {
 
 	if w.b {
 		return "true"
-	} else {
-		return "false"
 	}
+
+	return "false"
 }
 
 func (w *boolWord) Format() string {
