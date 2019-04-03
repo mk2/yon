@@ -55,19 +55,15 @@ Parser API
 */
 
 func (p *parser) NextWord() kit.Word {
-
 	word := <-p.words
-
 	return word
 }
 
 func (p *parser) GetWords() <-chan kit.Word {
-
 	return p.words
 }
 
 func (p *parser) ReadWord() (kit.Word, error) {
-
 	if p.onceAgainWord {
 
 		kit.Println("found unused last token")
@@ -100,7 +96,6 @@ func (p *parser) ReadWord() (kit.Word, error) {
 }
 
 func (p *parser) UnreadWord() error {
-
 	if p.onceAgainWord {
 		return errors.New("already called UreadToken")
 	}
@@ -119,19 +114,19 @@ parser private methods
 */
 
 func (p *parser) run() {
-
 	for p.state = parse; p.state != nil; {
 		p.state = p.state(p)
 	}
+
+	close(p.stoppedCh)
+	close(p.errorCh)
 }
 
 func (p *parser) emit(w kit.Word) {
-
 	p.words <- w
 }
 
 func (p *parser) next() kit.Token {
-
 	var (
 		t   kit.Token
 		err error
@@ -145,7 +140,6 @@ func (p *parser) next() kit.Token {
 }
 
 func (p *parser) peek() kit.Token {
-
 	var (
 		t   = p.next()
 		err = p.input.UnreadToken()
@@ -165,7 +159,6 @@ parser functions
 */
 
 func parse(p *parser) stateFn {
-
 	p.leftDelim = nil
 	p.rightDelim = nil
 
@@ -208,7 +201,6 @@ func parse(p *parser) stateFn {
 }
 
 func parseIdentifier(p *parser) stateFn {
-
 	t := p.next()
 	ident := t.GetVal()
 
@@ -222,7 +214,6 @@ func parseIdentifier(p *parser) stateFn {
 }
 
 func parseArrayDict(p *parser) stateFn {
-
 	if aw, dw := parseArrayDictBody(p); aw != nil {
 		p.emit(aw)
 	} else if dw != nil {
@@ -234,14 +225,12 @@ func parseArrayDict(p *parser) stateFn {
 
 // parseAnonFunc parses `[ number | string | ident | array | tuple | func ]`
 func parseAnonFunc(p *parser) stateFn {
-
 	p.emit(parseAnonFuncBody(p))
 
 	return parse
 }
 
 func parseArrayDictBody(p *parser) (kit.ArrayWord, kit.DictWord) {
-
 	// skip the first bracket
 	p.next()
 
@@ -255,7 +244,6 @@ func parseArrayDictBody(p *parser) (kit.ArrayWord, kit.DictWord) {
 }
 
 func parseAnonFuncBody(p *parser) kit.FuncWord {
-
 	// skip the first square bracket
 	p.next()
 
@@ -267,7 +255,6 @@ func parseAnonFuncBody(p *parser) kit.FuncWord {
 }
 
 func parseChainWordBody(p *parser, expectType kit.WordType) (kit.ChainWord, kit.WordType) {
-
 	w := word.NewChainWord()
 	actualType := expectType
 

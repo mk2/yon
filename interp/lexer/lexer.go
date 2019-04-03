@@ -33,7 +33,6 @@ type stateFn func(*lexer) stateFn
 
 // New returns new lexer struct instance
 func New(r kit.RuneScanner) kit.Lexer {
-
 	l := &lexer{
 		name:           "",
 		input:          r,
@@ -42,9 +41,7 @@ func New(r kit.RuneScanner) kit.Lexer {
 		buf:            new(bytes.Buffer),
 		onceAgainToken: false,
 	}
-
 	go l.run()
-
 	return l
 }
 
@@ -57,22 +54,17 @@ Lexer APIs
 // NextToken returns next obtaining token
 // This API is blocking.
 func (l *lexer) NextToken() kit.Token {
-
 	token := <-l.tokens
-
 	return token
 }
 
 // GetTokenCh returns token incoming channel
 func (l *lexer) GetTokens() <-chan kit.Token {
-
 	return l.tokens
 }
 
 func (l *lexer) ReadToken() (kit.Token, error) {
-
 	if l.onceAgainToken {
-
 		kit.Printf("found unused last token: %+v\n", l.lastToken)
 
 		l.Lock()
@@ -103,7 +95,6 @@ func (l *lexer) ReadToken() (kit.Token, error) {
 }
 
 func (l *lexer) UnreadToken() error {
-
 	if l.onceAgainToken {
 		return errors.New("already called UreadToken")
 	}
@@ -122,14 +113,13 @@ Lexer private methods
 */
 
 func (l *lexer) run() {
-
 	for l.state = lex; l.state != nil; {
 		l.state = l.state(l)
 	}
+	close(l.tokens)
 }
 
 func (l *lexer) emit(t kit.TokenType) {
-
 	val := l.buf.String()
 
 	if val != "<nil>" {
@@ -144,7 +134,6 @@ func (l *lexer) emit(t kit.TokenType) {
 }
 
 func (l *lexer) peek() rune {
-
 	var (
 		r   = l.next()
 		err = l.input.UnreadRune()
@@ -160,7 +149,6 @@ func (l *lexer) peek() rune {
 }
 
 func (l *lexer) next() rune {
-
 	var (
 		r   rune
 		err error
@@ -182,7 +170,6 @@ lexer functions
 */
 
 func lex(l *lexer) stateFn {
-
 	switch r := l.peek(); {
 
 	case r == '(':
@@ -243,7 +230,6 @@ func lex(l *lexer) stateFn {
 }
 
 func lexIdentifier(l *lexer) stateFn {
-
 	for r := l.peek(); isLetter(r); r = l.peek() {
 		l.buf.WriteRune(r)
 		l.next()
@@ -255,7 +241,6 @@ func lexIdentifier(l *lexer) stateFn {
 }
 
 func lexSpace(l *lexer) stateFn {
-
 	for isSpace(l.peek()) {
 		l.next()
 	}
@@ -266,7 +251,6 @@ func lexSpace(l *lexer) stateFn {
 }
 
 func lexString(l *lexer) stateFn {
-
 	// skip the left delimiter
 	l.next()
 
@@ -284,7 +268,6 @@ func lexString(l *lexer) stateFn {
 }
 
 func lexNumber(l *lexer) stateFn {
-
 	for r := l.peek(); isNumber(r) || r == '.'; r = l.peek() {
 		l.buf.WriteRune(r)
 		l.next()
@@ -302,18 +285,15 @@ Rune check functions
 */
 
 func isNumber(r rune) bool {
-
 	return '0' <= r && r <= '9'
 }
 
 func isLetter(r rune) bool {
-
 	return 'a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' ||
 		r == '-' || r == '_' || r == '?' || r == '!' || r == '.' || r == '+' || r == '%' || r == '/' || r == '=' ||
 		r == '*' || r == '^' || r == '\''
 }
 
 func isSpace(r rune) bool {
-
 	return r == ' ' || r == '\t' || r == '\n' || r == '\v' || r == '\f' || r == '\r'
 }
