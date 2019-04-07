@@ -14,17 +14,14 @@ type arrayWord struct {
 }
 
 func NewArrayWordFromChainWord(c kit.ChainWord) kit.ArrayWord {
-
 	return NewArrayWordFromList(c.ExtractList())
 }
 
 func NewArrayWord() kit.ArrayWord {
-
 	return NewArrayWordFromList(list.New())
 }
 
 func NewArrayWordFromList(l *list.List) kit.ArrayWord {
-
 	return &arrayWord{
 		chainWord: chainWord{
 			word: word{wordType: TArrayWord, author: author.NewUserAuthor()},
@@ -34,19 +31,16 @@ func NewArrayWordFromList(l *list.List) kit.ArrayWord {
 }
 
 func (w *arrayWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
-
 	m.Stack().Push(w)
 
 	return nil, nil
 }
 
 func (w *arrayWord) Put(wd kit.Word) {
-
 	w.PushBack(wd)
 }
 
 func (w *arrayWord) Array() []kit.Word {
-
 	var ws []kit.Word
 	w.Each(func(wd kit.Word) {
 		ws = append(ws, wd)
@@ -56,7 +50,6 @@ func (w *arrayWord) Array() []kit.Word {
 }
 
 func (w *arrayWord) String() string {
-
 	var (
 		buf     = new(bytes.Buffer)
 		isFirst = true
@@ -72,7 +65,6 @@ func (w *arrayWord) String() string {
 }
 
 func (w *arrayWord) Format() string {
-
 	var (
 		buf     = new(bytes.Buffer)
 		isFirst = true

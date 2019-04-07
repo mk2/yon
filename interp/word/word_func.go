@@ -15,12 +15,10 @@ type funcWord struct {
 }
 
 func NewPreludeFuncWord(name string, body kit.WordFuncBody) kit.FuncWord {
-
 	return NewFuncWord(name, author.NewPreludeAuthor(), body)
 }
 
 func NewFuncWord(name string, author kit.Author, body kit.WordFuncBody) kit.FuncWord {
-
 	return &funcWord{
 		chainWord: chainWord{
 			word: word{wordType: TFuncWord, author: author},
@@ -32,12 +30,10 @@ func NewFuncWord(name string, author kit.Author, body kit.WordFuncBody) kit.Func
 }
 
 func NewFuncWordFromChainWord(name string, author kit.Author, c kit.ChainWord) kit.FuncWord {
-
 	return NewFuncWord(name, author, funcBodyFromChainWord(c))
 }
 
 func (w *funcWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
-
 	if w.quoted {
 		w.quoted = false
 		m.Stack().Push(w)
@@ -48,9 +44,7 @@ func (w *funcWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 }
 
 func funcBodyFromChainWord(a kit.ChainWord) kit.WordFuncBody {
-
 	return func(m kit.Memory, args ...interface{}) (err error) {
-
 		a.Each(func(w kit.Word) {
 			_, err = w.Do(m)
 		})
@@ -60,16 +54,13 @@ func funcBodyFromChainWord(a kit.ChainWord) kit.WordFuncBody {
 }
 
 func (w *funcWord) Name() string {
-
 	return w.name
 }
 
 func (w *funcWord) String() string {
-
 	return w.name
 }
 
 func (w *funcWord) Format() string {
-
 	return fmt.Sprintf(fFuncWord, w.name, w.quoted)
 }

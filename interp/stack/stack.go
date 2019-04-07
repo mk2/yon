@@ -21,14 +21,12 @@ type stack struct {
 }
 
 func New() kit.Stack {
-
 	return &stack{
 		List: *list.New(),
 	}
 }
 
 func (s *stack) Print() string {
-
 	depth := 0
 	var buf bytes.Buffer
 
@@ -47,7 +45,6 @@ func (s *stack) Print() string {
 }
 
 func printWord(depth int, w kit.Word) string {
-
 	switch w.GetWordType() {
 
 	case word.TNumberWord:
@@ -73,37 +70,30 @@ func printWord(depth int, w kit.Word) string {
 }
 
 func printNumberWord(depth int, w kit.NumberWord) string {
-
 	return Sprintf(Magenta(fBase), depth, w.Format())
 }
 
 func printStringWord(depth int, w kit.StringWord) string {
-
 	return Sprintf(Cyan(fBase), depth, w.Format())
 }
 
 func printNameWord(depth int, w kit.NameWord) string {
-
 	return Sprintf(Brown(fBase), depth, w.Format())
 }
 
 func printBoolWord(depth int, w kit.BoolWord) string {
-
 	return Sprintf(Red(fBase), depth, w.Format())
 }
 
 func printFuncWord(depth int, w kit.FuncWord) string {
-
 	return Sprintf(Gray(fBase), depth, w.Format())
 }
 
 func printArrayWord(depth int, w kit.ArrayWord) string {
-
 	return Sprintf(Green(fBase), depth, w.Format())
 }
 
 func (s *stack) Push(v kit.Word) kit.Word {
-
 	s.Lock()
 	e := s.PushFront(v)
 	s.Unlock()
@@ -112,7 +102,6 @@ func (s *stack) Push(v kit.Word) kit.Word {
 }
 
 func (s *stack) Pop() kit.Word {
-
 	s.Lock()
 	e := s.Front()
 	if e == nil {
@@ -126,7 +115,6 @@ func (s *stack) Pop() kit.Word {
 }
 
 func (s *stack) Peek() kit.Word {
-
 	e := s.Front()
 	if e == nil {
 		return nil

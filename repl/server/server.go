@@ -14,7 +14,6 @@ type server struct {
 }
 
 func New() kit.ReplServer {
-
 	return &server{
 		interp: interp.New(),
 		buf:    new(bytes.Buffer),
@@ -22,7 +21,6 @@ func New() kit.ReplServer {
 }
 
 func (s *server) Send(input string) error {
-
 	s.buf.Reset()
 	s.buf.WriteString(input)
 
@@ -30,6 +28,5 @@ func (s *server) Send(input string) error {
 }
 
 func (s *server) Receive(timeoutSeconds int) string {
-
 	return s.interp.StdoutString()
 }

@@ -43,27 +43,22 @@ type word struct {
 }
 
 func (w *word) GetWordType() kit.WordType {
-
 	return w.wordType
 }
 
 func (w *word) GetAuthorType() kit.AuthorType {
-
 	return w.author.GetAuthorType()
 }
 
 func (w *word) GetAuthorId() kit.AuthorId {
-
 	return w.author.GetAuthorId()
 }
 
 func (w *word) GetAuthor() kit.Author {
-
 	return w.author
 }
 
 func CheckChainWord(w kit.Word) bool {
-
 	switch w.GetWordType() {
 	case TChainWord | TArrayWord | TFuncWord:
 		return true

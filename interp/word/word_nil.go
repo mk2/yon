@@ -10,25 +10,21 @@ type nilWord struct {
 }
 
 func NewNilWord() kit.Word {
-
 	return &nilWord{
 		word: word{wordType: TNilWord, author: author.NewPreludeAuthor()},
 	}
 }
 
 func (w *nilWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
-
 	// do nothing
 
 	return nil, nil
 }
 
 func (w *nilWord) String() string {
-
 	return "nil"
 }
 
 func (w *nilWord) Format() string {
-
 	return fNilWord
 }

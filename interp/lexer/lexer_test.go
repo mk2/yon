@@ -10,7 +10,6 @@ import (
 )
 
 func TestLexer_new(t *testing.T) {
-
 	l := lexer.New(bytes.NewBufferString("a 'b `test` 123 1.23 test {}"))
 
 	var cnt = 0
@@ -45,7 +44,6 @@ func TestLexer_new(t *testing.T) {
 }
 
 func assertTokenType(t *testing.T, r kit.TokenType, a kit.TokenType) {
-
 	if r != a {
 		t.Errorf("[Invalid token type] real: %d assumed: %d", r, a)
 	}

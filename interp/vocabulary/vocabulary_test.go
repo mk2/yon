@@ -7,7 +7,6 @@ import (
 )
 
 func TestExtractClass(t *testing.T) {
-
 	class, key := vocabulary.ExtractClass("prelude~dup")
 
 	if class != "prelude" || key != "dup" {

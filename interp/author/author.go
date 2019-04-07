@@ -20,34 +20,28 @@ const (
 )
 
 func randomAuthorId() kit.AuthorId {
-
 	var n uint64
 	binary.Read(rand.Reader, binary.LittleEndian, &n)
 	return kit.AuthorId(strconv.FormatUint(n, 36))
 }
 
 func NewPreludeAuthor() kit.Author {
-
 	return NewStaticAuthor(AuthorPrelude)
 }
 
 func NewUserAuthor() kit.Author {
-
 	return NewRandomAuthor(AuthorUser)
 }
 
 func NewStaticAuthor(typ kit.AuthorType) kit.Author {
-
 	return New(typ, "")
 }
 
 func NewRandomAuthor(typ kit.AuthorType) kit.Author {
-
 	return New(typ, randomAuthorId())
 }
 
 func New(typ kit.AuthorType, id kit.AuthorId) kit.Author {
-
 	return &author{
 		typ: typ,
 		id:  id,
@@ -55,11 +49,9 @@ func New(typ kit.AuthorType, id kit.AuthorId) kit.Author {
 }
 
 func (a *author) GetAuthorType() kit.AuthorType {
-
 	return a.typ
 }
 
 func (a *author) GetAuthorId() kit.AuthorId {
-
 	return a.id
 }

@@ -14,7 +14,6 @@ type numberWord struct {
 }
 
 func NewNumberWordFromFloat64(number float64) kit.NumberWord {
-
 	return &numberWord{
 		word:   word{wordType: TNumberWord, author: author.NewUserAuthor()},
 		number: number,
@@ -22,7 +21,6 @@ func NewNumberWordFromFloat64(number float64) kit.NumberWord {
 }
 
 func NewNumberWord(val string) kit.NumberWord {
-
 	var (
 		f   float64
 		err error
@@ -38,7 +36,6 @@ func NewNumberWord(val string) kit.NumberWord {
 }
 
 func (w *numberWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
-
 	m.Stack().Push(w)
 	m.Printf(w.String())
 
@@ -46,17 +43,14 @@ func (w *numberWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) 
 }
 
 func (w *numberWord) Number() float64 {
-
 	return w.number
 }
 
 func (w *numberWord) String() string {
-
 	return strconv.FormatFloat(w.number, 'E', -1, 64)
 }
 
 func (w *numberWord) Format() string {
-
 	return fmt.Sprintf(fNumberWord, w.number)
 }
 
@@ -66,7 +60,6 @@ type stringWord struct {
 }
 
 func NewStringWord(val string) kit.StringWord {
-
 	return &stringWord{
 		str:  val,
 		word: word{wordType: TStringWord, author: author.NewUserAuthor()},
@@ -74,7 +67,6 @@ func NewStringWord(val string) kit.StringWord {
 }
 
 func (w *stringWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
-
 	m.Stack().Push(w)
 	m.Printf(w.String())
 
@@ -97,7 +89,6 @@ type boolWord struct {
 }
 
 func NewBoolWord(b bool) kit.BoolWord {
-
 	return &boolWord{
 		word: word{wordType: TBoolWord, author: author.NewPreludeAuthor()},
 		b:    b,
@@ -105,7 +96,6 @@ func NewBoolWord(b bool) kit.BoolWord {
 }
 
 func (w *boolWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
-
 	m.Stack().Push(w)
 	m.Printf(w.String())
 
@@ -113,12 +103,10 @@ func (w *boolWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
 }
 
 func (w *boolWord) Eval() bool {
-
 	return w.b
 }
 
 func (w *boolWord) String() string {
-
 	if w.b {
 		return "true"
 	}
@@ -127,6 +115,5 @@ func (w *boolWord) String() string {
 }
 
 func (w *boolWord) Format() string {
-
 	return fmt.Sprintf(fBoolWord, w.b)
 }

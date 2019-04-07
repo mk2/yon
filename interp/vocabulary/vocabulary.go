@@ -27,7 +27,6 @@ const (
 )
 
 func New() kit.Vocabulary {
-
 	v := &vocabulary{
 		classes: make(map[string]map[string]kit.Word, 0),
 	}
@@ -38,7 +37,6 @@ func New() kit.Vocabulary {
 }
 
 func (v *vocabulary) NewClass(className string) error {
-
 	v.Lock()
 	v.classes[className] = make(map[string]kit.Word, 0)
 	v.Unlock()
@@ -47,7 +45,6 @@ func (v *vocabulary) NewClass(className string) error {
 }
 
 func (v *vocabulary) Print() string {
-
 	buf := new(bytes.Buffer)
 
 	for c, ws := range v.classes {
@@ -60,7 +57,6 @@ func (v *vocabulary) Print() string {
 }
 
 func (v *vocabulary) ExistWord(c string, k string) (kit.Word, error) {
-
 	if _, classOk := v.classes[c]; !classOk {
 		return nil, errors.New("class not found: " + c)
 	}
@@ -73,7 +69,6 @@ func (v *vocabulary) ExistWord(c string, k string) (kit.Word, error) {
 }
 
 func (v *vocabulary) Write(c string, k string, w kit.Word) error {
-
 	if _, classOk := v.classes[c]; !classOk {
 		return errors.New("class not found: " + c)
 	}
@@ -90,7 +85,6 @@ func (v *vocabulary) Write(c string, k string, w kit.Word) error {
 }
 
 func (v *vocabulary) OverWrite(c string, k string, w kit.Word) (err error) {
-
 	err = v.Write(c, k, w)
 
 	if err != nil {
@@ -103,7 +97,6 @@ func (v *vocabulary) OverWrite(c string, k string, w kit.Word) (err error) {
 }
 
 func (v *vocabulary) AliasOverWrite(c string, k string, alter string) (err error) {
-
 	if w := v.ReadClass(c, k); w != nil {
 		v.OverWrite(c, alter, w)
 	}
@@ -112,22 +105,18 @@ func (v *vocabulary) AliasOverWrite(c string, k string, alter string) (err error
 }
 
 func (v *vocabulary) Nil() kit.Word {
-
 	return v.ReadClass(CPrelude, VNil)
 }
 
 func (v *vocabulary) True() kit.Word {
-
 	return v.ReadClass(CPrelude, VTrue)
 }
 
 func (v *vocabulary) False() kit.Word {
-
 	return v.ReadClass(CPrelude, VFalse)
 }
 
 func (v *vocabulary) ReadClass(c string, k string) kit.Word {
-
 	if class, classOk := v.classes[c]; classOk {
 		if w, wordOk := class[k]; wordOk {
 			return w
@@ -138,7 +127,6 @@ func (v *vocabulary) ReadClass(c string, k string) kit.Word {
 }
 
 func (v *vocabulary) Read(fqk string) kit.Word {
-
 	c, k := ExtractClass(fqk)
 
 	if c == "" {
@@ -164,7 +152,6 @@ func (v *vocabulary) Read(fqk string) kit.Word {
 
 // ExtractClass returns the extracted class name and key from the given fully qualified key.
 func ExtractClass(fqk string) (string, string) {
-
 	fqkLen := len(fqk)
 	names := strings.Split(fqk, ClassSep)
 	key := names[len(names)-1]

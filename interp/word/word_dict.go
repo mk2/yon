@@ -15,17 +15,14 @@ type dictWord struct {
 }
 
 func NewDictWord() kit.DictWord {
-
 	return NewDictWordFromList(list.New())
 }
 
 func NewDictWordFromChainWord(c kit.ChainWord) kit.DictWord {
-
 	return NewDictWordFromList(c.ExtractList())
 }
 
 func NewDictWordFromList(l *list.List) kit.DictWord {
-
 	return &dictWord{
 		dict: make(map[kit.Word]kit.Word, 0),
 		chainWord: chainWord{
@@ -36,26 +33,22 @@ func NewDictWordFromList(l *list.List) kit.DictWord {
 }
 
 func (w *dictWord) Map() map[kit.Word]kit.Word {
-
 	return w.dict
 }
 
 func (w *dictWord) Do(m kit.Memory, args ...interface{}) (interface{}, error) {
-
 	m.Stack().Push(w)
 
 	return nil, nil
 }
 
 func (w *dictWord) Put(k kit.Word, v kit.Word) {
-
 	w.dict[k] = v
 
 	return
 }
 
 func (w *dictWord) String() string {
-
 	var (
 		buf     = new(bytes.Buffer)
 		isFirst = true
@@ -71,7 +64,6 @@ func (w *dictWord) String() string {
 }
 
 func (w *dictWord) Format() string {
-
 	var (
 		buf     = new(bytes.Buffer)
 		isFirst = true

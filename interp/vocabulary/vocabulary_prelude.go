@@ -47,7 +47,6 @@ const (
 )
 
 func (v *vocabulary) LoadPrelude() error {
-
 	v.NewClass("prelude")
 
 	v.OverWrite(CPrelude, VNil, word.NewNilWord())
@@ -175,7 +174,6 @@ func (v *vocabulary) LoadPrelude() error {
 	v.OverWrite(CPrelude, VEach, word.NewPreludeFuncWord(
 		VEach,
 		func(m kit.Memory, args ...interface{}) error {
-
 			var (
 				fn = m.Stack().Pop()
 				w  = m.Stack().Pop()
@@ -197,7 +195,6 @@ func (v *vocabulary) LoadPrelude() error {
 	v.OverWrite(CPrelude, VIf, word.NewPreludeFuncWord(
 		VIf,
 		func(m kit.Memory, args ...interface{}) error {
-
 			var (
 				ifFalseFn = m.Stack().Pop()
 				ifTrueFn  = m.Stack().Pop()
@@ -225,7 +222,6 @@ func (v *vocabulary) LoadPrelude() error {
 	v.OverWrite(CPrelude, VApply, word.NewPreludeFuncWord(
 		VApply,
 		func(m kit.Memory, args ...interface{}) error {
-
 			if w := m.Stack().Pop(); w != nil {
 				w.Do(m)
 			}
@@ -241,7 +237,6 @@ func (v *vocabulary) LoadPrelude() error {
 	v.OverWrite(CPrelude, VEq, word.NewPreludeFuncWord(
 		VEq,
 		func(m kit.Memory, args ...interface{}) error {
-
 			var (
 				rhs = m.Stack().Pop()
 				lhs = m.Stack().Pop()
@@ -267,7 +262,6 @@ func (v *vocabulary) LoadPrelude() error {
 	v.OverWrite(CPrelude, VPlus, word.NewPreludeFuncWord(
 		VPlus,
 		func(m kit.Memory, args ...interface{}) error {
-
 			var (
 				rhs = m.Stack().Pop()
 				lhs = m.Stack().Pop()
@@ -294,7 +288,6 @@ func (v *vocabulary) LoadPrelude() error {
 	v.OverWrite(CPrelude, VMinus, word.NewPreludeFuncWord(
 		VMinus,
 		func(m kit.Memory, args ...interface{}) error {
-
 			var (
 				rhs = m.Stack().Pop()
 				lhs = m.Stack().Pop()
@@ -321,7 +314,6 @@ func (v *vocabulary) LoadPrelude() error {
 	v.OverWrite(CPrelude, VMulti, word.NewPreludeFuncWord(
 		VMulti,
 		func(m kit.Memory, args ...interface{}) error {
-
 			var (
 				rhs = m.Stack().Pop()
 				lhs = m.Stack().Pop()
@@ -348,7 +340,6 @@ func (v *vocabulary) LoadPrelude() error {
 	v.OverWrite(CPrelude, VDiv, word.NewPreludeFuncWord(
 		VDiv,
 		func(m kit.Memory, args ...interface{}) error {
-
 			var (
 				rhs = m.Stack().Pop()
 				lhs = m.Stack().Pop()

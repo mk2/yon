@@ -31,22 +31,18 @@ type Token struct {
 }
 
 func (t Token) GetType() kit.TokenType {
-
 	return t.Typ
 }
 
 func (t Token) GetPos() kit.Position {
-
 	return t.Pos
 }
 
 func (t Token) GetVal() string {
-
 	return t.Val
 }
 
 func (t Token) String() string {
-
 	switch t.Typ {
 
 	case TIdentifier:

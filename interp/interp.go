@@ -40,49 +40,41 @@ func New() kit.Interpreter {
 }
 
 func (ip *interp) PrintStack() {
-
 	ip.memo.Stack().Print()
 }
 
 func (ip *interp) PrintVocab() {
-
 	ip.memo.Vocab().Print()
 }
 
 func (ip *interp) PrintHistory() {
-
 }
 
 func (ip *interp) StdoutString() string {
-
 	return ip.memo.Stdout()
 }
 
 func (ip *interp) StderrString() string {
-
 	return ip.memo.Stderr()
 }
 
 func (ip *interp) SetClass(class string) error {
-
 	ip.class = class
 
 	return nil
 }
 
 func (ip *interp) GetClass() (string, error) {
-
 	return ip.class, nil
 }
 
 func (ip *interp) EvalAndWait(runes kit.RuneScanner) error {
-
 	ip.Eval(runes)
+
 	return ip.Wait()
 }
 
 func (ip *interp) Wait() error {
-
 	select {
 
 	case <-ip.stoppedCh:
@@ -95,7 +87,6 @@ func (ip *interp) Wait() error {
 }
 
 func (ip *interp) Eval(runes kit.RuneScanner) (kit.StoppedCh, kit.ErrorCh) {
-
 	tokens := lexer.New(runes)
 	words := parser.New(tokens, ip.memo)
 
@@ -111,7 +102,6 @@ Interpreter private methods
 */
 
 func (ip *interp) run(words kit.WordScanner) {
-
 	m := ip.memo
 
 	var (
