@@ -1,14 +1,11 @@
 package vocabulary
 
 import (
-	"sync"
-
-	"errors"
-
-	"strings"
-
 	"bytes"
+	"errors"
 	"fmt"
+	"strings"
+	"sync"
 
 	"github.com/mk2/yon/interp/kit"
 )

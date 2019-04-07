@@ -2,8 +2,9 @@ package client
 
 import (
 	"bufio"
-	"github.com/mk2/yon/repl/kit"
 	"os"
+
+	"github.com/mk2/yon/repl/kit"
 )
 
 type client struct {

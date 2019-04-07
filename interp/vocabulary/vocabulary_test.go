@@ -1,8 +1,9 @@
 package vocabulary_test
 
 import (
-	"github.com/mk2/yon/interp/vocabulary"
 	"testing"
+
+	"github.com/mk2/yon/interp/vocabulary"
 )
 
 func TestExtractClass(t *testing.T) {

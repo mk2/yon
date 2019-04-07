@@ -1,9 +1,8 @@
 package stack
 
 import (
-	"container/list"
-
 	"bytes"
+	"container/list"
 	"sync"
 
 	. "github.com/logrusorgru/aurora"

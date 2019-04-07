@@ -4,9 +4,9 @@ import (
 	"bytes"
 
 	"github.com/mk2/yon/interp"
+	interpkit "github.com/mk2/yon/interp/kit"
+	"github.com/mk2/yon/repl/kit"
 )
-import interpkit "github.com/mk2/yon/interp/kit"
-import "github.com/mk2/yon/repl/kit"
 
 type server struct {
 	interp interpkit.Interpreter

@@ -2,11 +2,9 @@ package lexer
 
 import (
 	"bytes"
-	"time"
-
 	"errors"
-
 	"sync"
+	"time"
 
 	"github.com/mk2/yon/interp/kit"
 	"github.com/mk2/yon/interp/token"

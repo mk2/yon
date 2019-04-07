@@ -1,10 +1,9 @@
 package interp_test
 
 import (
+	"bytes"
 	"fmt"
 	"testing"
-
-	"bytes"
 
 	"github.com/mk2/yon/interp"
 )
